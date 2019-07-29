@@ -7,6 +7,10 @@ class Introduction(Page):
     def is_displayed(self):
         return self.round_number == 1
 
+class NextRound(WaitPage):
+    def after_all_players_arrive(self):
+        self.group.get_recommendation(round_number = self.round_number)
+
 
 class Decide(Page):
     form_model = 'player'
@@ -36,6 +40,8 @@ class HistoryResults(Page):
         prices_player_1 = [p.price for p in player_1.in_all_rounds()]
         prices_player_2 = [p.price for p in player_2.in_all_rounds()]
         prices_player_3 = [p.price for p in player_3.in_all_rounds()]
+        past_recommendations = [g.recommendation for g in self.group.in_all_rounds()]
+
         round_list = list(range(1,self.round_number+1))
 
 
@@ -45,6 +51,7 @@ class HistoryResults(Page):
             'prices_player_1': prices_player_1,
             'prices_player_2': prices_player_2,
             'prices_player_3': prices_player_3,
+            'past_recommendations': past_recommendations,
             'round_list': round_list
         }
 
@@ -52,8 +59,7 @@ class HistoryResults(Page):
 #     def after_all_players_arrive(self):
 #         self.group.set_payoffs_round()
 
-class NextRound(Page):
-    pass
+
 
 class FinalResults(Page):
     def is_displayed(self):
@@ -62,10 +68,10 @@ class FinalResults(Page):
 
 page_sequence = [
     Introduction,
+    NextRound,
     Decide,
     RoundWaitPage,
     RoundResults,
     HistoryResults,
-    NextRound,
     FinalResults
 ]

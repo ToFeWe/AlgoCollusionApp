@@ -23,15 +23,32 @@ class Constants(BaseConstants):
     instructions_template = 'bertrand/instructions.html'
 
     maximum_price = 100
-
+    monopoly_price = 100
+    deviation_price = 0
 
 class Subsession(BaseSubsession):
     pass
 
 
+
 class Group(BaseGroup):
     winning_price = models.IntegerField()
     winner_payoff = models.IntegerField()
+    recommendation = models.IntegerField()
+
+    def get_recommendation(self, round_number):
+        players = self.get_players()
+        # In the first round we always recommend the monopoly price
+        if round_number > 1:
+            past_recommendation = self.in_previous_rounds()[-1].recommendation
+            past_prices = [p.in_previous_rounds()[-1].price for p in players]
+            followed_advise = [True if price == past_recommendation else False for price in past_prices]
+            if False in followed_advise:
+                self.recommendation = Constants.deviation_price
+            else:
+                self.recommendation = Constants.monopoly_price
+        else:
+            self.recommendation = Constants.monopoly_price
 
     def set_payoffs_round(self):
         players = self.get_players()
@@ -46,6 +63,7 @@ class Group(BaseGroup):
             else:
                 p.is_winner = False
                 p.payoff = 0
+
 
     
 

@@ -6,7 +6,18 @@
 {% endblock %}
 
 {% block content %}
-
+    {% if group.recommendation == Constants.monopoly_price %}
+        Der Algorithmus empfiehlt, dass jeder Teilnehmer einen Preis 
+        von <b> {{group.recommendation}} </b> setzt, um so den gemeinschaftlichen
+        Gewinn zu maximieren.
+    {% else %}
+        In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis.   
+        Der Algorithmus empfiehlt, dass jeder Teilnehmer einen Preis 
+        von <b> {{group.recommendation}} </b> setzt, um so die Abweichung zu
+        bestrafen. Sollten sich alle an diese Empfehlung halten, wird der Preis
+        in den kommenden Perioden wieder erhöht.
+    {% endif %}
+    
     {% formfield player.price label="Please enter an amount from 0 to 100 as your price" %}
 
 
