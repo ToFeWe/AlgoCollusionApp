@@ -1,0 +1,104 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Preisentwicklung in den letzten Runden
+{% endblock %}
+
+{% block content %}
+<br><b>Zur Erinnerung: Sie sind Spieler {{player.id_in_group}}</b></br>
+<br>
+<br><b>Fahren Sie mit der Maus über den Graphen, um die Preise in der jeweiligen Period zu sehen.</b></br>
+<br>
+
+<div id="chart" style="height: 300px; width: 100%;"></div>
+
+    {% next_button %}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+
+        var options = {
+            chart: {
+                height: 350,
+                type: 'line',
+                shadow: {
+                    enabled: true,
+                    color: '#000',
+                    top: 18,
+                    left: 7,
+                    blur: 10,
+                    opacity: 1
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#f9d500', '#ff0033', '#102bfb'],
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            series: [{
+                    name: "Spieler 1",
+                    data: {{ prices_player_1 }}
+                },
+                {
+                    name: "Spieler 2",
+                    data: {{ prices_player_2 }}
+                },
+                {
+                    name: "Spieler 3",
+                    data: {{ prices_player_3 }}
+                }
+            ],
+            title: {
+                text: 'Preishistorie',
+                align: 'left'
+            },
+            grid: {
+                borderColor: '#e7e7e7',
+                row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
+            markers: {
+                
+                size: 6
+            },
+            xaxis: {
+                categories:  {{ round_list }},
+                title: {
+                    text: 'Runde'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Preise'
+                },
+                min: 0  ,
+                max: 100
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: -25,
+                offsetX: -5
+            }
+        }
+
+        var chart = new ApexCharts(
+            document.querySelector("#chart"),
+            options
+        );
+
+        chart.render();
+    </script>
+
+{% endblock %}

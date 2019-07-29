@@ -1,0 +1,41 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Results
+{% endblock %}
+
+{% block content %}
+    <table class="table">
+        <tr>
+            <th>Ihr Preis</th>
+            <td>{{ player.price }}</td>
+        </tr>
+        <tr>
+            <th>Niedrigste Preis</th>
+            <td>{{ group.winning_price }}</td>
+        </tr>
+        <tr>
+            <th>Wurde ihr Produkt verkauft?</th>
+            <td>{% if player.is_winner %} Ja {% else %} Nein {% endif %}</td>
+        </tr>
+        <tr>
+            <th>Ihre Auszahlung</th>
+            <td>{{ player.payoff }}</td>
+        </tr>
+
+        {% for p in opponents %}
+                <tr>
+                    <th> Preis von Spieler {{p.id_in_group}} </th>
+                    <td> {{p.price}} </td>
+                </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% next_button %}
+
+    {% include Constants.instructions_template %}
+
+{% endblock %}

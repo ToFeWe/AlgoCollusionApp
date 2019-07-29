@@ -1,0 +1,14 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Nächste Runde startet
+{% endblock %}
+
+{% block content %}
+    Die nächste Runde beginnt. 
+    {% next_button %}
+        {% include Constants.instructions_template %}
+
+{% endblock %}
+
