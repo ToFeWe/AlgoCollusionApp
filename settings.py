@@ -17,8 +17,14 @@ SESSION_CONFIGS = [
         display_name="bertrand",
         num_demo_participants=3,
         app_sequence=['bertrand']
+    ),
+    dict(
+        name='bertrand_big',
+        display_name="bertrand",
+        num_demo_participants=6,
+        app_sequence=['bertrand']
     )
-    
+
 ]
 # see the end of this file for the inactive session configs
 

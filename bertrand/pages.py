@@ -1,25 +1,61 @@
 from ._builtin import Page, WaitPage
 from otree.api import Currency as c, currency_range
 from .models import Constants
+import random
 
 
 class Introduction(Page):
     def is_displayed(self):
         return self.round_number == 1
 
+
+class Explanation(Page):
+    def is_displayed(self):
+        return self.round_number == 1
+
+
+class Quiz(Page):
+    def is_displayed(self):
+        return self.round_number == 1
+
+
 class NextRound(WaitPage):
+    # We wait for all players in the Subsession since we
+    # currently write the continuation variable to the session dict
+    # TODO: Question is if we want to have group specific continuation
+    # TODO: or session specific?
+    wait_for_all_groups = True
     def after_all_players_arrive(self):
-        self.group.get_recommendation(round_number = self.round_number)
+
+        for current_group in self.subsession.get_groups():
+            current_group.get_recommendation(round_number=self.round_number)
+
+
+        # Check if we continue to play
+        if self.round_number <= Constants.fixed_rounds:
+            self.session.vars['playing'] = True
+        else:
+            r_number = random.random()
+            if r_number > Constants.cont_prob:
+                self.session.vars['playing'] = False
+            else:
+                self.session.vars['playing'] = True
 
 
 class Decide(Page):
     form_model = 'player'
     form_fields = ['price']
 
+    def is_displayed(self):
+        return self.session.vars['playing']
+
 
 class RoundWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.set_payoffs_round()
+
+    def is_displayed(self):
+        return self.session.vars['playing']
 
 
 class RoundResults(Page):
@@ -29,10 +65,14 @@ class RoundResults(Page):
             'opponents': opponents
         }
 
+    def is_displayed(self):
+        return self.session.vars['playing']
+
+
 class HistoryResults(Page):
     def vars_for_template(self):
         opponents = [p for p in self.group.get_players() if p != self.player]
-        #ids_opponents = [p.id_in_group for p in opponents]
+        # ids_opponents = [p.id_in_group for p in opponents]
         player_1 = self.group.get_player_by_id(1)
         player_2 = self.group.get_player_by_id(2)
         player_3 = self.group.get_player_by_id(3)
@@ -42,12 +82,10 @@ class HistoryResults(Page):
         prices_player_3 = [p.price for p in player_3.in_all_rounds()]
         past_recommendations = [g.recommendation for g in self.group.in_all_rounds()]
 
-        round_list = list(range(1,self.round_number+1))
+        round_list = list(range(1, self.round_number + 1))
 
-
-
-        # TODO: For simplicity hardcoded 
-        return {    
+        # TODO: For simplicity hardcoded
+        return {
             'prices_player_1': prices_player_1,
             'prices_player_2': prices_player_2,
             'prices_player_3': prices_player_3,
@@ -55,12 +93,14 @@ class HistoryResults(Page):
             'round_list': round_list
         }
 
-# class EndRoundWaitPage(WaitPage):
-#     def after_all_players_arrive(self):
-#         self.group.set_payoffs_round()
+    def is_displayed(self):
+        return self.session.vars['playing']
 
-
-
+class SurveyQuestions(Page):
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+    
+    
 class FinalResults(Page):
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
@@ -68,10 +108,13 @@ class FinalResults(Page):
 
 page_sequence = [
     Introduction,
+    Explanation,
+    Quiz,
     NextRound,
     Decide,
     RoundWaitPage,
     RoundResults,
     HistoryResults,
+    SurveyQuestions,
     FinalResults
 ]

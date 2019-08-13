@@ -6,30 +6,36 @@ import random
 
 
 doc = """
-2 firms complete in a market by setting prices for homogenous goods.
-
-See "Kruse, J. B., Rassenti, S., Reynolds, S. S., & Smith, V. L. (1994).
-Bertrand-Edgeworth competition in experimental markets.
-Econometrica: Journal of the Econometric Society, 343-371."
+Price Recommender Game with Bertrand
 """
 
 
 class Constants(BaseConstants):
     players_per_group = 3
     name_in_url = 'bertrand'
-    num_rounds = 3
 
+
+    # Note that *num_rounds* is used to have an upper bound but is not acutally used
+    num_rounds = 100
+
+    # Rounds without continuation probability
+    fixed_rounds = 3
+
+    # Probability to continue the experiment for the next round
     cont_prob = 6/7
+
     instructions_template = 'bertrand/instructions.html'
 
     maximum_price = 100
     monopoly_price = 100
+
+    # Price that is recommended if there is a deviation from a player
     deviation_price = 0
 
 class Subsession(BaseSubsession):
-    pass
-
-
+    def creating_session(self):
+        # Variable that shows if we still play
+        self.session.vars['playing'] = True
 
 class Group(BaseGroup):
     winning_price = models.IntegerField()
