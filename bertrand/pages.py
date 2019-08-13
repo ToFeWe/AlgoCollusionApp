@@ -15,6 +15,9 @@ class Explanation(Page):
 
 
 class Quiz(Page):
+    form_model = 'player'
+    form_fields = ['q_bertrand_1', 'q_recommendation_1', 'q_recommendation_2']
+
     def is_displayed(self):
         return self.round_number == 1
 
@@ -115,6 +118,7 @@ page_sequence = [
     RoundWaitPage,
     RoundResults,
     HistoryResults,
+    # now random rounds
     SurveyQuestions,
     FinalResults
 ]
