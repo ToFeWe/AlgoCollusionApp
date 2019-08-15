@@ -2,37 +2,58 @@
 {% load otree %}
 
 {% block title %}
-    Results
+    Ergebnisse
 {% endblock %}
 
 {% block content %}
     <table class="table">
+
+        <b>Ergebnisse der aktuellen Runde</b>
         <tr>
-            <th>Ihr Preis</th>
-            <td>{{ player.price }}</td>
-        </tr>
-        <tr>
-            <th>Niedrigste Preis</th>
-            <td>{{ group.winning_price }}</td>
-        </tr>
-        <tr>
-            <th>Wurde ihr Produkt verkauft?</th>
-            <td>{% if player.is_winner %} Ja {% else %} Nein {% endif %}</td>
-        </tr>
-        <tr>
-            <th>Ihre Auszahlung</th>
-            <td>{{ player.payoff }}</td>
+            <th>  <th>
+            <th> Sie (Spieler {{player.id_in_group}})
+            
+            {% for p in opponents %}
+                <th> Spieler  {{p.id_in_group}} </th>
+            {% endfor %}
         </tr>
 
-        {% for p in opponents %}
-                <tr>
-                    <th> Preis von Spieler {{p.id_in_group}} </th>
-                    <td> {{p.price}} </td>
-                </tr>
+        <tr>
+            <th> Preise </th>
+            <td> {{player.price}} <td>
 
-        {% endfor %}
+            {% for p in opponents %}
+                <td> {{p.price}} </td>
 
-    </table>
+            {% endfor %}
+        <tr>
+
+
+        <tr>
+            <th> Gewinne </th>
+            <td> {{player.profit}} <td>
+
+            {% for p in opponents %}
+                <td> {{p.profit}} </td>
+            {% endfor %}
+        </tr>
+    
+        
+    Ihr Preis in dieser Runde war {{ player.price }}. Der niedrigste Preis betrug {{ group.winning_price }}.
+    {% if player.is_winner %} 
+    Da Sie den günstigsten Preis gesetzt haben, haben also gewonnen. 
+        {% if group.n_winners == 1 %}
+         Da kein anderer Spieler diesen Preis gesetzt hat, erhalten Sie {{ group.winner_profit }}. 
+        {% else %}
+         Da {{ group.n_winners }} andere Spieler diesen Preis gewählt haben, wird der Profit dieser Runde zwischen den Spielern mit dem niedrigsten Preis aufgeteilt. 
+         Jeder erhält {{ group.winner_profit }}. 
+        {% endif %}
+    
+     {% else %}
+     Sie haben daher ihr Produkt nicht verkauft und erhalten einen Gewinn von {{player.profit}}.
+     {% endif %}
+
+    Insgesamt haben Sie {{ player.accumulated_profit }} € in allen Perioden erwirtschaftet.
 
     {% next_button %}
 

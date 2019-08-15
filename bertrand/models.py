@@ -22,7 +22,7 @@ class Constants(BaseConstants):
     fixed_rounds = 1
 
     # Probability to continue the experiment for the next round
-    cont_prob = 6/7
+    cont_prob = 1/7
 
     instructions_template = 'bertrand/instructions.html'
 
@@ -32,6 +32,9 @@ class Constants(BaseConstants):
     # Price that is recommended if there is a deviation from a player
     deviation_price = 1
 
+    # Number of consumers
+    m_consumer = 300
+
 class Subsession(BaseSubsession):
     def creating_session(self):
         # Variable that shows if we still play
@@ -39,37 +42,54 @@ class Subsession(BaseSubsession):
 
 class Group(BaseGroup):
     winning_price = models.IntegerField()
-    winner_payoff = models.IntegerField()
+    winner_profit = models.FloatField()
     recommendation = models.IntegerField()
+    n_winners = models.IntegerField()
 
     def get_recommendation(self, round_number):
+        """ Based on the past round create a new recommendation
+        for the following period. 
+        Currently, this recommendation is based on the following
+        simple rule:
+        - In the first round recommend the monopoly price
+        - In all later round:
+            - If all players followed the advise in the last round
+            rounds, recommend the monopoly price
+            - If player played different prices, recommend the deviation
+            price
+        
+        Arguments:
+            round_number {[type]} -- [description]
+        """
         players = self.get_players()
         # In the first round we always recommend the monopoly price
         if round_number > 1:
-            past_recommendation = self.in_previous_rounds()[-1].recommendation
             past_prices = [p.in_previous_rounds()[-1].price for p in players]
-            followed_advise = [True if price == past_recommendation else False for price in past_prices]
-            if False in followed_advise:
+            unique_prices = set(past_prices)
+            if len(unique_prices) != 1:
                 self.recommendation = Constants.deviation_price
             else:
                 self.recommendation = Constants.monopoly_price
         else:
             self.recommendation = Constants.monopoly_price
 
-    def set_payoffs_round(self):
+    def set_profits_round(self):
         players = self.get_players()
         self.winning_price = min([p.price for p in players])
         winners = [p for p in players if p.price == self.winning_price]
-        winner_payoff = self.winning_price / len(winners)
+        self.n_winners = len(winners)
+        # Market is shared among all winners
+        self.winner_profit = self.winning_price * Constants.m_consumer / self.n_winners
 
         for p in players:
             if p in winners:
                 p.is_winner = True
-                p.payoff = winner_payoff
+                p.profit = self.winner_profit
+                p.accumulated_profit = sum([p_in_round.profit for p_in_round in p.in_all_rounds()])
             else:
                 p.is_winner = False
-                p.payoff = 0
-
+                p.profit = 0
+                p.accumulated_profit = sum([p_in_round.profit for p_in_round in p.in_all_rounds()])
 
     
 
@@ -78,6 +98,12 @@ class Player(BasePlayer):
         min=Constants.deviation_price, max=Constants.maximum_price,
         doc="""Price player offers to sell product for"""
     )
+
+    # Define Profit as Float as it could be a non-integer number
+    # if we implement it in the way that a profit share goes to the 
+    # agent.
+    profit = models.FloatField()
+    accumulated_profit = models.FloatField()
 
     is_winner = models.BooleanField()
 

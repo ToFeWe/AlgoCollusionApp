@@ -28,6 +28,10 @@ class NextRound(WaitPage):
     # TODO: Question is if we want to have group specific continuation
     # TODO: or session specific?
     wait_for_all_groups = True
+
+    def is_displayed(self):
+        return self.session.vars['playing']
+
     def after_all_players_arrive(self):
 
         for current_group in self.subsession.get_groups():
@@ -35,14 +39,14 @@ class NextRound(WaitPage):
 
 
         # Check if we continue to play
-        if self.round_number <= Constants.fixed_rounds:
-            self.session.vars['playing'] = True
-        else:
+        # Note that the later *self.session.vars['playing']* is there to prevent
+        # that we redraw the random number once we already decided to stop
+        # self.session.vars['playing'] is initalized to *True* in the session
+        # start up 
+        if self.round_number > Constants.fixed_rounds and self.session.vars['playing']:
             r_number = random.random()
             if r_number > Constants.cont_prob:
                 self.session.vars['playing'] = False
-            else:
-                self.session.vars['playing'] = True
 
 
 class Decide(Page):
@@ -55,7 +59,7 @@ class Decide(Page):
 
 class RoundWaitPage(WaitPage):
     def after_all_players_arrive(self):
-        self.group.set_payoffs_round()
+        self.group.set_profits_round()
 
     def is_displayed(self):
         return self.session.vars['playing']
