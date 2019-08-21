@@ -37,7 +37,7 @@
                 <td> {{p.profit}} </td>
             {% endfor %}
         </tr>
-    
+    </table>
         
     Ihr Preis in dieser Runde war {{ player.price }}. Der niedrigste Preis betrug {{ group.winning_price }}.
     {% if player.is_winner %} 
@@ -54,7 +54,7 @@
      {% endif %}
 
     Insgesamt haben Sie {{ player.accumulated_profit }} € in allen Perioden erwirtschaftet.
-
+    <br><br>
     {% next_button %}
 
     {% include Constants.instructions_template %}

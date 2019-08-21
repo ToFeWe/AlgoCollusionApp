@@ -35,6 +35,10 @@ class Constants(BaseConstants):
     # Number of consumers
     m_consumer = 300
 
+    # Exchange rate for taler to one Euro
+    exchange_rate = 100
+
+
 class Subsession(BaseSubsession):
     def creating_session(self):
         # Variable that shows if we still play
@@ -58,8 +62,6 @@ class Group(BaseGroup):
             - If player played different prices, recommend the deviation
             price
         
-        Arguments:
-            round_number {[type]} -- [description]
         """
         players = self.get_players()
         # In the first round we always recommend the monopoly price
@@ -149,3 +151,6 @@ class Player(BasePlayer):
             # Count +1 if the player answered the question wrong
             self.counter_recommendation_2 += 1
             return 'Denken Sie besser noch mal nach'
+
+
+    def set_final_payoff(self):

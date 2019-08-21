@@ -56,6 +56,13 @@ class Decide(Page):
     def is_displayed(self):
         return self.session.vars['playing']
 
+    def vars_for_template(self):
+        label_decide = "Bitte wählen sie Ihren Preis zwsichen {} und {}:".format(Constants.deviation_price,
+                                                                                 Constants.monopoly_price)
+        return {
+            "label_decide": label_decide
+            }
+
 
 class RoundWaitPage(WaitPage):
     def after_all_players_arrive(self):
@@ -102,6 +109,15 @@ class HistoryResults(Page):
 
     def is_displayed(self):
         return self.session.vars['playing']
+
+class FinalPayoff(WaitPage):
+    def after_all_players_arrive(self):
+        self.group.set_profits_round()
+
+    
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
 
 class SurveyQuestions(Page):
     def is_displayed(self):
