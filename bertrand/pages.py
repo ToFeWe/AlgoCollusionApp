@@ -34,8 +34,6 @@ class NextRound(WaitPage):
 
     def after_all_players_arrive(self):
 
-        for current_group in self.subsession.get_groups():
-            current_group.get_recommendation(round_number=self.round_number)
 
 
         # Check if we continue to play
@@ -47,6 +45,17 @@ class NextRound(WaitPage):
             r_number = random.random()
             if r_number > Constants.cont_prob:
                 self.session.vars['playing'] = False
+                # Remember which was the last round we played
+                self.session.vars['last_round'] = self.round_number - 1
+                self.subsession.last_round = self.round_number - 1
+            else:
+                # If we are still playing, get the recommendation for the current round
+                for current_group in self.subsession.get_groups():
+                    current_group.get_recommendation(round_number=self.round_number)
+        else:
+            # If we are still playing, get the recommendation for the current round
+            for current_group in self.subsession.get_groups():
+                current_group.get_recommendation(round_number=self.round_number)
 
 
 class Decide(Page):
@@ -57,10 +66,11 @@ class Decide(Page):
         return self.session.vars['playing']
 
     def vars_for_template(self):
-        label_decide = "Bitte wählen sie Ihren Preis zwsichen {} und {}:".format(Constants.deviation_price,
+        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {}:".format(Constants.deviation_price,
                                                                                  Constants.monopoly_price)
         return {
-            "label_decide": label_decide
+            "label_decide": label_decide,
+            'exchange_rate': 1 / self.session.config['real_world_currency_per_point']
             }
 
 
@@ -110,23 +120,23 @@ class HistoryResults(Page):
     def is_displayed(self):
         return self.session.vars['playing']
 
-class FinalPayoff(WaitPage):
-    def after_all_players_arrive(self):
-        self.group.set_profits_round()
-
-    
-    def is_displayed(self):
-        return self.round_number == Constants.num_rounds
-
-
 class SurveyQuestions(Page):
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
     
+    def before_next_page(self):
+        self.player.set_final_payoff()
+
     
 class FinalResults(Page):
     def is_displayed(self):
         return self.round_number == Constants.num_rounds
+    
+    def vars_for_template(self):
+        return {
+            'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
+            'show_up': self.session.config['participation_fee']
+        }
 
 
 page_sequence = [

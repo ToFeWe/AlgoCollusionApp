@@ -2,13 +2,20 @@
 {% load otree %}
 
 {% block title %}
-    Preisentwicklung in den letzten Runden
+Viele Dank für Ihre Teilnahme
 {% endblock %}
 
 {% block content %}
-    So viel Geld bekommst du.
+    Du hast ingesamt {{player.payoff}} im Verlauf des Experiments verdient. Ein Euro entsprechen dabei {{exchange_rate}} Punkten.  
+    Außerdem erhälst du zusätzlich für dein Erscheinen im Experiment {{show_up}}.
 
-    {{player.payoff}}
+    <br><br>
+    Deine ingesamte Auszahlung ist also {{player.final_payoff_euro}} €.
+
+    
+
+
+    Bitte warte bis wir dich aufrufen.
     {% next_button %}
 {% endblock %}
 

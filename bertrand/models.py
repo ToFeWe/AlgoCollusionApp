@@ -3,26 +3,25 @@ from otree.api import (
     Currency as c, currency_range
 )
 import random
-
+import math
 
 doc = """
 Price Recommender Game with Bertrand
 """
-
 
 class Constants(BaseConstants):
     players_per_group = 3
     name_in_url = 'bertrand'
 
 
-    # Note that *num_rounds* is used to have an upper bound but is not acutally used
+    # Note that *num_rounds* is used to have an upper bound but is not actually used
     num_rounds = 100
 
     # Rounds without continuation probability
     fixed_rounds = 1
 
     # Probability to continue the experiment for the next round
-    cont_prob = 1/7
+    cont_prob = 0
 
     instructions_template = 'bertrand/instructions.html'
 
@@ -35,18 +34,16 @@ class Constants(BaseConstants):
     # Number of consumers
     m_consumer = 300
 
-    # Exchange rate for taler to one Euro
-    exchange_rate = 100
-
 
 class Subsession(BaseSubsession):
+    last_round =  models.IntegerField()
     def creating_session(self):
         # Variable that shows if we still play
         self.session.vars['playing'] = True
 
 class Group(BaseGroup):
     winning_price = models.IntegerField()
-    winner_profit = models.FloatField()
+    winner_profit = models.IntegerField()
     recommendation = models.IntegerField()
     n_winners = models.IntegerField()
 
@@ -64,7 +61,10 @@ class Group(BaseGroup):
         
         """
         players = self.get_players()
-        # In the first round we always recommend the monopoly price
+
+        # If we are not in the first round, we recommend the monopoly price
+        # if players had the same price in the last period
+        # and else the deviation price
         if round_number > 1:
             past_prices = [p.in_previous_rounds()[-1].price for p in players]
             unique_prices = set(past_prices)
@@ -73,6 +73,7 @@ class Group(BaseGroup):
             else:
                 self.recommendation = Constants.monopoly_price
         else:
+            # In the first round we always recommend the monopoly price
             self.recommendation = Constants.monopoly_price
 
     def set_profits_round(self):
@@ -81,7 +82,7 @@ class Group(BaseGroup):
         winners = [p for p in players if p.price == self.winning_price]
         self.n_winners = len(winners)
         # Market is shared among all winners
-        self.winner_profit = self.winning_price * Constants.m_consumer / self.n_winners
+        self.winner_profit = int(self.winning_price * Constants.m_consumer / self.n_winners)
 
         for p in players:
             if p in winners:
@@ -101,13 +102,18 @@ class Player(BasePlayer):
         doc="""Price player offers to sell product for"""
     )
 
-    # Define Profit as Float as it could be a non-integer number
-    # if we implement it in the way that a profit share goes to the 
-    # agent.
-    profit = models.FloatField()
-    accumulated_profit = models.FloatField()
+    # Define all as Integer as they are points/tokens
+
+    # Round specific profit and accumulated profit as points
+    profit = models.IntegerField()
+    accumulated_profit = models.IntegerField()
 
     is_winner = models.BooleanField()
+
+
+    # Final payoff is stored again
+    final_payoff_euro = models.FloatField()
+
 
     # Quiz Questions
     q_bertrand_1 = models.IntegerField(
@@ -128,7 +134,6 @@ class Player(BasePlayer):
     )
 
     # Counter variable how often the player has answered smth wrong
-
     counter_bertrand_1 = models.IntegerField(initial = 0)
     counter_recommendation_1 = models.IntegerField(initial = 0)
     counter_recommendation_2 = models.IntegerField(initial = 0)
@@ -140,7 +145,7 @@ class Player(BasePlayer):
             self.counter_bertrand_1 += 1
             return 'Denken Sie besser noch mal nach'
 
-    def q_recommendation_1error_message(self, value):
+    def q_recommendation_1_error_message(self, value):
         if value != 'bla':
             # Count +1 if the player answered the question wrong
             self.counter_recommendation_1 += 1
@@ -154,3 +159,10 @@ class Player(BasePlayer):
 
 
     def set_final_payoff(self):
+        # We take the accumulated payoff from the last round we 
+        # actually played
+        last_played_round = self.session.vars['last_round']
+        total_money = self.in_round(last_played_round).accumulated_profit 
+        self.payoff = total_money
+        # Final points as money
+        self.final_payoff_euro = c(self.payoff).to_real_world_currency(self.session)
