@@ -20,90 +20,123 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
 
-        var options = {
-            chart: {
-                height: 350,
-                type: 'line',
-                shadow: {
-                    enabled: true,
-                    color: '#000',
-                    top: 18,
-                    left: 7,
-                    blur: 10,
-                    opacity: 1
-                },
-                toolbar: {
-                    show: false
-                }
-            },
-            colors: ['#f9d500', '#ff0033', '#102bfb', '#000000'],
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                curve: 'smooth'
-            },
-            series: [{
-                    name: "Spieler 1",
-                    data: {{ prices_player_1 }}
-                },
-                {
-                    name: "Spieler 2",
-                    data: {{ prices_player_2 }}
-                },
-                {
-                    name: "Spieler 3",
-                    data: {{ prices_player_3 }}
-                },
-                {
-                    name: "Empfehlung",
-                    data: {{ past_recommendations }}
-                }
-                
-            ],
-            title: {
-                text: 'Preishistorie',
-                align: 'left'
-            },
-            grid: {
-                borderColor: '#e7e7e7',
-                row: {
-                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                    opacity: 0.5
-                },
-            },
-            markers: {
-                
-                size: 6
-            },
-            xaxis: {
-                categories:  {{ round_list }},
-                title: {
-                    text: 'Runde'
-                }
-            },
-            yaxis: {
-                title: {
-                    text: 'Preise'
-                },
-                min: {{ Constants.deviation_price }}  ,
-                max: {{ Constants.monopoly_price }}
-            },
-            legend: {
-                position: 'top',
-                horizontalAlign: 'right',
-                floating: true,
-                offsetY: -25,
-                offsetX: -5
+        // If we play the recommendation treatment
+        if("{{treatment}}" == 'recommendation') {
+            var options_treatment_specific = {
+                        colors: ['#f9d500', '#ff0033', '#102bfb', '#000000'],
+                        series: [{
+                                name: "Spieler 1",
+                                data: {{ prices_player_1 }}
+                            },
+                            {
+                                name: "Spieler 2",
+                                data: {{ prices_player_2 }}
+                            },
+                            {
+                                name: "Spieler 3",
+                                data: {{ prices_player_3 }}
+                            },
+                            {
+                                name: "Empfehlung",
+                                data: {{ past_recommendations }}
+                            }
+                            
+                        ]
             }
+        } else {
+        // If it is not the recommendation treatment, we have to display less information
+            var options_treatment_specific = {
+                        colors: ['#f9d500', '#ff0033', '#102bfb'],
+                        series: [{
+                                name: "Spieler 1",
+                                data: {{ prices_player_1 }}
+                            },
+                            {
+                                name: "Spieler 2",
+                                data: {{ prices_player_2 }}
+                            },
+                            {
+                                name: "Spieler 3",
+                                data: {{ prices_player_3 }}
+                            }
+                            
+                        ]
+            }
+
+
         }
 
+
+
+            var basic_options = {
+                chart: {
+                    height: 350,
+                    type: 'line',
+                    shadow: {
+                        enabled: true,
+                        color: '#000',
+                        top: 18,
+                        left: 7,
+                        blur: 10,
+                        opacity: 1
+                    },
+                    toolbar: {
+                        show: false
+                    }
+                },
+                dataLabels: {
+                    enabled: false,
+                },
+                stroke: {
+                    curve: 'smooth'
+                },
+                title: {
+                    text: 'Preishistorie',
+                    align: 'left'
+                },
+                grid: {
+                    borderColor: '#e7e7e7',
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                },
+                markers: {
+                    
+                    size: 6
+                },
+                xaxis: {
+                    categories:  {{ round_list }},
+                    title: {
+                        text: 'Runde'
+                    }
+                },
+                yaxis: {
+                    title: {
+                        text: 'Preise'
+                    },
+                    min: {{ Constants.deviation_price }}  ,
+                    max: {{ Constants.monopoly_price }}
+                },
+                legend: {
+                    position: 'top',
+                    horizontalAlign: 'right',
+                    floating: true,
+                    offsetY: -25,
+                    offsetX: -5
+                }
+            }
+
+        // Combine treatment specific options and basic options
+        var options = Object.assign( {}, basic_options,  options_treatment_specific);
+        
         var chart = new ApexCharts(
             document.querySelector("#chart"),
             options
         );
 
         chart.render();
+        console.log(option)
     </script>
 
 {% endblock %}

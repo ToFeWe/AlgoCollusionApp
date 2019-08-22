@@ -13,14 +13,39 @@ class Explanation(Page):
     def is_displayed(self):
         return self.round_number == 1
 
+    def vars_for_template(self):
+        # Group treatment stored in participant.vars of
+        # first group member.
+        p1 = self.group.get_player_by_id(1)
+        treatment =  p1.participant.vars['group_treatment']
+        
+        return {
+            'treatment': treatment
+        }
 
 class Quiz(Page):
     form_model = 'player'
     form_fields = ['q_bertrand_1', 'q_recommendation_1', 'q_recommendation_2']
 
+    def get_form_fields(self):
+        p1 = self.group.get_player_by_id(1)
+        treatment =  p1.participant.vars['group_treatment']
+        if treatment == 'baseline':
+            return ['q_bertrand_1', 'q_recommendation_1']
+        else:
+            return ['q_bertrand_1', 'q_recommendation_1', 'q_recommendation_2']
     def is_displayed(self):
         return self.round_number == 1
 
+    def vars_for_template(self):
+        # Group treatment stored in participant.vars of
+        # first group member.
+        p1 = self.group.get_player_by_id(1)
+        treatment =  p1.participant.vars['group_treatment']
+        
+        return {
+            'treatment': treatment
+        }
 
 class NextRound(WaitPage):
     # We wait for all players in the Subsession since we
@@ -50,12 +75,20 @@ class NextRound(WaitPage):
                 self.subsession.last_round = self.round_number - 1
             else:
                 # If we are still playing, get the recommendation for the current round
+                # given that the group is in a treatment with recommendation.
                 for current_group in self.subsession.get_groups():
-                    current_group.get_recommendation(round_number=self.round_number)
+                    p1 = current_group.get_player_by_id(1)
+                    treatment =  p1.participant.vars['group_treatment']
+                    if treatment == 'recommendation':
+                        current_group.get_recommendation(round_number=self.round_number)
         else:
             # If we are still playing, get the recommendation for the current round
+            # given that the group is in a treatment with recommendation.
             for current_group in self.subsession.get_groups():
-                current_group.get_recommendation(round_number=self.round_number)
+                p1 = current_group.get_player_by_id(1)
+                treatment =  p1.participant.vars['group_treatment']
+                if treatment == 'recommendation':
+                    current_group.get_recommendation(round_number=self.round_number)
 
 
 class Decide(Page):
@@ -66,11 +99,15 @@ class Decide(Page):
         return self.session.vars['playing']
 
     def vars_for_template(self):
+        p1 = self.group.get_player_by_id(1)
+        treatment =  p1.participant.vars['group_treatment']
+
         label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {}:".format(Constants.deviation_price,
                                                                                  Constants.monopoly_price)
         return {
             "label_decide": label_decide,
-            'exchange_rate': 1 / self.session.config['real_world_currency_per_point']
+            'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
+            'treatment': treatment
             }
 
 
@@ -84,9 +121,13 @@ class RoundWaitPage(WaitPage):
 
 class RoundResults(Page):
     def vars_for_template(self):
+        p1 = self.group.get_player_by_id(1)
+        treatment =  p1.participant.vars['group_treatment']
+
         opponents = [p for p in self.group.get_players() if p != self.player]
         return {
-            'opponents': opponents
+            'opponents': opponents,
+            'treatment': treatment
         }
 
     def is_displayed(self):
@@ -104,18 +145,25 @@ class HistoryResults(Page):
         prices_player_1 = [p.price for p in player_1.in_all_rounds()]
         prices_player_2 = [p.price for p in player_2.in_all_rounds()]
         prices_player_3 = [p.price for p in player_3.in_all_rounds()]
-        past_recommendations = [g.recommendation for g in self.group.in_all_rounds()]
 
+        treatment =  player_1.participant.vars['group_treatment']
         round_list = list(range(1, self.round_number + 1))
 
-        # TODO: For simplicity hardcoded
-        return {
-            'prices_player_1': prices_player_1,
-            'prices_player_2': prices_player_2,
-            'prices_player_3': prices_player_3,
-            'past_recommendations': past_recommendations,
-            'round_list': round_list
+        # Note that past_recommendation is simply an empty list for the baseline treatment
+        # but it is not used anyways.
+        past_recommendations = [g.recommendation for g in self.group.in_all_rounds()]
+
+        out_dict = {
+        'prices_player_1': prices_player_1,
+        'prices_player_2': prices_player_2,
+        'prices_player_3': prices_player_3,
+        'treatment': treatment,
+        'past_recommendations': past_recommendations,
+        'round_list': round_list
         }
+
+        # TODO: For simplicity hardcoded
+        return out_dict
 
     def is_displayed(self):
         return self.session.vars['playing']

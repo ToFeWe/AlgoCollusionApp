@@ -9,18 +9,21 @@
 
 <div class="row">
   <div class="column-left"> 
-  <b> Preisempfehlung in dieser Runde: </b><br>
-    {% if group.recommendation == Constants.monopoly_price %}
-        Der Algorithmus empfiehlt, dass jeder Teilnehmer einen Preis 
-        von <b> {{group.recommendation}} </b> setzt, um so den gemeinschaftlichen
-        Gewinn zu maximieren.
-    {% else %}
-        In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis.   
-        Der Algorithmus empfiehlt, dass jeder Teilnehmer einen Preis 
-        von <b> {{group.recommendation}} </b> setzt, um so die Abweichung zu
-        bestrafen. Sollten sich alle an diese Empfehlung halten, wird der Preis
-        in den kommenden Perioden wieder erhöht.
-    {% endif %}
+  	{% if treatment == 'recommendation'%}
+
+		<b> Preisempfehlung in dieser Runde: </b><br>
+		{% if group.recommendation == Constants.monopoly_price %}
+			Der Algorithmus empfiehlt, dass jeder Teilnehmer einen Preis 
+			von <b> {{group.recommendation}} </b> setzt, um so den gemeinschaftlichen
+			Gewinn zu maximieren.
+		{% else %}
+			In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis.   
+			Der Algorithmus empfiehlt, dass jeder Teilnehmer einen Preis 
+			von <b> {{group.recommendation}} </b> setzt, um so die Abweichung zu
+			bestrafen. Sollten sich alle an diese Empfehlung halten, wird der Preis
+			in den kommenden Perioden wieder erhöht.
+		{% endif %}
+	{% endif %}
     <br><br>
     <b>
     {% formfield player.price label=label_decide %}

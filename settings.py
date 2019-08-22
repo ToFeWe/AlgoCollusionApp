@@ -13,15 +13,17 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 SESSION_CONFIGS = [
     dict(
-        name='bertrand',
-        display_name="bertrand",
+        name='bertrand_baseline',
+        display_name="bertrand_baseline",
+        group_treatment='baseline',
         num_demo_participants=3,
         app_sequence=['bertrand']
     ),
     dict(
-        name='bertrand_big',
-        display_name="bertrand",
-        num_demo_participants=6,
+        name='bertrand_recommendation',
+        display_name="bertrand_recommendation",
+        group_treatment='recommendation',
+        num_demo_participants=3,
         app_sequence=['bertrand']
     )
 

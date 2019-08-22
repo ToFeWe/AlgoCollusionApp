@@ -4,6 +4,7 @@ from otree.api import (
 )
 import random
 import math
+import itertools
 
 doc = """
 Price Recommender Game with Bertrand
@@ -34,18 +35,47 @@ class Constants(BaseConstants):
     # Number of consumers
     m_consumer = 300
 
+    # Treatment names
+    treatments = ['baseline', 'recommendation']
 
 class Subsession(BaseSubsession):
     last_round =  models.IntegerField()
     def creating_session(self):
-        # Variable that shows if we still play
-        self.session.vars['playing'] = True
+        if self.round_number == 1:
+            # Initialize variable that shows if we still play
+            self.session.vars['playing'] = True
+
+            
+            # We use itertools.cycle to have balanced treatments
+            treament_cycle = itertools.cycle(Constants.treatments)
+
+            # Assign the treatment to each group
+            # Note that we store it in the *treatment* field in the 
+            # first round but also in the participant variables of
+            # the first participant in the group to access it across rounds. 
+            for g in self.get_groups():
+
+                # If we have a fixed treatment for the session, use it for all groups
+                # else assign the treatments in the iteration cycle.
+                if 'group_treatment' in self.session.config:
+                    treatment_draw = self.session.config['group_treatment']
+                else:
+                    treatment_draw = next(treament_cycle)
+                
+                # Store it in the variable *group_treatment* for first round for the group
+                g.group_treatment = treatment_draw
+
+                # Furthermore, store it in the participant variables for the first player in each
+                # group to access it accross rounds.
+                p1 = g.get_player_by_id(1)
+                p1.participant.vars['group_treatment'] = treatment_draw
 
 class Group(BaseGroup):
     winning_price = models.IntegerField()
     winner_profit = models.IntegerField()
     recommendation = models.IntegerField()
     n_winners = models.IntegerField()
+    group_treatment  = models.StringField()
 
     def get_recommendation(self, round_number):
         """ Based on the past round create a new recommendation
@@ -103,7 +133,6 @@ class Player(BasePlayer):
     )
 
     # Define all as Integer as they are points/tokens
-
     # Round specific profit and accumulated profit as points
     profit = models.IntegerField()
     accumulated_profit = models.IntegerField()
@@ -136,7 +165,7 @@ class Player(BasePlayer):
     # Counter variable how often the player has answered smth wrong
     counter_bertrand_1 = models.IntegerField(initial = 0)
     counter_recommendation_1 = models.IntegerField(initial = 0)
-    counter_recommendation_2 = models.IntegerField(initial = 0)
+    counter_recommendation_2 = models.IntegerField(initial = 0, blank=True)
 
 
     def q_bertrand_1_error_message(self, value):
@@ -165,4 +194,4 @@ class Player(BasePlayer):
         total_money = self.in_round(last_played_round).accumulated_profit 
         self.payoff = total_money
         # Final points as money
-        self.final_payoff_euro = c(self.payoff).to_real_world_currency(self.session)
+        self.final_payoff_euro = float(self.participant.payoff_plus_participation_fee())
