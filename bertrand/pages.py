@@ -16,36 +16,41 @@ class Explanation(Page):
     def vars_for_template(self):
         # Group treatment stored in participant.vars of
         # first group member.
-        p1 = self.group.get_player_by_id(1)
-        treatment =  p1.participant.vars['group_treatment']
+        treatment =  self.participant.vars['group_treatment']
         
         return {
             'treatment': treatment
         }
+
+ 
+
 
 class Quiz(Page):
     form_model = 'player'
     form_fields = ['q_bertrand_1', 'q_recommendation_1', 'q_recommendation_2']
 
     def get_form_fields(self):
-        p1 = self.group.get_player_by_id(1)
-        treatment =  p1.participant.vars['group_treatment']
+        treatment =  self.participant.vars['group_treatment']
         if treatment == 'baseline':
             return ['q_bertrand_1', 'q_recommendation_1']
         else:
             return ['q_bertrand_1', 'q_recommendation_1', 'q_recommendation_2']
+    
     def is_displayed(self):
         return self.round_number == 1
 
     def vars_for_template(self):
         # Group treatment stored in participant.vars of
         # first group member.
-        p1 = self.group.get_player_by_id(1)
-        treatment =  p1.participant.vars['group_treatment']
+        treatment =  self.participant.vars['group_treatment']
         
         return {
             'treatment': treatment
         }
+
+class StartExperiment(Page):
+    def is_displayed(self):
+        return self.round_number == 1
 
 class NextRound(WaitPage):
     # We wait for all players in the Subsession since we
@@ -73,6 +78,7 @@ class NextRound(WaitPage):
                 # Remember which was the last round we played
                 self.session.vars['last_round'] = self.round_number - 1
                 self.subsession.last_round = self.round_number - 1
+                self.player.set_final_payoff()
             else:
                 # If we are still playing, get the recommendation for the current round
                 # given that the group is in a treatment with recommendation.
@@ -99,8 +105,7 @@ class Decide(Page):
         return self.session.vars['playing']
 
     def vars_for_template(self):
-        p1 = self.group.get_player_by_id(1)
-        treatment =  p1.participant.vars['group_treatment']
+        treatment =  self.participant.vars['group_treatment']
 
         label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {}:".format(Constants.deviation_price,
                                                                                  Constants.monopoly_price)
@@ -121,8 +126,7 @@ class RoundWaitPage(WaitPage):
 
 class RoundResults(Page):
     def vars_for_template(self):
-        p1 = self.group.get_player_by_id(1)
-        treatment =  p1.participant.vars['group_treatment']
+        treatment =  self.participant.vars['group_treatment']
 
         opponents = [p for p in self.group.get_players() if p != self.player]
         return {
@@ -146,7 +150,7 @@ class HistoryResults(Page):
         prices_player_2 = [p.price for p in player_2.in_all_rounds()]
         prices_player_3 = [p.price for p in player_3.in_all_rounds()]
 
-        treatment =  player_1.participant.vars['group_treatment']
+        treatment =  self.participant.vars['group_treatment']
         round_list = list(range(1, self.round_number + 1))
 
         # Note that past_recommendation is simply an empty list for the baseline treatment
@@ -168,23 +172,14 @@ class HistoryResults(Page):
     def is_displayed(self):
         return self.session.vars['playing']
 
-class SurveyQuestions(Page):
+class LastFixedRound(Page):
     def is_displayed(self):
-        return self.round_number == Constants.num_rounds
-    
-    def before_next_page(self):
-        self.player.set_final_payoff()
+        return self.round_number == Constants.fixed_rounds
 
-    
-class FinalResults(Page):
-    def is_displayed(self):
-        return self.round_number == Constants.num_rounds
-    
     def vars_for_template(self):
-        return {
-            'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
-            'show_up': self.session.config['participation_fee']
-        }
+        return {'fixed_rounds': 
+                Constants.fixed_rounds}
+
 
 
 page_sequence = [
@@ -192,11 +187,10 @@ page_sequence = [
     Explanation,
     Quiz,
     NextRound,
+    StartExperiment,
     Decide,
     RoundWaitPage,
     RoundResults,
     HistoryResults,
-    # now random rounds
-    SurveyQuestions,
-    FinalResults
+    LastFixedRound
 ]

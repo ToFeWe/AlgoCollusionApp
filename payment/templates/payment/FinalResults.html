@@ -1,0 +1,22 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Viele Dank für Ihre Teilnahme
+{% endblock %}
+
+{% block content %}
+Du hast insgesamt {{player.payoff}} im Verlauf des Experiments verdient.
+Ein Euro entsprechen dabei {{exchange_rate|c}}.
+ Außerdem erhältst du zusätzlich für dein Erscheinen im Experiment {{show_up}}.  
+  
+   <br><br>
+ Deine gesamte Auszahlung ist also {{final_payoff_euro}} €.. Bitte warte bis wir dich aufrufen.
+   <br><br>
+
+    
+
+
+Die Teilnehmer werden nun nacheinander nach vorne gebeten um Ihnen den Gewinn auszuzahlen. Warten Sie bitte an Ihrem Platz bis Sie an der Reihe sind. 
+{% endblock %}
+

@@ -24,7 +24,6 @@ class Constants(BaseConstants):
     # Probability to continue the experiment for the next round
     cont_prob = 0
 
-    instructions_template = 'bertrand/instructions.html'
 
     maximum_price = 10
     monopoly_price = 10
@@ -47,7 +46,7 @@ class Subsession(BaseSubsession):
 
             
             # We use itertools.cycle to have balanced treatments
-            treament_cycle = itertools.cycle(Constants.treatments)
+            treatment_cycle = itertools.cycle(Constants.treatments)
 
             # Assign the treatment to each group
             # Note that we store it in the *treatment* field in the 
@@ -60,15 +59,15 @@ class Subsession(BaseSubsession):
                 if 'group_treatment' in self.session.config:
                     treatment_draw = self.session.config['group_treatment']
                 else:
-                    treatment_draw = next(treament_cycle)
+                    treatment_draw = next(treatment_cycle)
                 
                 # Store it in the variable *group_treatment* for first round for the group
                 g.group_treatment = treatment_draw
 
-                # Furthermore, store it in the participant variables for the first player in each
+                # Furthermore, store it in the participant variables for the each player in each
                 # group to access it accross rounds.
-                p1 = g.get_player_by_id(1)
-                p1.participant.vars['group_treatment'] = treatment_draw
+                for p in g.get_players():
+                    p.participant.vars['group_treatment'] = treatment_draw
 
 class Group(BaseGroup):
     winning_price = models.IntegerField()

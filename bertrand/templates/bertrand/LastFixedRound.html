@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+    <center>
+    <b>Sie haben {{fixed_rounds}} Runden gespielt. Ab der kommenden Runde würfelt der Computer einen virtuellen Würfel, welcher entscheidet, ob das Experiment weitergeführt wird oder nicht. Bei einer Zahl von 6 ist das Spiel vorbei, bei allen anderen Zahlen geht das Experiment weiter.</b>
+    <br><br>    {% next_button %}
+
+    </center>
+
+
+{% endblock %}
+

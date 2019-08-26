@@ -17,7 +17,7 @@ SESSION_CONFIGS = [
         display_name="bertrand_baseline",
         group_treatment='baseline',
         num_demo_participants=3,
-        app_sequence=['bertrand']
+        app_sequence=['bertrand', 'survey', 'payment']
     ),
     dict(
         name='bertrand_recommendation',
@@ -25,7 +25,14 @@ SESSION_CONFIGS = [
         group_treatment='recommendation',
         num_demo_participants=3,
         app_sequence=['bertrand']
+    ),
+    dict(
+        name='bertrand_cycle',
+        display_name="bertrand_recommendation",
+        num_demo_participants=6,
+        app_sequence=['bertrand']
     )
+
 
 ]
 # see the end of this file for the inactive session configs
@@ -37,6 +44,7 @@ LANGUAGE_CODE = 'de'
 
 # e.g. EUR, GBP, CNY, JPY
 REAL_WORLD_CURRENCY_CODE = 'EUR'
+POINTS_CUSTOM_NAME = 'Taler'
 USE_POINTS = True
 REAL_WORLD_CURRENCY_DECIMAL_PLACES = 1
 
