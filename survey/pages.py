@@ -5,6 +5,7 @@ from .models import Constants
 
 class SurveyQuestions(Page):    
     pass
+    
 page_sequence = [
     SurveyQuestions
 ]

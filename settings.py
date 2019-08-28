@@ -24,14 +24,21 @@ SESSION_CONFIGS = [
         display_name="bertrand_recommendation",
         group_treatment='recommendation',
         num_demo_participants=3,
-        app_sequence=['bertrand']
+        app_sequence=['bertrand', 'survey', 'payment']
     ),
     dict(
         name='bertrand_cycle',
         display_name="bertrand_recommendation",
         num_demo_participants=6,
-        app_sequence=['bertrand']
+        app_sequence=['bertrand', 'survey', 'payment']
+    ),
+    dict(
+        name='bertrand_big',
+        display_name="bertrand_recommendation",
+        num_demo_participants=33,
+        app_sequence=['bertrand', 'survey', 'payment']
     )
+
 
 
 ]

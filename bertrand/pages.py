@@ -78,7 +78,11 @@ class NextRound(WaitPage):
                 # Remember which was the last round we played
                 self.session.vars['last_round'] = self.round_number - 1
                 self.subsession.last_round = self.round_number - 1
-                self.player.set_final_payoff()
+
+                # If we played the last round, set the final payoff for all players in all groups
+                for g in self.subsession.get_groups():
+                    for p in g.get_players(): 
+                        p.set_final_payoff()
             else:
                 # If we are still playing, get the recommendation for the current round
                 # given that the group is in a treatment with recommendation.

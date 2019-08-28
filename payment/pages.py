@@ -15,5 +15,5 @@ class FinalResults(Page):
 
 
 page_sequence = [
-FinalResults
-]
+    FinalResults
+    ]
