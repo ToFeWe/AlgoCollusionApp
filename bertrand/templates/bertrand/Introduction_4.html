@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Erklärung des Experiments{% endblock %}
+
+{% block content %}
+Nach jeder Runde werden alle Spieler über die gewählten Preise aller Firmen informiert.
+ Sowie über die Gewinne aller Firmen und den eigenen Gesamtgewinn.
+  In der nächsten Runde hat jede Firma wieder die Möglichkeit den Preis neu zu wählen.
+   Das Spiel geht mindestens über <b>20 Runden</b>. Danach wirft der Computer vor jeder möglichen weiteren Runde einen virtuellen Würfel. Das Ergebnis entscheidet, ob eine weitere Runde gespielt wird oder nicht. Bei einer Zahl von 6 ist das Spiel vorbei, bei allen anderen Zahlen wird eine weitere Runde gespielt.
+<br>
+<br>
+Nach Spielende werden Sie über die Summe Ihrer Gewinne aus allen Runden informiert. Diese wird Ihnen anschließend ausgezahlt. Außerdem erhalten Sie zusätzlich 4 € für die Teilnahme an diesem Experiment. 
+<br><br>
+Als Hilfsmittel bieten wir einen Rechner an, mit dem Sie Ihren Gewinn pro Runde berechnen können. 
+<br><br>
+{% next_button %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Herzlich Willkommen{% endblock %}
+
+{% block content %}
+Hallo und herzlich willkommen zu unserem Experiment. 
+In der nächsten Stunde werden Sie an einem Computer Entscheidungen treffen.
+Bitte lesen Sie die Instruktionen aufmerksam durch.
+Alle Teilnehmer erhalten die gleichen Instruktionen.
+<br><br>
+<b>Besonders wichtig:</b> Sprechen Sie nicht mit Ihren Nachbarn, benutzen Sie nicht Ihr 
+Mobiltelefon und verhalten Sie sich während des gesamten Experiments leise.
+ Sollten Sie irgendwelche Fragen haben, melden Sie sich. Wir kommen dann zu Ihrem Platz und helfen. 
+<br>
+<br>
+{% next_button %}
+{% endblock %}

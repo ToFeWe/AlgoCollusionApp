@@ -1,0 +1,17 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Herzlich Willkommen{% endblock %}
+
+{% block content %}
+In diesem Experiment treffen Sie wiederholt Preisentscheidungen. Diese ermöglichen es Ihnen echtes Geld zu verdienen. Wie viel Sie verdienen ist abhängig von Ihren Entscheidungen und denen Ihrer Mitspieler. Unabhängig davon erhalten Sie 4 € für die Teilnahme. 
+<br><br>
+Im Experiment verwenden wir eine fiktive Geldeinheit namens Taler. Im Anschluss an das Experiment werden die Taler in Euro umgerechnet und Ihnen ausgezahlt. Dabei entsprechen XXX Taler einem Euro. Die Euro Beträge werden auf die erste Nachkommastelle gerundet. 
+<br><br>
+
+<b>Beispiel:</b><br>
+Spieler A hat im Experiment 465 Taler verdient. Umgerechnet entspricht das 11,625 €. Auf die erste Nachkommastelle gerundet werden Spieler A 11,6 € ausgezahlt. 
+<br>
+<br>
+{% next_button %}
+{% endblock %}

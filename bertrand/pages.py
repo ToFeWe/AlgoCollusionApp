@@ -4,37 +4,50 @@ from .models import Constants
 import random
 
 
-class Introduction(Page):
+class Introduction_1(Page):
     def is_displayed(self):
         return self.round_number == 1
 
-
-class Explanation(Page):
+class Introduction_2(Page):
     def is_displayed(self):
         return self.round_number == 1
 
-    def vars_for_template(self):
-        # Group treatment stored in participant.vars of
-        # first group member.
+class Introduction_3(Page):
+    def is_displayed(self):
+        return self.round_number == 1
+
+class Introduction_4(Page):
+    def is_displayed(self):
+        return self.round_number == 1
+
+class Algorithm_Introduction(Page):
+    def is_displayed(self):
         treatment =  self.participant.vars['group_treatment']
-        
-        return {
-            'treatment': treatment
-        }
+        return treatment == 'recommendation' and self.round_number == 1
+
+
 
  
 
 
 class Quiz(Page):
     form_model = 'player'
-    form_fields = ['q_bertrand_1', 'q_recommendation_1', 'q_recommendation_2']
 
     def get_form_fields(self):
         treatment =  self.participant.vars['group_treatment']
         if treatment == 'baseline':
-            return ['q_bertrand_1', 'q_recommendation_1']
+            return ['q_how_many_customer',
+                    'q_after_fixed_round',
+                    'q_profit_1',
+                    'q_profit_2',
+                    'q_profit_3']
         else:
-            return ['q_bertrand_1', 'q_recommendation_1', 'q_recommendation_2']
+            return ['q_how_many_customer',
+                    'q_after_fixed_round',
+                    'q_profit_1',
+                    'q_profit_2',
+                    'q_profit_3',
+                    'q_goal_alg']
     
     def is_displayed(self):
         return self.round_number == 1
@@ -111,7 +124,7 @@ class Decide(Page):
     def vars_for_template(self):
         treatment =  self.participant.vars['group_treatment']
 
-        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {}:".format(Constants.deviation_price,
+        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {} Talern:".format(Constants.deviation_price,
                                                                                  Constants.monopoly_price)
         return {
             "label_decide": label_decide,
@@ -187,8 +200,11 @@ class LastFixedRound(Page):
 
 
 page_sequence = [
-    Introduction,
-    Explanation,
+    Introduction_1,
+    Introduction_2,
+    Introduction_3,
+    Introduction_4,
+    Algorithm_Introduction,
     Quiz,
     NextRound,
     StartExperiment,
