@@ -16,12 +16,15 @@
 			Der Algorithmus empfiehlt einen Preis von <b>{{group.recommendation}}</b> Talern.
 		{% else %}
 			{% if group.recommendation == Constants.monopoly_price %}
-				In der vergangenen Runde haben alle Firmen einen Preis von XXX gesetzt.
-				Der Algorithmus empfiehlt einen Preis von <b>{{group.recommendation}}</b> Talern.
-				TODO: Fälle einbauen, wenn formuliert!
+				In der vergangenen Runde haben alle Firmen einen Preis von {{player_price_last_round}} Talern gewählt.
+					{% if player_price_last_round != Constants.monopoly_price %}
+						Für einen höheren Gesamtgewinn empfiehlt der Algorithmus in dieser Runde den Preis auf <b>{{group.recommendation}} Taler</b> zu erhöhen.
+					{% else %}
+						Der Algorithmus empfiehlt den Preis von <b>{{group.recommendation}} Talern</b> beizubehalten.
+					{% endif %}
 				{% else %}
 				In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis und die Firmen haben 
-				unterschiedliche Preise gewählt. Der Algorithmus empfiehlt einen Preis von <b>{{group.recommendation}}</b> Talern.	
+				unterschiedliche Preise gewählt. Der Algorithmus empfiehlt einen Preis von <b>{{group.recommendation}} Taler.</b>
 			{% endif %}
 		{% endif %}
 	{% endif %}

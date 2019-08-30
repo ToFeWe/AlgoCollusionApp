@@ -12,6 +12,17 @@ class Introduction_2(Page):
     def is_displayed(self):
         return self.round_number == 1
 
+    def vars_for_template(self):
+        exchange_rate = 1 / self.session.config['real_world_currency_per_point']
+        coins_in_euro = 844 / exchange_rate
+
+        return {
+            'exchange_rate': exchange_rate,
+            'show_up_fee': self.session.config['participation_fee'],
+            'coins_in_euro': coins_in_euro,
+            'coins_in_euro_rounded': round(coins_in_euro, 1)
+        }
+
 class Introduction_3(Page):
     def is_displayed(self):
         return self.round_number == 1
@@ -19,6 +30,11 @@ class Introduction_3(Page):
 class Introduction_4(Page):
     def is_displayed(self):
         return self.round_number == 1
+        
+    def vars_for_template(self):
+        return {
+            'show_up_fee': self.session.config['participation_fee']
+        }
 
 class Algorithm_Introduction(Page):
     def is_displayed(self):
@@ -124,12 +140,20 @@ class Decide(Page):
     def vars_for_template(self):
         treatment =  self.participant.vars['group_treatment']
 
+        # In the first round there is no last price
+        # We set it here to -1, as it won't be displayed anyways,
+        # given the fixed recommendation in the first period.
+        if self.round_number == 1:
+            player_price_last_round = -1
+        else:
+            player_price_last_round = self.player.in_previous_rounds()[-1].price
         label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {} Talern:".format(Constants.deviation_price,
                                                                                  Constants.monopoly_price)
         return {
             "label_decide": label_decide,
             'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
-            'treatment': treatment
+            'treatment': treatment,
+            'player_price_last_round': player_price_last_round
             }
 
 

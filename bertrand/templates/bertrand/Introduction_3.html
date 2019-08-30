@@ -9,12 +9,12 @@ In diesem Experiment repräsentieren Sie eine Firma in einem Produktmarkt.
   Diese Firmen werden von zwei anderen Experiment-Teilnehmern repräsentiert.
    Das Experiment hat mehrere Runden.
     Sie treffen in jeder Runde auf dieselben Firmen (also Experiment-Teilnehmer).
-     Der Markt hat 30 identische Kunden.
+     Der Markt hat {{Constants.m_consumer}} identische Kunden.
       Jeder Kunde möchte in jeder Runde <b>eine Einheit</b> des Produkts möglichst günstig kaufen.
-       Jeder Kunde ist bereit bis zu 10 Taler für diese Einheit des Produkts auszugeben.
+       Jeder Kunde ist bereit bis zu {{Constants.maximum_price}} Taler für diese Einheit des Produkts auszugeben.
         Alle Firmen entscheiden in jeder Runde erneut <b>unabhängig und gleichzeitig</b>,
          für wie viel Sie Ihr Produkt verkaufen möchten.
-          Sie können Ihr Produkt für einen Stückpreis von 1, 2, … oder 10 Taler verkaufen (nur ganze Taler). Es gibt keine Produktionskosten. Ihr Preis multipliziert mit der Anzahl verkaufter Einheiten ist gleich Ihr Gewinn.
+          Sie können Ihr Produkt für einen Stückpreis von {{Constants.deviation_price}}, 2, … oder {{Constants.maximum_price}} Taler verkaufen (nur ganze Taler). Es gibt keine Produktionskosten. Ihr Preis multipliziert mit der Anzahl verkaufter Einheiten ist gleich Ihr Gewinn.
 <br><br>
 Sie konkurrieren mit den anderen beiden Firmen im Markt.
  Die Firma mit dem <b>niedrigsten Preis in der jeweiligen Runde</b> verkauft die Produkte.
