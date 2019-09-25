@@ -19,7 +19,7 @@ class Constants(BaseConstants):
     num_rounds = 40
 
     # Rounds without continuation probability
-    fixed_rounds = 2
+    fixed_rounds = 3
 
     # Probability to continue the experiment for the next round
     cont_prob = 5/6

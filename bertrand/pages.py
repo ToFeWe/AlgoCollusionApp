@@ -42,7 +42,8 @@ class Algorithm_Introduction(Page):
         return treatment == 'recommendation' and self.round_number == 1
 
 
-
+class NewGame(Page):
+    pass
  
 
 
