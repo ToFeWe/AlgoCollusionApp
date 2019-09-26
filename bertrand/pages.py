@@ -7,20 +7,20 @@ import random
 class ShuffleWaitPage(WaitPage):
     wait_for_all_groups = True
 
-    def after_all_players_arrive(self):
-        # In the first round for the app group randomly
-        if self.round_number == 1:
-            self.subsession.group_randomly()
+    # def after_all_players_arrive(self):
+    #     # In the first round for the app group according to shuffle rules
+    #     if self.round_number == 1:
+    #         self.subsession.do_my_shuffle()
+    #     # Then apply this structure to each round for the given app
+    #     # Note that this way we have a new matching if we play the app for
+    #     # multiple times.
+    #     # If we change the constants in each app accordingly.
+    #     for subsession in self.subsession.in_rounds(2, Constants.num_rounds):
+    #         subsession.group_like_round(1)
 
-        # Then apply this random structure to each round for the given app
-        # Note that this way we have a new random matching if we play the app for
-        # multiple times.
-        for subsession in self.subsession.in_rounds(2, Constants.num_rounds):
-            subsession.group_like_round(1)
-
-        # Initialize variable that shows if we still play in the first round 
-        # of the app
-        self.session.vars['playing'] = True
+    #     # Initialize variable that shows if we still play in the first round 
+    #     # of the app
+    #     self.session.vars['playing'] = True
 
     def is_displayed(self):
         return self.round_number == 1

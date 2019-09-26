@@ -12,9 +12,22 @@ class Constants(OriginalConstants):
     # then instead of Constants.abc, do self.subsession.this_app_constants().abc
     # even better, return a NamedTuple instead of a dict.
 
-
 class Subsession(SharedBaseSubsession):
-    pass
+    def creating_session(self):
+        if self.round_number == 1:
+            if self.session.num_participants == 9:
+                shuffle_structure = [[1, 6, 8], [4, 9, 2], [7, 3, 5]]
+            elif self.session.num_participants == 18:
+                shuffle_structure = [[1, 6, 8], [4, 9, 2], [7, 3, 5],
+                        [10, 15, 17], [13, 18, 11], [16, 12, 14]]
+            elif self.session.num_participants == 27:
+                shuffle_structure = [[1, 6, 8], [4, 9, 2], [7, 3, 5],
+                     [10, 15, 17], [13, 18, 11], [16, 12, 14], 
+                     [19, 24, 26], [22, 27, 20], [25, 21, 23]]
+            
+            self.set_group_matrix(shuffle_structure)
+        else:
+            self.group_like_round(1)
 
 
 class Group(SharedBaseGroup):

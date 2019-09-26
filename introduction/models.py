@@ -13,7 +13,8 @@ Your app description
 
 class Constants(BaseConstants):
     name_in_url = 'introduction'
-    players_per_group = None
+    # Groups of nine to ensure that matching groups work properly
+    players_per_group = 9
     num_rounds = 1
 
     # TODO: Chekc that its always the same in the next app

@@ -16,20 +16,20 @@ SESSION_CONFIGS = [
         name='bertrand_baseline',
         display_name="bertrand_baseline",
         group_treatment='baseline',
-        num_demo_participants=3,
+        num_demo_participants=9,
         app_sequence=['introduction', 'bertrand', 'bertrand_SG_2', 'bertrand_SG_3', 'survey', 'payment']
     ),
     dict(
         name='bertrand_recommendation',
         display_name="bertrand_recommendation",
         group_treatment='recommendation',
-        num_demo_participants=3,
+        num_demo_participants=9,
         app_sequence=['introduction', 'bertrand', 'bertrand_SG_2', 'bertrand_SG_3',  'survey', 'payment']
     ),
     dict(
         name='bertrand_big_recommendation',
         display_name="bertrand_recommendation",
-        num_demo_participants=33,
+        num_demo_participants=27,
         group_treatment='recommendation',
         app_sequence=['introduction', 'bertrand', 'bertrand_SG_2', 'bertrand_SG_3',  'survey', 'payment']
     )

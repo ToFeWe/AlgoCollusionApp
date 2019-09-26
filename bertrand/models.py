@@ -11,6 +11,9 @@ Price Recommender Game with Bertrand
 """
 
 class Constants(BaseConstants):
+    class Meta:
+        abstract = True
+
     players_per_group = 3
     name_in_url = 'bertrand'
 
@@ -37,13 +40,12 @@ class Constants(BaseConstants):
     # Treatment names
     treatments = ['baseline', 'recommendation']
 
-
 class SharedBaseSubsession(BaseSubsession):
     class Meta:
       abstract = True
 
     last_round =  models.IntegerField()
-            
+
 
 class SharedBaseGroup(BaseGroup):
     class Meta:
@@ -134,12 +136,26 @@ class SharedBasePlayer(BasePlayer):
         self.final_payoff_euro = float(self.participant.payoff_plus_participation_fee())
 
 class Subsession(SharedBaseSubsession):
-    pass
+    def creating_session(self):
+        if self.round_number == 1:
+            if self.session.num_participants == 9:
+                shuffle_structure = [[1,2,3], [4, 5, 6], [7, 8, 9]]
+            elif self.session.num_participants == 18:
+                shuffle_structure = [[1,2,3], [4, 5, 6], [7, 8, 9],
+                                    [10, 11, 12], [13, 14, 15], [16, 17, 18]]
+            elif self.session.num_participants == 27:
+                shuffle_structure = [[1,2,3], [4, 5, 6], [7, 8, 9],
+                                    [10, 11, 12], [13, 14, 15], [16, 17, 18],
+                                    [19, 20, 21], [22, 23, 24], [25, 26, 27]]
+            self.set_group_matrix(shuffle_structure)
+        else:
+            self.group_like_round(1)
 
 
 class Group(SharedBaseGroup):
     pass
 
-
 class Player(SharedBasePlayer):
     pass
+
+
