@@ -1,0 +1,27 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+
+    <center>
+
+    Der Zufallsmechanismus hat entschieden, dass dies die letzte Runde des Spiels war. Sie haben insgesamt {{accumulated_profit}} verdient.
+        Das war das {{super_game_count}} Super Game. 
+
+    {% if super_game_count == 3 %}
+    Der Würfel ist gefallen! Das war die letzte Runde. Bitte beantworten sie noch die folgenden Fragen.
+
+    {% else %}
+    Der Würfel ist gefallen! Das war die letzte Runde. Sie spielen das ganze jetzt noch mal.
+
+    {% endif %}
+     Der Gewinn in dem aktuellen Spiel war XYZ. Ingesamt haben sie ABC verdient.
+    <br><br>    {% next_button %}
+
+    </center>
+
+
+{% endblock %}
+

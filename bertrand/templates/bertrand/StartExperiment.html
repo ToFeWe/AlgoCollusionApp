@@ -6,8 +6,18 @@
 {% block content %}
 
     <center>
-    <b>Klicken Sie auf "Weiter" um mit dem Experiment zu beginnen.</b>
-    <br><br>    {% next_button %}
+    <b>Klicken Sie auf "Weiter" um mit dem Experiment zu beginnen.
+    <br><br>    
+    Sie sind der Spieler {{player.id_in_group}} in Ihrer Gruppe aus ingesamt drei Personen.
+    
+    {% if  super_game_count != 1 %}
+    <br><br>
+    Beachten Sie, dass sich die Mitspieler in Ihrer Gruppe im Vergleich zum letzten Spiel geändert haben.
+
+    {% endif %}
+    <br><br>
+    </b>
+    {% next_button %}
 
     </center>
 

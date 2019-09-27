@@ -11,22 +11,11 @@ Price Recommender Game with Bertrand
 """
 
 class Constants(BaseConstants):
-    class Meta:
-        abstract = True
-
     players_per_group = 3
     name_in_url = 'bertrand'
-
-
-    # Note that *num_rounds* is used to have an upper bound but is not actually used
-    num_rounds = 40
-
-    # Rounds without continuation probability
-    fixed_rounds = 1
-
-    # Probability to continue the experiment for the next round
-    cont_prob = 5/6
-
+    
+    # num_rounds is only an upper bound but not acutally used
+    num_rounds = 30 
 
     maximum_price = 10
     monopoly_price = 10
@@ -44,7 +33,6 @@ class SharedBaseSubsession(BaseSubsession):
     class Meta:
       abstract = True
 
-    last_round =  models.IntegerField()
 
 
 class SharedBaseGroup(BaseGroup):
@@ -111,7 +99,7 @@ class SharedBasePlayer(BasePlayer):
 
     price = models.IntegerField(
         min=Constants.deviation_price, max=Constants.maximum_price,
-        doc="""Price player offers to sell product for"""
+        doc= """Price player offers to sell product for"""
     )
 
     # Define all as Integer as they are points/tokens
@@ -128,8 +116,8 @@ class SharedBasePlayer(BasePlayer):
 
     def set_final_payoff(self):
         # We take the accumulated payoff from the last round we 
-        # actually played
-        last_played_round = self.session.vars['last_round']
+        # played
+        last_played_round = self.subsession.this_app_constants()['round_number_draw']
         total_money = self.in_round(last_played_round).accumulated_profit 
         self.payoff = total_money
         # Final points as money
@@ -151,6 +139,14 @@ class Subsession(SharedBaseSubsession):
         else:
             self.group_like_round(1)
 
+    def this_app_constants(self):
+        """ App specific constants
+        
+        """
+        # The number of rounds we have drawn ex ante according to some cont prob
+        return {'round_number_draw': 1, #TODO: Change
+                'super_game_count': 1
+                } 
 
 class Group(SharedBaseGroup):
     pass

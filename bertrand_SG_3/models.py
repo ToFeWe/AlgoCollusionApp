@@ -29,7 +29,15 @@ class Subsession(SharedBaseSubsession):
         else:
             self.group_like_round(1)
 
-
+    def this_app_constants(self):
+        """ App specific constants
+        
+        """
+        # The number of rounds we have drawn ex ante according to some cont prob
+        return {'round_number_draw': 3, #TODO: Change
+                'super_game_count': 3
+                } 
+                
 class Group(SharedBaseGroup):
     pass
 

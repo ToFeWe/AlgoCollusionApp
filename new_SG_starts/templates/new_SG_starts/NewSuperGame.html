@@ -1,0 +1,15 @@
+{% extends "global/Page.html" %}
+{% load otree static %}
+
+{% block title %}
+ Sie spielen jetzt das gleiche Spiel nochmal.
+ {% endblock %}
+
+{% block content %}
+Dies war die letzte Runde vom Spiel. 
+<br><br>
+ Sie spielen jetzt das gleiche Spiel nochmal, aber mit neuen Partner.
+
+    {% next_button %}
+
+{% endblock %}
