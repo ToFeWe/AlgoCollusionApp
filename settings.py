@@ -17,7 +17,13 @@ SESSION_CONFIGS = [
         display_name="bertrand_baseline",
         group_treatment='baseline',
         num_demo_participants=9,
-        app_sequence=['introduction', 'bertrand', 'bertrand_SG_2', 'bertrand_SG_3', 'survey', 'payment']
+        app_sequence=[
+        #'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         #'survey',
+         'payment'] # TODO: Adjust
     ),
     dict(
         name='bertrand_recommendation',
@@ -48,7 +54,7 @@ LANGUAGE_CODE = 'de'
 REAL_WORLD_CURRENCY_CODE = 'EUR'
 POINTS_CUSTOM_NAME = 'Taler'
 USE_POINTS = True
-REAL_WORLD_CURRENCY_DECIMAL_PLACES = 1
+REAL_WORLD_CURRENCY_DECIMAL_PLACES = 2
 
 ROOMS = [
     dict(

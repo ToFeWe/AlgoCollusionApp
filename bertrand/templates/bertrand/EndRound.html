@@ -1,26 +1,31 @@
 {% extends "global/Page.html" %}
 {% load otree %}
 
-{% block title %}{% endblock %}
+{% block title %}Ende des {{super_game_count}}. Spiels {% endblock %}
 
 {% block content %}
 
-    <center>
 
-    Der Zufallsmechanismus hat entschieden, dass dies die letzte Runde des Spiels war. Sie haben insgesamt {{accumulated_profit}} verdient.
-        Das war das {{super_game_count}} Super Game. 
-
-    {% if super_game_count == 3 %}
-    Der Würfel ist gefallen! Das war die letzte Runde. Bitte beantworten sie noch die folgenden Fragen.
-
+    Der Zufallsmechanismus hat entschieden, dass dies die letzte Runde des {{super_game_count}}. Spiels war. 
+    Sie haben in diesem Spiel insgesamt <b>{{accumulated_profit}} Taler </b> verdient. <br>
+    <br><br>
+    {% if super_game_count != 3 %}
+    
+        Sie spielen jetzt das gleiche Spiel im Folgenden erneut. 
+        <br><br>
+        {% if super_game_count == 2 %}
+            Dies wird der letzte Durchgang sein.
+        {% endif %}
+        <b>WICHTIG: Beachten Sie, dass sich dabei mit  neuen Mitspielern in einer
+        Gruppe sein werden. </b>
+        
     {% else %}
-    Der Würfel ist gefallen! Das war die letzte Runde. Sie spielen das ganze jetzt noch mal.
+    Dies war das letzte Spiel. Bitte klicken Sie auf "Weiter", um noch einige abschließenden Fragen zu beantworten.
 
     {% endif %}
-     Der Gewinn in dem aktuellen Spiel war XYZ. Ingesamt haben sie ABC verdient.
-    <br><br>    {% next_button %}
+<br><br>    
 
-    </center>
+    {% next_button %}
 
 
 {% endblock %}

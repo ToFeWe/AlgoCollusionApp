@@ -13,29 +13,19 @@ class Constants(OriginalConstants):
     # even better, return a NamedTuple instead of a dict.
 
 class Subsession(SharedBaseSubsession):
-    def creating_session(self):
-        if self.round_number == 1:
-            if self.session.num_participants == 9:
-                shuffle_structure = [[1,5,9], [4, 8, 3], [7, 2, 6]]
-            elif self.session.num_participants == 18:
-                shuffle_structure = [[1, 5, 9], [4, 8, 3], [7, 2, 6],
-                        [10, 14, 18], [13, 17, 12], [16, 11, 15]]
-            elif self.session.num_participants == 27:
-                shuffle_structure = [[1, 5, 9], [4, 8, 3], [7, 2, 6],
-                                    [10, 14, 18], [13, 17, 12], [16, 11, 15], 
-                                    [19, 23, 27], [22, 26, 21], [25, 20, 24]]
-            
-            self.set_group_matrix(shuffle_structure)
-        else:
-            self.group_like_round(1)
-
     def this_app_constants(self):
         """ App specific constants
         
         """
         # The number of rounds we have drawn ex ante according to some cont prob
-        return {'round_number_draw': 2, #TODO: Change
-                'super_game_count': 2
+        return {'round_number_draw': 1, #TODO: Change
+                'super_game_count': 2,
+                'shuffle_structure_small': [[1,5,9], [4, 8, 3], [7, 2, 6]],
+                'shuffle_structure_medium': [[1, 5, 9], [4, 8, 3], [7, 2, 6],
+                                            [10, 14, 18], [13, 17, 12], [16, 11, 15]],
+                'shuffle_structure_big': [[1, 5, 9], [4, 8, 3], [7, 2, 6],
+                                    [10, 14, 18], [13, 17, 12], [16, 11, 15], 
+                                    [19, 23, 27], [22, 26, 21], [25, 20, 24]]
                 } 
 
 class Group(SharedBaseGroup):
