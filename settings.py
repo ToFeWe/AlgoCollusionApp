@@ -13,7 +13,7 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 SESSION_CONFIGS = [
     dict(
-        name='bertrand_baseline',
+        name='bertrand_baseline_test',
         display_name="bertrand_baseline",
         group_treatment='baseline',
         num_demo_participants=9,

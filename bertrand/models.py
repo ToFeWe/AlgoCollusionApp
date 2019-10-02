@@ -181,9 +181,8 @@ class SharedBasePlayer(BasePlayer):
         # IMPORTANT: Only use this method once the profit for the round has been calculated
         # using *set_profits_round* from the group method
         total_money = self.in_round(last_played_round).accumulated_profit 
-        self.payoff = total_money
-        # Final points as money
-        self.final_payoff_euro = float(self.participant.payoff_plus_participation_fee())
+        # Note, we do not save this to payoff as we will randomly select one of the 
+        # super games for payoff.
 
         # Save the final accumulated payoff for the last subgame in the participant dict.
         self.sg_payoff_to_dict(sg_counter = self.subsession.this_app_constants()['super_game_count'],

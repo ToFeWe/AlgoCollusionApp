@@ -2,6 +2,7 @@ from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
 )
+import random
 
 
 author = 'Your name here'
@@ -18,8 +19,11 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    pass
+    # Indicator which super game is payed
+    payed_sg = models.IntegerField()
 
+    def creating_session(self):
+        self.payed_sg = random.choice([1,2,3])
 
 class Group(BaseGroup):
     pass

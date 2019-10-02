@@ -45,9 +45,9 @@
 
     Ihr Preis in dieser Runde war {{ player.price }} Taler. Der niedrigste Preis betrug {{ group.winning_price }} Taler.
     {% if player.is_winner %} 
-    Da Sie den günstigsten Preis gesetzt haben, haben also gewonnen. 
+    Da Sie den günstigsten Preis gewählt haben, haben also gewonnen. 
         {% if group.n_winners == 1 %}
-         Da kein anderer Spieler diesen Preis gesetzt hat, erhalten Sie {{ group.winner_profit }} Taler. 
+         Da kein anderer Spieler diesen Preis gewählt hat, erhalten Sie {{ group.winner_profit }} Taler. 
         {% else %}
          Da {{group.n_winners|add:"-1" }} andere/r Spieler auch diesen Preis gewählt haben/hat, wird der Profit dieser Runde zwischen den Spielern mit dem niedrigsten Preis aufgeteilt. 
          Jeder erhält {{ group.winner_profit }} Taler. 

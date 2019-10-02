@@ -5,6 +5,12 @@ from .models import Constants
 
 class FinalResults(Page):    
     def vars_for_template(self):
+
+        # Set the payoff as the randomly selected super game
+        payed_sg_string = str(self.subsession.payed_sg)
+        key_payoff_sg = 'final_payoff_sg_' + payed_sg_string
+        self.player.payoff = self.participant.vars[key_payoff_sg]
+
         return {
             'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
             'show_up': self.session.config['participation_fee'],
@@ -12,7 +18,8 @@ class FinalResults(Page):
             'payoff_coins': self.participant.payoff,
             'payoff_sg_1': self.participant.vars['final_payoff_sg_1'],
             'payoff_sg_2': self.participant.vars['final_payoff_sg_2'],
-            'payoff_sg_3': self.participant.vars['final_payoff_sg_3']
+            'payoff_sg_3': self.participant.vars['final_payoff_sg_3'],
+            'payed_sg': self.subsession.payed_sg
         }
 
 
