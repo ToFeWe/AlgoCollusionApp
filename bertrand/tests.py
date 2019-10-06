@@ -25,6 +25,7 @@ class SharedPlayerBot(Bot):
 
             if self.round_number == self.subsession.this_app_constants()['round_number_draw']:
                 round_number_draw = self.subsession.this_app_constants()['round_number_draw']
+                assert round_number_draw in [1,2,3]
                 # Each round everyone plays a price of 10. Hence, the market is shared for each round
                 # across all rounds.
                 accumulated_payoff_in_app = round_number_draw * 10 * Constants.m_consumer / Constants.players_per_group

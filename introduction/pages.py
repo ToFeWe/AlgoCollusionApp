@@ -2,6 +2,7 @@ from otree.api import Currency as c, currency_range
 from ._builtin import Page, WaitPage
 from .models import Constants
 
+import math
 
 class Introduction_1(Page):
     def is_displayed(self):
@@ -13,13 +14,13 @@ class Introduction_2(Page):
 
     def vars_for_template(self):
         exchange_rate = 1 / self.session.config['real_world_currency_per_point']
-        coins_in_euro = 844 / exchange_rate
+        coins_in_euro = 465 / exchange_rate
 
         return {
             'exchange_rate': exchange_rate,
             'show_up_fee': self.session.config['participation_fee'],
             'coins_in_euro': coins_in_euro,
-            'coins_in_euro_rounded': round(coins_in_euro, 1)
+            'coins_in_euro_rounded': math.ceil(coins_in_euro * 10) / 10 # Round up first decimal digit
         }
 
 class Introduction_3(Page):

@@ -9,12 +9,16 @@ In diesem Experiment repräsentieren Sie eine Firma in einem Produktmarkt.
   Diese Firmen werden von zwei anderen Experiment-Teilnehmern repräsentiert.
    Das Experiment hat mehrere Runden.
     Sie treffen in jeder Runde auf dieselben Firmen (also Experiment-Teilnehmer).
+        Alle Firmen entscheiden in jeder Runde erneut <b>unabhängig und gleichzeitig</b>,
+         für wie viel Sie Ihr Produkt verkaufen möchten.
+          Sie können Ihr Produkt für einen Stückpreis von {{Constants.deviation_price}}, 2, … oder {{Constants.maximum_price}} Taler verkaufen (nur ganze Taler). 
+          Es gibt keine Produktionskosten. Ihr Preis multipliziert mit der Anzahl verkaufter Einheiten ist gleich Ihr Gewinn. Formal ausgedrückt:
+          <br><br>
+          <b> Gewinn = Preis x verkaufte Menge </b>
+          <br><br>
      Der Markt hat {{Constants.m_consumer}} identische Kunden.
       Jeder Kunde möchte in jeder Runde <b>eine Einheit</b> des Produkts möglichst günstig kaufen.
        Jeder Kunde ist bereit bis zu {{Constants.maximum_price}} Taler für diese Einheit des Produkts auszugeben.
-        Alle Firmen entscheiden in jeder Runde erneut <b>unabhängig und gleichzeitig</b>,
-         für wie viel Sie Ihr Produkt verkaufen möchten.
-          Sie können Ihr Produkt für einen Stückpreis von {{Constants.deviation_price}}, 2, … oder {{Constants.maximum_price}} Taler verkaufen (nur ganze Taler). Es gibt keine Produktionskosten. Ihr Preis multipliziert mit der Anzahl verkaufter Einheiten ist gleich Ihr Gewinn.
 <br><br>
 Sie konkurrieren mit den anderen beiden Firmen im Markt.
  Die Firma mit dem <b>niedrigsten Preis in der jeweiligen Runde</b> verkauft die Produkte.
@@ -27,13 +31,13 @@ Sie konkurrieren mit den anderen beiden Firmen im Markt.
 
 <h3> Beispiele </h3>
 <b>Beispiel 1:</b>
-Firma A setzt einen Preis von 1, Firma B setzt einen Preis von 1, Firma C setzt einen Preis von 5. Somit haben Firma A und B gemeinsam den niedrigsten Preis gesetzt. Bei einem Preis von einem Taler ist der Gesamtgewinn 30 Taler, da es 30 Kunden gibt. Firma A und B verkaufen beide die gleiche Anzahl an Produkten und bekommen damit den gleichen Gewinn von 15 Talern ausgezahlt. Firma C verkauft nichts und hat einen Gewinn von 0. 
+Firma 1 setzt einen Preis von 1, Firma B setzt einen Preis von 1, Firma C setzt einen Preis von 5. Somit haben Firma A und B gemeinsam den niedrigsten Preis gesetzt. Bei einem Preis von einem Taler ist der Gesamtgewinn 30 Taler, da es 30 Kunden gibt. Firma A und B verkaufen beide die gleiche Anzahl an Produkten und bekommen damit den gleichen Gewinn von 15 Talern ausgezahlt. Firma C verkauft nichts und hat einen Gewinn von 0. 
 <br><br>
 <b>Beispiel 2:</b>
 Firma A setzt einen Preis von 10, Firma B setzt einen Preis von 10, Firma C setzt einen Preis von 10. Somit haben Firma A, B und C gemeinsam den niedrigsten Preis gesetzt. Sie verkaufen alle die gleiche Anzahl an Produkten (jeweils 10) und bekommen damit den gleichen Gewinn von 100 Talern ausgezahlt. 
 <br><br>
 <b>Beispiel 3:</b>
-Firma A setzt einen Preis von 1, Firma B setzt einen Preis von 1, Firma C setzt einen Preis von 1. Somit haben Firma A, B und C gemeinsam den niedrigsten Preis gesetzt. Sie verkaufen alle die gleiche Anzahl an Produkten (jeweils 10) und bekommen damit den gleichen Gewinn von 10 Talern ausgezahlt. 
+Firma A setzt einen Preis von 1, Firma B setzt einen Preis von 4, Firma C setzt einen Preis von 8. Somit hat Firma A den niedrigsten Preis gesetzt. Firma A verkauft als einzige das Produkt zu einem Preis von 1 an alle 30 Kunden und bekommt damit einen Gewinn von 30 Talern ausgezahlt. Firma B und C verkaufen beide nichts und haben einen Gewinn von 0. 
 <br><br>
 {% next_button %}
 {% endblock %}

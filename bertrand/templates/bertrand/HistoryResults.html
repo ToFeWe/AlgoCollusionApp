@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<br><b>Zur Erinnerung: Sie sind Spieler {{player.id_in_group}}</b></br>
+<br><b>Zur Erinnerung: Sie sind Firma {{player.id_in_group}}</b></br>
 <br>
 <br><b>Fahren Sie mit der Maus über den Graphen, um die Preise in der jeweiligen Period zu sehen.</b></br>
 <br>
@@ -25,15 +25,15 @@
             var options_treatment_specific = {
                         colors: ['#f9d500', '#ff0033', '#102bfb', '#000000'],
                         series: [{
-                                name: "Spieler 1",
+                                name: "Firma 1",
                                 data: {{ prices_player_1 }}
                             },
                             {
-                                name: "Spieler 2",
+                                name: "Firma 2",
                                 data: {{ prices_player_2 }}
                             },
                             {
-                                name: "Spieler 3",
+                                name: "Firma 3",
                                 data: {{ prices_player_3 }}
                             },
                             {
@@ -43,20 +43,21 @@
                             
                         ]
             }
-        } else {
+        } 
+        else {
         // If it is not the recommendation treatment, we have to display less information
             var options_treatment_specific = {
                         colors: ['#f9d500', '#ff0033', '#102bfb'],
                         series: [{
-                                name: "Spieler 1",
+                                name: "Firma 1",
                                 data: {{ prices_player_1 }}
                             },
                             {
-                                name: "Spieler 2",
+                                name: "Firma 2",
                                 data: {{ prices_player_2 }}
                             },
                             {
-                                name: "Spieler 3",
+                                name: "Firma 3",
                                 data: {{ prices_player_3 }}
                             }
                             

@@ -4,17 +4,26 @@
 {% block title %}Erklärung des Experiments{% endblock %}
 
 {% block content %}
-Nach jeder Runde werden alle Spieler über die gewählten Preise aller Firmen informiert.
- Sowie über die Gewinne aller Firmen und den eigenen Gesamtgewinn.
-  In der nächsten Runde hat jede Firma wieder die Möglichkeit den Preis neu zu wählen.
-   Das Spiel geht mindestens über <b>{{Constants.fixed_rounds}} Runden</b>. Danach wirft der Computer vor jeder möglichen weiteren Runde einen virtuellen Würfel. Das Ergebnis entscheidet, ob eine weitere Runde gespielt wird oder nicht. Bei einer Zahl von 6 ist das Spiel vorbei, bei allen anderen Zahlen wird eine weitere Runde gespielt.
-<br>
-<br>
-Nach Spielende werden Sie über die Summe Ihrer Gewinne aus allen Runden informiert.
- Diese wird Ihnen anschließend ausgezahlt.
-  Außerdem erhalten Sie zusätzlich {{show_up_fee}} für die Teilnahme an diesem Experiment. 
+Nach jeder Runde werden alle Spieler über die gewählten Preise aller Firmen informiert, sowie über die Gewinne aller Firmen und den eigenen Gesamtgewinn des Spiels.
+ In der nächsten Runde hat jede Firma wieder die Möglichkeit den Preis neu zu wählen. Die Teilnehmer, mit denen Sie konkurrieren, sind dabei in allen Runden eines Spiels identisch. 
+
 <br><br>
-Als Hilfsmittel bieten wir einen Rechner an, mit dem Sie Ihren Gewinn pro Runde berechnen können. 
+Nach jeder Runde entscheidet ein Zufallsmechanismus, ob eine weitere Runde gespielt wird oder das Spiel endet.
+Die Wahrscheinlichkeit, dass eine weitere Runde gespielt liegt bei 95%. Das Spiel endet also nach jeder Runde mit einer Wahrscheinlichkeit von 5%.<br>
+Bildlich gesprochen wirft der Computer vor jeder möglichen weiteren Runde einen virtuellen Würfel mit 20 Seiten.
+Das Ergebnis entscheidet, ob eine weitere Runde gespielt wird oder nicht. Bei einer Zahl von 20 ist das Spiel vorbei, bei allen anderen Zahlen wird eine weitere Runde gespielt.
+<br><br>
+
+
+<b>Beachten Sie:<br>
+Sie spielen das beschriebene Spiel insgesamt 3 mal.</b> Nach jedem Spiel werden sie mit neuen Teilnehmern zu einem neuen Markt zusammengesetzt.
+Das bedeutet, dass Sie in jedem der drei Spiele mit anderen Teilnehmer interagieren. 
+
+<br><br>
+Nach Spielende wird zufällig entschieden, welches der 3 Spiele ausgezahlt wird. Dieser Gewinn wird Ihnen anschließend ausgezahlt.
+ Außerdem erhalten Sie zusätzlich {{show_up_fee}} für die Teilnahme an diesem Experiment. 
+<br><br>
+Als Hilfsmittel blenden wir Ihnen einen virtuellen Taschenrechner ein, mit dem Sie Ihren Gewinn pro Runde berechnen können.
 <br><br>
 {% next_button %}
 {% endblock %}

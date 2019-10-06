@@ -3,15 +3,6 @@ from otree.api import Currency as c, currency_range
 from .models import Constants
 import random
 
-class StartExperiment(Page):
-    def is_displayed(self):
-        return self.round_number == 1
-    
-    def vars_for_template(self):
-        return {
-            'super_game_count': self.subsession.this_app_constants()['super_game_count']
-        }
-
 class NextRound(WaitPage):
     wait_for_all_groups = True
     
@@ -28,6 +19,15 @@ class NextRound(WaitPage):
             treatment =  p1.participant.vars['group_treatment']
             if treatment == 'recommendation':
                 current_group.get_recommendation(round_number=self.round_number)
+
+class StartExperiment(Page):
+    def is_displayed(self):
+        return self.round_number == 1
+    
+    def vars_for_template(self):
+        return {
+            'super_game_count': self.subsession.this_app_constants()['super_game_count']
+        }
 
 
 
@@ -96,7 +96,7 @@ class HistoryResults(Page):
 
     def vars_for_template(self):
         opponents = [p for p in self.group.get_players() if p != self.player]
-        # ids_opponents = [p.id_in_group for p in opponents]
+
         player_1 = self.group.get_player_by_id(1)
         player_2 = self.group.get_player_by_id(2)
         player_3 = self.group.get_player_by_id(3)
@@ -105,7 +105,11 @@ class HistoryResults(Page):
         prices_player_2 = [p.price for p in player_2.in_all_rounds()]
         prices_player_3 = [p.price for p in player_3.in_all_rounds()]
 
+
+        # Return treatment, to show different graphs for them
         treatment =  self.participant.vars['group_treatment']
+
+        # +1 due to python
         round_list = list(range(1, self.round_number + 1))
 
         # Note that past_recommendation is simply an empty list for the baseline treatment
@@ -121,7 +125,6 @@ class HistoryResults(Page):
         'round_list': round_list
         }
 
-        # TODO: For simplicity hardcoded
         return out_dict
 
 

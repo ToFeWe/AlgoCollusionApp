@@ -26,6 +26,25 @@ SESSION_CONFIGS = [
          'payment'] # TODO: Adjust
     ),
     dict(
+        name='test_survey_baseline',
+        display_name="test_survey",
+        group_treatment='baseline',
+        num_demo_participants=9,
+        app_sequence=[
+         'survey',
+         ]
+    ),
+    dict(
+        name='test_survey_recommendation',
+        display_name="test_survey_recommendation",
+        group_treatment='recommendation',
+        num_demo_participants=9,
+        app_sequence=[
+         'survey',
+         ]
+    ),
+
+    dict(
         name='bertrand_recommendation',
         display_name="bertrand_recommendation",
         group_treatment='recommendation',
@@ -54,7 +73,7 @@ LANGUAGE_CODE = 'de'
 REAL_WORLD_CURRENCY_CODE = 'EUR'
 POINTS_CUSTOM_NAME = 'Taler'
 USE_POINTS = True
-REAL_WORLD_CURRENCY_DECIMAL_PLACES = 2
+REAL_WORLD_CURRENCY_DECIMAL_PLACES = 1
 
 ROOMS = [
     dict(

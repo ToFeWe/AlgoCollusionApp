@@ -11,10 +11,10 @@
         <b>Ergebnisse der aktuellen Runde</b>
         <tr>
             <th>  <th>
-            <th> Sie (Spieler {{player.id_in_group}})
+            <th> Sie (Firma {{player.id_in_group}})
             
             {% for p in opponents %}
-                <th> Spieler  {{p.id_in_group}} </th>
+                <th> Firma  {{p.id_in_group}} </th>
             {% endfor %}
         </tr>
 
@@ -47,10 +47,10 @@
     {% if player.is_winner %} 
     Da Sie den günstigsten Preis gewählt haben, haben also gewonnen. 
         {% if group.n_winners == 1 %}
-         Da kein anderer Spieler diesen Preis gewählt hat, erhalten Sie {{ group.winner_profit }} Taler. 
+         Da kein andere Firma diesen Preis gewählt hat, erhalten Sie {{ group.winner_profit }} Taler. 
         {% else %}
          Da {{group.n_winners|add:"-1" }} andere/r Spieler auch diesen Preis gewählt haben/hat, wird der Profit dieser Runde zwischen den Spielern mit dem niedrigsten Preis aufgeteilt. 
-         Jeder erhält {{ group.winner_profit }} Taler. 
+         Jeder erhält {{ group.winner_profit }} Taler.
         {% endif %}
     
      {% else %}

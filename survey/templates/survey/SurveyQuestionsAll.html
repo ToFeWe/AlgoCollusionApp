@@ -5,7 +5,15 @@
 
 {% block content %}
 
-{% formfields %}
+{% formfield player.q_all_other_players%}
+{% formfield player.q_all_communication%}
+
+
+Nehmen Sie an Sie wüssten, dass die anderen Marktteilnehmer einen Preis von 10 Talern gewählt haben, wie sozial angemessen wäre es in dieser Situation einen eigenen Preis von ...
+{% formfield player.q_socially_appropriate_10%}
+{% formfield player.q_socially_appropriate_9%}
+{% formfield player.q_socially_appropriate_1%}
+
 
 <br>Bitte klicken Sie nach Beantwortung der Fragen auf "Weiter".<br><br>
 

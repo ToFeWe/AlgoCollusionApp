@@ -42,8 +42,7 @@ class Subsession(BaseSubsession):
     def creating_session(self):
         if self.round_number == 1:
             # Every player is in the same treatment for now.
-            # Thus, we cannot run baseline and treatment in the same session.
-            # Should be fine though.
+            # Thus, we cannot/shouldnot run baseline and treatment in the same session.
             for p in self.get_players():
                 # Save treatment in participant vars for future apps and also in formfield for
                 # analysis.
@@ -67,8 +66,8 @@ class Player(BasePlayer):
 
     q_after_fixed_round = models.StringField(
         initial=None, 
-        choices = ['Das wird durch Würfeln entschieden.', 'Ja.', 'Nein.'],
-        label='Endet das Experiment nach der 20. Runde?'
+        choices = ['95%', '5%', '50%'],
+        label='Was ist die Wahrscheinlichkeit, dass nach Abschluss einer Runde eine weitere Runde gespielt wird?'
     )
 
     q_profit_1 = models.IntegerField(
@@ -114,7 +113,7 @@ class Player(BasePlayer):
             return Constants.error_message_form_field
 
     def q_after_fixed_round_error_message(self, value):
-        if value != 'Das wird durch Würfeln entschieden.':
+        if value != '95%':
             # Count +1 if the player answered the question wrong
             self.counter_after_fixed_round += 1
             return Constants.error_message_form_field
