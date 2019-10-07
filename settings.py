@@ -43,6 +43,24 @@ SESSION_CONFIGS = [
          'survey',
          ]
     ),
+    dict(
+        name='test_intro_baseline',
+        display_name="test_introduction",
+        group_treatment='baseline',
+        num_demo_participants=9,
+        app_sequence=[
+         'introduction',
+         ]
+    ),
+    dict(
+        name='test_intro_recommendation',
+        display_name="test_introduction_recommendation",
+        group_treatment='recommendation',
+        num_demo_participants=9,
+        app_sequence=[
+         'introduction',
+         ]
+    ),
 
     dict(
         name='bertrand_recommendation',

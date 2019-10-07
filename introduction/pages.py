@@ -41,9 +41,6 @@ class Algorithm_Introduction(Page):
         treatment =  self.participant.vars['group_treatment']
         return treatment == 'recommendation' and self.round_number == 1
 
-
-class NewGame(Page):
-    pass
  
 
 
