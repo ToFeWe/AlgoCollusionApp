@@ -139,12 +139,16 @@ class SharedBaseGroup(BaseGroup):
             if p in winners:
                 p.is_winner = True
                 p.profit = self.winner_profit
-                p.accumulated_profit = sum([p_in_round.profit for p_in_round in p.in_all_rounds()])
+                
             else:
                 p.is_winner = False
                 p.profit = 0
-                p.accumulated_profit = sum([p_in_round.profit for p_in_round in p.in_all_rounds()])
-
+            
+            # Accumulate profit if we played more than one round
+            if self.round_number == 1:
+                p.accumulated_profit = p.profit
+            else:
+                p.accumulated_profit = p.in_round(self.round_number - 1).accumulated_profit + p.profit
     
 
 class SharedBasePlayer(BasePlayer):

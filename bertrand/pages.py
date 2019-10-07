@@ -3,22 +3,6 @@ from otree.api import Currency as c, currency_range
 from .models import Constants
 import random
 
-class NextRound(WaitPage):
-    wait_for_all_groups = True
-    
-    def is_displayed(self):
-        # Only displayed if we still play, e.g. the number of rounds is equal or
-        # below the random raw of round numbers from before
-        return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
-
-    def after_all_players_arrive(self):
-        # Get the recommendation for the current round
-        # given that the group is in a treatment with recommendation.
-        for current_group in self.subsession.get_groups():
-            p1 = current_group.get_player_by_id(1)
-            treatment =  p1.participant.vars['group_treatment']
-            if treatment == 'recommendation':
-                current_group.get_recommendation(round_number=self.round_number)
 
 class StartExperiment(Page):
     def is_displayed(self):
@@ -29,6 +13,19 @@ class StartExperiment(Page):
             'super_game_count': self.subsession.this_app_constants()['super_game_count']
         }
 
+class NextRound(WaitPage):
+    def is_displayed(self):
+        # Only displayed if we still play, e.g. the number of rounds is equal or
+        # below the random raw of round numbers from before
+        return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
+
+    def after_all_players_arrive(self):
+        # Get the recommendation for the current round
+        # given that the group is in a treatment with recommendation.
+        p1 = self.group.get_player_by_id(1)
+        treatment =  p1.participant.vars['group_treatment']
+        if treatment == 'recommendation':
+            self.group.get_recommendation(round_number=self.round_number)
 
 
 class Decide(Page):
@@ -136,10 +133,8 @@ class EndRound(Page):
         return self.round_number == self.subsession.this_app_constants()['round_number_draw']
 
     def vars_for_template(self):
-        # Set the final payoff for all players in all groups for the given Super Game
-        for g in self.subsession.get_groups():
-            for p in g.get_players(): 
-                p.set_final_payoff()
+        # Set the final payoff for player for the given Super Game
+        self.player.set_final_payoff()
 
         return {
             'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
@@ -154,8 +149,8 @@ class EndRound(Page):
 
 
 page_sequence = [
-    NextRound,
     StartExperiment,
+    NextRound,
     Decide,
     RoundWaitPage,
     RoundResults,
