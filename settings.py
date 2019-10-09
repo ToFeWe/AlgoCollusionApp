@@ -21,7 +21,7 @@ SESSION_CONFIGS = [
          #'introduction',
          'bertrand',
          'bertrand_SG_2', 
-         #'bertrand_SG_3', 
+         'bertrand_SG_3', 
          #'survey',
          'payment'] # TODO: Adjust
     ),

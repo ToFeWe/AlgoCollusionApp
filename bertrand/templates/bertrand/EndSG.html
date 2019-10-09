@@ -9,15 +9,21 @@
     Der Zufallsmechanismus hat entschieden, dass dies die letzte Runde des {{super_game_count}}. Spiels war. 
     Sie haben in diesem Spiel insgesamt <b>{{accumulated_profit}} Taler </b> verdient. <br>
     <br><br>
+    <br><br>
+
     {% if super_game_count != 3 %}
+    <b>
     
-        Sie spielen jetzt das gleiche Spiel im Folgenden erneut. 
+        Sie spielen jetzt das gleiche Spiel im Folgenden erneut. Es besteht wieder eine Wahrscheinlichkeit von 95%, dass nach jeder abgeschlossenen Runde eine weitere Runde gespielt wird.
         <br><br>
+
+        WICHTIG: Beachten Sie, dass Sie im folgenden Spiel mit neuen Mitspielern in einer
+        Gruppe sein werden. 
+        
         {% if super_game_count == 2 %}
-            Dies wird der letzte Durchgang sein.
+            <br><br>Dies wird der letzte Durchgang sein.
         {% endif %}
-        <b>WICHTIG: Beachten Sie, dass sich dabei mit neuen Mitspielern in einer
-        Gruppe sein werden. </b>
+        </b>
         
     {% else %}
     Dies war das letzte Spiel. Bitte beantworten Sie nun noch die folgenden Fragen. Ihre Antworten bleiben anonym und dienen nur zu Forschungszwecken. 

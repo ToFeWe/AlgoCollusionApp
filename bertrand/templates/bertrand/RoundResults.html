@@ -45,7 +45,7 @@
 
     Ihr Preis in dieser Runde war {{ player.price }} Taler. Der niedrigste Preis betrug {{ group.winning_price }} Taler.
     {% if player.is_winner %} 
-    Da Sie den günstigsten Preis gewählt haben, haben also gewonnen. 
+    Da Sie den günstigsten Preis gewählt haben, haben Sie also gewonnen. 
         {% if group.n_winners == 1 %}
          Da kein andere Firma diesen Preis gewählt hat, erhalten Sie {{ group.winner_profit }} Taler. 
         {% else %}
@@ -57,7 +57,7 @@
      Sie haben daher ihr Produkt nicht verkauft und erhalten einen Gewinn von {{player.profit}} Taler.
      {% endif %}
 
-    Insgesamt haben Sie {{ player.accumulated_profit }} Taler in allen Perioden in diesem Spiel erwirtschaftet.
+    <br><br>Insgesamt haben Sie {{ player.accumulated_profit }} Taler in allen Runden in diesem Spiel erwirtschaftet.
     <br><br>
 
     {% next_button %}
