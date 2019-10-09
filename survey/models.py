@@ -152,7 +152,7 @@ class Player(BasePlayer):
     )
     q_study_field = models.StringField(label='Was studieren Sie?')
     q_semester = models.IntegerField(label='Im wievielten Semester studieren Sie?', min=1, max=45)
-    q_n_experiment = models.IntegerField(label='An wie vielen Experimenten haben Sie bereits teilgenommen?')
+    q_n_experiment = models.IntegerField(label='An wie vielen Experimenten haben Sie bereits teilgenommen?', max=500, min=0)
     q_similar_experiment = models.StringField(label='Haben Sie schon einmal an einem ähnlichen Experiment teilgenommen?',
                                          choices=['Ja.', 'Nein.', 'Ich weiß es nicht.'])
     q_other_notes = models.StringField(blank=True, label="Haben Sie weitere abschließende Anmerkungen zu diesem Experiment?")
