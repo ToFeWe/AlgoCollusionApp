@@ -18,10 +18,10 @@ SESSION_CONFIGS = [
         group_treatment='baseline',
         num_demo_participants=9,
         app_sequence=[
-         'introduction',
+         #'introduction',
          'bertrand',
          'bertrand_SG_2', 
-         'bertrand_SG_3', 
+         #'bertrand_SG_3', 
          #'survey',
          'payment'] # TODO: Adjust
     ),

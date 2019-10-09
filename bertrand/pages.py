@@ -125,7 +125,7 @@ class HistoryResults(Page):
         return out_dict
 
 
-class EndRound(Page):
+class EndSG(Page):
 
     def is_displayed(self):
         # Only displayed in the last round, e.g. the number of rounds is equal #
@@ -134,6 +134,7 @@ class EndRound(Page):
 
     def vars_for_template(self):
         # Set the final payoff for player for the given Super Game
+        # Nothing random here, hence we can execute it in vars_for_template
         self.player.set_final_payoff()
 
         return {
@@ -155,5 +156,5 @@ page_sequence = [
     RoundWaitPage,
     RoundResults,
     HistoryResults,
-    EndRound
+    EndSG
 ]
