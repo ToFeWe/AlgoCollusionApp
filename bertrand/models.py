@@ -3,7 +3,7 @@ from otree.api import (
     Currency as c, currency_range
 )
 import random
-import math
+import numpy as np
 
 doc = """
 Price Recommender Game with Bertrand
@@ -70,6 +70,20 @@ class SharedBaseSubsession(BaseSubsession):
                 for p in g.get_players():
                     p.participant.vars['group_treatment'] = treatment_draw
 
+                    # Init payoff variable for dict to zero at the start of the game
+                    # to avoid errors on the admin page.
+                    # Will be adjusted over the course of the game.
+                    sg_counter = self.this_app_constants()['super_game_count']
+                    key_name = "final_payoff_sg_" + str(sg_counter)        
+                    p.participant.vars[key_name] = 0
+
+
+    
+    def vars_for_admin_report(self):
+        all_groups = self.get_groups()
+        return {
+            'all_groups': all_groups
+        }
 class SharedBaseGroup(BaseGroup):
     class Meta:
         abstract = True
@@ -170,8 +184,7 @@ class SharedBasePlayer(BasePlayer):
 
 
     # Final payoff is stored again
-    final_payoff_euro = models.FloatField()
-
+    final_payoff_sg = models.FloatField()
 
     def set_final_payoff(self):
         # We take the accumulated payoff from the last round we 
@@ -184,13 +197,14 @@ class SharedBasePlayer(BasePlayer):
         # Take the accumulated profit from the last round
         # IMPORTANT: Only use this method once the profit for the round has been calculated
         # using *set_profits_round* from the group method
-        total_money = self.in_round(last_played_round).accumulated_profit 
+        total_coins = self.in_round(last_played_round).accumulated_profit 
+        final_payoff_sg = total_coins
         # Note, we do not save this to payoff as we will randomly select one of the 
         # super games for payoff.
 
         # Save the final accumulated payoff for the last subgame in the participant dict.
         self.sg_payoff_to_dict(sg_counter = self.subsession.this_app_constants()['super_game_count'],
-                               final_payoff = total_money)
+                               final_payoff = total_coins)
 
     def sg_payoff_to_dict(self, sg_counter, final_payoff):
         """ A helper function to save payoff for each subgame (*final_payoff* for subgame *sg_counter*) to the participant dict.

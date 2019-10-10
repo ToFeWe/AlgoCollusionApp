@@ -6,7 +6,8 @@ from .models import Constants
 import random
 
 class SharedPlayerBot(Bot):
-    cases = ['simple', 'random_price']
+    cases = ['random_price']
+    #, 'simple', 
     # , 'hip_hop_player', 'deviation'
     def play_round(self):
         case = self.case
@@ -35,7 +36,7 @@ class SharedPlayerBot(Bot):
                 key_name = "final_payoff_sg_" + str(sg_counter)        
                 assert accumulated_payoff_in_app == self.participant.vars[key_name]
                 # TODO: Mit richtiger Umrechnungsrate in Euro testen
-                yield(pages.EndRound)
+                yield(pages.EndSG)
 
 
         if case == 'random_price':
@@ -63,7 +64,7 @@ class SharedPlayerBot(Bot):
                 key_name = "final_payoff_sg_" + str(sg_counter)        
                 assert accumulated_payoff_in_app == self.participant.vars[key_name]
                 # TODO: Mit richtiger Umrechnungsrate in Euro testen
-                yield(pages.EndRound)
+                yield(pages.EndSG)
 
 
 class PlayerBot(SharedPlayerBot):

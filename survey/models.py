@@ -100,6 +100,7 @@ class Player(BasePlayer):
         initial=None,
         label='Könnte man Ihrer Meinung nach den Algorithmus optimieren? Wenn ja wie?'
     )
+
     # Questions for all    
     q_all_other_players = models.StringField(
         initial=None,
@@ -145,7 +146,7 @@ class Player(BasePlayer):
         widget=widgets.RadioSelectHorizontal())
 
     # General Questions
-    q_age = models.IntegerField(label='Wie alt sind Sie?', min=12, max=99)
+    q_age = models.IntegerField(label='Wie alt sind Sie?', min=16, max=99)
     q_gender = models.StringField(
         label = 'Was ist Ihr Geschlecht?',
         choices = ['Männlich', 'Weiblich', 'Divers', 'keine Angabe']

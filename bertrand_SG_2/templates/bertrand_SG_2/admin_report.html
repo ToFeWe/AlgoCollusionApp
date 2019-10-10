@@ -1,0 +1,6 @@
+{% load otree %}
+<ul>
+    {% for g in all_groups %}
+        <li>Group {{g.id_in_subsession}}: {{ g.winning_price }}</li>
+    {% endfor %}
+</ul>

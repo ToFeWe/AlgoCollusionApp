@@ -13,6 +13,21 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 SESSION_CONFIGS = [
     dict(
+        name='bertrand_recommendation_full',
+        display_name="bertrand_recommendation_full",
+        group_treatment='recommendation',
+        num_demo_participants=9,
+        use_browser_bots=True,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment'] # TODO: Adjust
+    ),
+
+    dict(
         name='bertrand_baseline_test',
         display_name="bertrand_baseline",
         group_treatment='baseline',
