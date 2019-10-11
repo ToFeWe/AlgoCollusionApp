@@ -13,8 +13,22 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 SESSION_CONFIGS = [
     dict(
-        name='bertrand_recommendation_full',
-        display_name="bertrand_recommendation_full",
+        name='BOT_recommendation_full_27',
+        display_name="BOT_recommendation_full_27",
+        group_treatment='recommendation',
+        num_demo_participants=27,
+        use_browser_bots=True,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment'] # TODO: Adjust
+    ),
+    dict(
+        name='BOT_recommendation_full_9',
+        display_name="BOT_recommendation_full_9",
         group_treatment='recommendation',
         num_demo_participants=9,
         use_browser_bots=True,
@@ -26,20 +40,33 @@ SESSION_CONFIGS = [
          'survey',
          'payment'] # TODO: Adjust
     ),
-
     dict(
-        name='bertrand_baseline_test',
-        display_name="bertrand_baseline",
-        group_treatment='baseline',
+        name='SELF_recommendation_full_9',
+        display_name="SELF_recommendation_full_9",
+        group_treatment='recommendation',
         num_demo_participants=9,
         app_sequence=[
-         #'introduction',
+         'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
-         #'survey',
+         'survey',
          'payment'] # TODO: Adjust
     ),
+    dict(
+        name='SELF_baseline_full_9',
+        display_name="SELF_baseline_full_9",
+        group_treatment='baseline',
+        num_demo_participants=9,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment'] # TODO: Adjust
+    ),
+
     dict(
         name='test_survey_baseline',
         display_name="test_survey",
@@ -75,27 +102,8 @@ SESSION_CONFIGS = [
         app_sequence=[
          'introduction',
          ]
-    ),
-
-    dict(
-        name='bertrand_recommendation',
-        display_name="bertrand_recommendation",
-        group_treatment='recommendation',
-        num_demo_participants=9,
-        app_sequence=['introduction', 'bertrand', 'bertrand_SG_2', 'bertrand_SG_3',  'survey', 'payment']
-    ),
-    dict(
-        name='bertrand_big_recommendation',
-        display_name="bertrand_recommendation",
-        num_demo_participants=27,
-        group_treatment='recommendation',
-        app_sequence=['introduction', 'bertrand', 'bertrand_SG_2', 'bertrand_SG_3',  'survey', 'payment']
     )
-
-
-
 ]
-# see the end of this file for the inactive session configs
 
 
 # ISO-639 code
@@ -129,24 +137,3 @@ SECRET_KEY = '4e0cd9nd3+-lh=zu1l^vota306m8%2l+#r7vdaph*11nuih33^'
 
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
-
-# inactive session configs
-### dict(name='trust', num_demo_participants=2, app_sequence=['trust']),
-### dict(name='prisoner', num_demo_participants=2, app_sequence=['prisoner']),
-### dict(name='ultimatum', num_demo_participants=2, app_sequence=['ultimatum']),
-### dict(name='ultimatum_strategy', num_demo_participants=2, app_sequence=['ultimatum'], use_strategy_method=True),
-### dict(name='ultimatum_non_strategy', num_demo_participants=2, app_sequence=['ultimatum'], use_strategy_method=False),
-### dict(name='vickrey_auction', num_demo_participants=3, app_sequence=['vickrey_auction']),
-### dict(name='volunteer_dilemma', num_demo_participants=3, app_sequence=['volunteer_dilemma']),
-### dict(name='cournot', num_demo_participants=2, app_sequence=['cournot']),
-### dict(name='principal_agent', num_demo_participants=2, app_sequence=['principal_agent']),
-### dict(name='dictator', num_demo_participants=2, app_sequence=['dictator']),
-### dict(name='matching_pennies', num_demo_participants=2, app_sequence=['matching_pennies']),
-### dict(name='traveler_dilemma', num_demo_participants=2, app_sequence=['traveler_dilemma']),
-### dict(name='bargaining', num_demo_participants=2, app_sequence=['bargaining']),
-### dict(name='common_value_auction', num_demo_participants=3, app_sequence=['common_value_auction']),
-### dict(name='bertrand', num_demo_participants=2, app_sequence=['bertrand']),
-### dict(name='real_effort', num_demo_participants=1, app_sequence=['real_effort']),
-### dict(name='lemon_market', num_demo_participants=3, app_sequence=['lemon_market']),
-### dict(name='public_goods_simple', num_demo_participants=3, app_sequence=['public_goods_simple']),
-### dict(name='trust_simple', num_demo_participants=2, app_sequence=['trust_simple']),
