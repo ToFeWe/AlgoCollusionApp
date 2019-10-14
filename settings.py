@@ -46,11 +46,11 @@ SESSION_CONFIGS = [
         group_treatment='recommendation',
         num_demo_participants=9,
         app_sequence=[
-         #'introduction',
+         'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
-         #'survey',
+         'survey',
          'payment'] # TODO: Adjust
     ),
     dict(

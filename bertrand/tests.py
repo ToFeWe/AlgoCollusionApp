@@ -179,6 +179,9 @@ class SharedPlayerBot(Bot):
                 # Hence, everyone must be a winner.
                 assert self.player.is_winner, "The player is not a winner even though everyone played the same price"
                 assert 'Da Sie den günstigsten Preis gewählt haben' in self.html
+                if self.session.config['group_treatment'] == 'recommendation':
+                    assert "einen Preis von " + str(self.group.recommendation) in self.html
+
                 yield(pages.RoundResults)
                 yield(pages.HistoryResults)
 
@@ -192,7 +195,12 @@ class SharedPlayerBot(Bot):
                 sg_counter = self.subsession.this_app_constants()['super_game_count']
                 key_name = "final_payoff_sg_" + str(sg_counter)        
                 assert accumulated_payoff_in_app == self.participant.vars[key_name]
-                # TODO: Mit richtiger Umrechnungsrate in Euro testen
+                
+                assert "insgesamt <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
+                if sg_counter == 1 or sg_counter == 2:
+                    assert "Sie spielen jetzt das gleiche Spiel erneut" in self.html
+                else:
+                    assert "Dies war das letzte Spiel" in self.html
                 yield(pages.EndSG)
 
 
@@ -241,6 +249,9 @@ class SharedPlayerBot(Bot):
                 else:
                     assert not self.player.is_winner
                     assert "ihr Produkt nicht verkauft" in self.html
+                
+                if self.session.config['group_treatment'] == 'recommendation':
+                    assert "einen Preis von " + str(self.group.recommendation) in self.html
                 yield(pages.RoundResults)
                 yield(pages.HistoryResults)
 
@@ -253,7 +264,12 @@ class SharedPlayerBot(Bot):
                 sg_counter = self.subsession.this_app_constants()['super_game_count']
                 key_name = "final_payoff_sg_" + str(sg_counter)        
                 assert accumulated_payoff_in_app == self.participant.vars[key_name]
-                # TODO: Mit richtiger Umrechnungsrate in Euro testen
+
+                assert "insgesamt <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
+                if sg_counter == 1 or sg_counter == 2:
+                    assert "Sie spielen jetzt das gleiche Spiel erneut" in self.html
+                else:
+                    assert "Dies war das letzte Spiel" in self.html
                 yield(pages.EndSG)
 
 
