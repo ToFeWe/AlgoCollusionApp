@@ -13,3 +13,4 @@ __pycache__/
 env
 .cache
 env_test
+desktop.ini
