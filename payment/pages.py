@@ -14,7 +14,6 @@ class FinalResults(Page):
 
         money_not_rounded_no_show_up = self.participant.vars[key_payoff_sg] * self.session.config['real_world_currency_per_point']
         self.player.final_money_no_show_up = float(math.ceil(money_not_rounded_no_show_up * 10) / 10)
-        print(self.player.final_money_no_show_up)
         self.player.final_money_with_show_up = self.player.final_money_no_show_up + float(self.session.config['participation_fee'])
 
         # Also write it to the participant dict as we use it for the admin report

@@ -4,10 +4,9 @@ from otree.api import (
 )
 
 
-author = 'Your name here'
+author = 'Tobias Werner'
 
-doc = """
-Your app description
+doc = """ An App for a price recommendation system in a market experiment.
 """
 
 
