@@ -132,7 +132,7 @@ def check_others_in_group(other_group_members, player_id, super_game):
         return True         
           
 class SharedPlayerBot(Bot):
-    cases = ['random_price']
+    cases = ['random_price', 'simple']
     #, 'simple', 
     # , 'hip_hop_player', 'deviation'
     def play_round(self):
@@ -153,6 +153,26 @@ class SharedPlayerBot(Bot):
                                                                                                                                                                                       self.subsession.this_app_constants()['super_game_count'])
 
             if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
+
+                # Check if the recommendation works properly for all rounds except the first
+                if self.session.config['group_treatment'] == 'recommendation' and self.round_number >1:
+                    group_last_round = self.group.in_previous_rounds()[-1]
+                    prices_last_round = [p.price for p in group_last_round.get_players()]
+                    n_unique_prices = len(set(prices_last_round))
+                    
+                    # If there were more than one price, there must have been a deviation
+                    if n_unique_prices != 1:
+                        assert "In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis" in self.html
+                        assert "einen Preis von <b>1 Taler.</b>" in self.html
+                        assert self.group.recommendation == 1
+                    else:
+                        assert self.group.recommendation == 10
+                        assert "vergangenen Runde haben alle Firmen einen Preis" in self.html
+                        if list(set(prices_last_round))[0] != 10:
+                            assert "Für einen höheren Gesamtgewinn empfiehlt" in self.html
+                        else:
+                            assert "<b>10 Talern</b> beizubehalten" in self.html
+
                 yield(pages.Decide, {'price': 10})
 
                 # Everyone plays the same price here,
@@ -190,33 +210,29 @@ class SharedPlayerBot(Bot):
                                              player_id = self.participant.id_in_session,
                                              super_game = self.subsession.this_app_constants()['super_game_count']), 'Other group member error for player {} in super game {}'.format(self.participant.id_in_session,
                                                                                                                                                                                       self.subsession.this_app_constants()['super_game_count'])
+                if self.session.config['group_treatment'] != 'baseline':
+                    assert 'einen Preis von <b>10</b> Talern' in self.html
 
             if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
-                # Check if the recommendation works properly
-                if self.session.config['group_treatment'] == 'recommendation':
-                    if self.round_number == 1:
-                        assert 'einen Preis von <b>10</b> Talern' in self.html
+                # Check if the recommendation works properly for all rounds except the first
+                if self.session.config['group_treatment'] == 'recommendation' and self.round_number >1:
+                    group_last_round = self.group.in_previous_rounds()[-1]
+                    prices_last_round = [p.price for p in group_last_round.get_players()]
+                    n_unique_prices = len(set(prices_last_round))
+                    
+                    # If there were more than one price, there must have been a deviation
+                    if n_unique_prices != 1:
+                        assert "In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis" in self.html
+                        assert "einen Preis von <b>1 Taler.</b>" in self.html
+                        assert self.group.recommendation == 1
                     else:
-                        group_last_round = self.group.in_previous_rounds()[-1]
-                        prices_last_round = [p.price for p in group_last_round]
-                        n_unique_prices = len(set(prices_last_round))
-                        
-                        # If there were more than one price, there must have been a deviation
-                        if n_unique_prices != 1:
-                            assert "In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis" in self.html
-                            assert "einen Preis von 1 Taler" in self.html
-                            assert self.group.recommendation == 1
+                        assert self.group.recommendation == 10
+                        assert "vergangenen Runde haben alle Firmen einen Preis" in self.html
+                        if list(set(prices_last_round))[0] != 10:
+                            assert "Für einen höheren Gesamtgewinn empfiehlt" in self.html
                         else:
-                            assert self.group.recommendation == 10
-                            assert "vergangenen Runde haben alle Firmen einen Preis" in self.html
-                            if list(set(prices_last_round))[0] != 10:
-                                assert "Für einen höheren Gesamtgewinn empfiehlt" in self.html
-                            else:
-                                assert "10 Talern beizubehalten" in self.html
-               
-                
-                
-                
+                            assert "<b>10 Talern</b> beizubehalten" in self.html
+
                 yield(pages.Decide, {'price': random.randint(1,10)})
 
                 if self.player.price == self.group.winning_price:
