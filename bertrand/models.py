@@ -14,7 +14,8 @@ class Constants(BaseConstants):
     name_in_url = 'bertrand'
     
     # num_rounds is only an upper bound but not actually used
-    num_rounds = 30 # TODO: Adjust
+    # Note that the maximum number we have drawn randomly is 27.
+    num_rounds = 30 
 
     maximum_price = 10
     monopoly_price = 10
@@ -191,7 +192,6 @@ class SharedBasePlayer(BasePlayer):
         # played.
         # This is stored as a fake-constant in the subsession, since it is a random draw
         # for each SuperGame and the different supergame apps inherit from this app
-        # TODO: Change *round_number_draw* for each super game app.
         last_played_round = self.subsession.this_app_constants()['round_number_draw']
 
         # Take the accumulated profit from the last round
@@ -220,7 +220,7 @@ class Subsession(SharedBaseSubsession):
         
         """
         # The number of rounds we have drawn ex ante according to some cont prob
-        return {'round_number_draw': 4, #TODO: Change
+        return {'round_number_draw': 27,
                 'super_game_count': 1,
                 'shuffle_structure_small': [[1,2,3], [4, 5, 6], [7, 8, 9]],
                 'shuffle_structure_medium': [[1,2,3], [4, 5, 6], [7, 8, 9],

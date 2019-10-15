@@ -201,6 +201,7 @@ class SharedPlayerBot(Bot):
                     assert "Sie spielen jetzt das gleiche Spiel erneut" in self.html
                 else:
                     assert "Dies war das letzte Spiel" in self.html
+                assert "dies die letzte Runde des {}. Spiels".format(self.subsession.this_app_constants()['super_game_count']) in self.html
                 yield(pages.EndSG)
 
 
@@ -252,6 +253,7 @@ class SharedPlayerBot(Bot):
                 
                 if self.session.config['group_treatment'] == 'recommendation':
                     assert "einen Preis von " + str(self.group.recommendation) in self.html
+                assert "allen Runden im {}. Spiel".format(self.subsession.this_app_constants()['super_game_count']) in self.html
                 yield(pages.RoundResults)
                 yield(pages.HistoryResults)
 
@@ -270,6 +272,7 @@ class SharedPlayerBot(Bot):
                     assert "Sie spielen jetzt das gleiche Spiel erneut" in self.html
                 else:
                     assert "Dies war das letzte Spiel" in self.html
+                assert "dies die letzte Runde des {}. Spiels".format(self.subsession.this_app_constants()['super_game_count']) in self.html
                 yield(pages.EndSG)
 
 

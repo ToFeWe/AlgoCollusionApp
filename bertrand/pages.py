@@ -81,7 +81,8 @@ class RoundResults(Page):
         opponents = [p for p in self.group.get_players() if p != self.player]
         return {
             'opponents': opponents,
-            'treatment': treatment
+            'treatment': treatment,
+            'super_game_count': self.subsession.this_app_constants()['super_game_count']
         }
 
 

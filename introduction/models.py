@@ -16,10 +16,8 @@ class Constants(BaseConstants):
     players_per_group = 9
     num_rounds = 1
 
-    # TODO: Check that its always the same in the next app
     fixed_rounds = 1
 
-    # TODO: Must check that those are the same as in the other app
     maximum_price = 10
     monopoly_price = 10
 
