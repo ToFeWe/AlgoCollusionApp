@@ -18,14 +18,15 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    # Indicator which super game is payed
-    payed_sg = models.IntegerField()
+
 
     def creating_session(self):
-        self.payed_sg = random.choice([1,2,3])
         
         # Init vars to zero
         for p in self.get_players():
+            # For every player another super game is payed
+            p.payed_sg = random.choice([1,2,3])
+            p.participant.vars['payed_sg'] = p.payed_sg
             p.participant.vars['final_money_with_show_up'] = 0
             p.participant.vars['final_money_no_show_up'] = 0
 
@@ -44,5 +45,8 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    # Indicator which super game is payed
+    payed_sg = models.IntegerField()
+
     final_money_no_show_up = models.FloatField()
     final_money_with_show_up = models.FloatField()

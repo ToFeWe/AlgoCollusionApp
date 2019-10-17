@@ -196,7 +196,7 @@ class SharedPlayerBot(Bot):
                 key_name = "final_payoff_sg_" + str(sg_counter)        
                 assert accumulated_payoff_in_app == self.participant.vars[key_name]
                 
-                assert "insgesamt <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
+                assert "insgesamt einen Gewinn von <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
                 if sg_counter == 1 or sg_counter == 2:
                     assert "Sie spielen jetzt das gleiche Spiel erneut" in self.html
                 else:
@@ -267,7 +267,7 @@ class SharedPlayerBot(Bot):
                 key_name = "final_payoff_sg_" + str(sg_counter)        
                 assert accumulated_payoff_in_app == self.participant.vars[key_name]
 
-                assert "insgesamt <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
+                assert "insgesamt einen Gewinn von <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
                 if sg_counter == 1 or sg_counter == 2:
                     assert "Sie spielen jetzt das gleiche Spiel erneut" in self.html
                 else:

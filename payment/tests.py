@@ -6,7 +6,7 @@ import math
 
 class PlayerBot(Bot):
     def play_round(self):
-        payed_sg_string = str(self.subsession.payed_sg)
+        payed_sg_string = str(self.player.payed_sg)
         assert int(payed_sg_string) in [1,2,3]
 
         key_payoff_sg = 'final_payoff_sg_' + payed_sg_string

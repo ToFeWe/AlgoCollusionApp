@@ -7,7 +7,7 @@ class FinalResults(Page):
     def vars_for_template(self):
 
         # Set the payoff as the randomly selected super game
-        payed_sg_string = str(self.subsession.payed_sg)
+        payed_sg_string = str(self.player.payed_sg)
         key_payoff_sg = 'final_payoff_sg_' + payed_sg_string
         self.player.payoff = self.participant.vars[key_payoff_sg]
 
@@ -29,7 +29,7 @@ class FinalResults(Page):
             'payoff_sg_1': self.participant.vars['final_payoff_sg_1'],
             'payoff_sg_2': self.participant.vars['final_payoff_sg_2'],
             'payoff_sg_3': self.participant.vars['final_payoff_sg_3'],
-            'payed_sg': self.subsession.payed_sg
+            'payed_sg': self.player.payed_sg
         }
 
 

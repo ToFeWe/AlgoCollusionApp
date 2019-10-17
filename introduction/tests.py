@@ -20,7 +20,7 @@ class PlayerBot(Bot):
         yield(pages.Introduction_2)
 
         # Correct deviation price
-        assert "einen Stückpreis von 1" in self.html
+        assert "einen Preis von 1" in self.html
 
         # Correct number of consumers
         assert "Der Markt hat 30" in self.html
