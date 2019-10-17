@@ -6,7 +6,7 @@ from .models import Constants
 class SurveyQuestionsAlg(Page):    
     form_model = 'player'
     form_fields = ['q_alg_helpful', 'q_alg_how_sure', 'q_alg_no_recommendation',
-                   'q_alg_relevant_other_player']
+                   'q_alg_relevant_other_player', 'q_alg_improve', 'q_alg_comments']
     def is_displayed(self):
         treatment = self.participant.vars['group_treatment']
         return treatment == 'recommendation'

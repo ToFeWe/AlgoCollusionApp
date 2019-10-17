@@ -7,34 +7,34 @@
 
 {% block content %}
     <table class="table">
-
+            
         <b>Ergebnisse der aktuellen Runde</b>
-        <tr>
-            <th>  <th>
-            <th> Sie (Firma {{player.id_in_group}})
+        <tr align="center">
+            <th align="center">  </th>
+            <th align="center"> Sie (Firma {{player.id_in_group}}) </th>
             
             {% for p in opponents %}
                 <th> Firma  {{p.id_in_group}} </th>
             {% endfor %}
         </tr>
 
-        <tr>
-            <th> Preise </th>
-            <td> {{player.price}} <td>
+        <tr align="center">
+            <th align="center"> Preise </th>
+            <td align="center"> {{player.price}} </td>
 
             {% for p in opponents %}
-                <td> {{p.price}} </td>
+                <td align="center"> {{p.price}} </td>
 
             {% endfor %}
-        <tr>
+        </tr>
 
 
-        <tr>
-            <th> Gewinne </th>
-            <td> {{player.profit}} <td>
+        <tr align="center">
+            <th align="center"> Gewinne </th>
+            <td align="center"> {{player.profit}} </td>
 
             {% for p in opponents %}
-                <td> {{p.profit}} </td>
+                <td align="center"> {{p.profit}} </td>
             {% endfor %}
         </tr>
     </table>
@@ -43,21 +43,21 @@
     <b>Zur Erinnerung:</b> Der Algortihmus hatte allen einen Preis von {{group.recommendation}} Talern empfohlen.<br><br>
     {% endif %}
 
-    Ihr Preis in dieser Runde war {{ player.price }} Taler. Der niedrigste Preis betrug {{ group.winning_price }} Taler.
+    Ihr Preis in dieser Runde betrug {{ player.price }} Taler. Der niedrigste Preis betrug {{ group.winning_price }} Taler.
     {% if player.is_winner %} 
     Da Sie den günstigsten Preis gewählt haben, haben Sie also gewonnen. 
         {% if group.n_winners == 1 %}
-         Da kein andere Firma diesen Preis gewählt hat, erhalten Sie {{ group.winner_profit }} Taler. 
+         Da kein andere Firma diesen Preis gewählt hat, erhalten Sie einen Gewinn {{ group.winner_profit }} Talern. 
         {% else %}
          Da {{group.n_winners|add:"-1" }} andere/r Spieler auch diesen Preis gewählt haben/hat, wird der Profit dieser Runde zwischen den Spielern mit dem niedrigsten Preis aufgeteilt. 
          Jeder erhält {{ group.winner_profit }} Taler.
         {% endif %}
     
      {% else %}
-     Sie haben daher ihr Produkt nicht verkauft und erhalten einen Gewinn von {{player.profit}} Taler.
+     Sie haben daher ihr Produkt nicht verkauft und erhalten einen Gewinn von {{player.profit}} Talern.
      {% endif %}
 
-    <br><br>Insgesamt haben Sie bisher {{ player.accumulated_profit }} Taler in allen Runden im {{super_game_count}}. Spiel erwirtschaftet.
+    <br><br>Insgesamt haben Sie bisher einen Gewinn von {{ player.accumulated_profit }} Taler in allen Runden im {{super_game_count}}. Spiel erwirtschaftet.
     <br><br>
 
     {% next_button %}

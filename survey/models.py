@@ -75,7 +75,7 @@ class Player(BasePlayer):
                  ('8', ''),
                  ('9', ''),
                  ('10', 'deutlich höher')],
-        label='Nehmen Sie an, dass Sie keine Empfehlung bekommen hätten. Denken Sie, dass Ihr Gesamtgewinn höher oder niedriger gewesen wäre?',
+        label='Nehmen Sie an, dass Sie und die Mitspieler keine Empfehlung bekommen hätten. Denken Sie, dass Ihr Gesamtgewinn höher oder niedriger gewesen wäre?',
         widget=widgets.RadioSelectHorizontal())
 
     q_alg_relevant_other_player = models.StringField(
@@ -95,9 +95,16 @@ class Player(BasePlayer):
         widget=widgets.RadioSelectHorizontal())
 
 
+    q_alg_comments = models.StringField(
+        initial=None,
+        label='Könnte man Ihrer Meinung nach den Algorithmus optimieren? Wenn ja wie?',
+        blank=True
+    )
+
     q_alg_improve = models.StringField(
         initial=None,
-        label='Könnte man Ihrer Meinung nach den Algorithmus optimieren? Wenn ja wie?'
+        label='Könnte man Ihrer Meinung nach den Algorithmus optimieren? Wenn ja wie?',
+        blank=True
     )
 
     # Questions for all    

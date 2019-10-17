@@ -17,7 +17,7 @@ class Introduction_2(Page):
         coins_in_euro = 465 / exchange_rate
 
         return {
-            'exchange_rate': exchange_rate,
+            'exchange_rate': int(exchange_rate), # Int to avoid comma
             'show_up_fee': self.session.config['participation_fee'],
             'coins_in_euro': coins_in_euro,
             'coins_in_euro_rounded': math.ceil(coins_in_euro * 10) / 10 # Round up first decimal digit

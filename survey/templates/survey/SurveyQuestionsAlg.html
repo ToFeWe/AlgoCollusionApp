@@ -206,7 +206,7 @@
 <div class="form-group required">
     
         
-            <label class="col-form-label" for="id_q_alg_no_recommendation_0">Nehmen Sie an, dass Sie keine Empfehlung bekommen hätten. Denken Sie, dass Ihr Gesamtgewinn höher oder niedriger gewesen wäre?</label>
+            <label class="col-form-label" for="id_q_alg_no_recommendation_0">Nehmen Sie an, dass Sie und die Mitspieler keine Empfehlung bekommen hätten. Denken Sie, dass Ihr Gesamtgewinn höher oder niedriger gewesen wäre?</label>
             <div class="controls  field-q_alg_no_recommendation">
                 <div class="form-check form-check-inline">
                                 <label for="id_q_alg_no_recommendation_0" class="form-check-label">deutlich niedriger &nbsp;</label>
@@ -400,6 +400,10 @@
         
     
 </div>
+
+{% formdfield player.q_alg_comments%}
+{% formdfield player.q_alg_improve%}
+
 <br>Bitte klicken Sie nach Beantwortung der Fragen auf "Weiter".<br><br>
 
 {% next_button %}

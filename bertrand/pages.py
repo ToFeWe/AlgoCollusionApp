@@ -51,7 +51,7 @@ class Decide(Page):
                                                                                  Constants.monopoly_price)
         return {
             "label_decide": label_decide,
-            'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
+            'exchange_rate': int(1 / self.session.config['real_world_currency_per_point']), # To avoid comma
             'treatment': treatment,
             'player_price_last_round': player_price_last_round,
             'super_game_count': self.subsession.this_app_constants()['super_game_count']

@@ -13,7 +13,9 @@ class PlayerBot(Bot):
                'q_alg_helpful': '0',
                'q_alg_how_sure': '1',
                'q_alg_no_recommendation': '2',
-               'q_alg_relevant_other_player': '10'
+               'q_alg_relevant_other_player': '10',
+               'q_alg_comments': 'lala',
+               'q_alg_improve': 'testets'
             })
         assert "sozial angemessen wäre es in dieser Situation einen eigenen Preis" in self.html
         yield(pages.SurveyQuestionsAll,  {
