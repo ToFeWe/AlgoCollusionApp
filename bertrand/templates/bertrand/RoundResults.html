@@ -49,7 +49,7 @@
         {% if group.n_winners == 1 %}
          Da kein andere Firma diesen Preis gewählt hat, erhalten Sie einen Gewinn {{ group.winner_profit }} Taler. 
         {% else %}
-         Da {{group.n_winners|add:"-1" }} andere/r Spieler auch diesen Preis gewählt haben/hat, wird der Profit dieser Runde zwischen den Spielern mit dem niedrigsten Preis aufgeteilt. 
+         Da {{group.n_winners|add:"-1" }} andere/r Teilnhemer auch diesen Preis gewählt haben/hat, wird der Profit dieser Runde zwischen den Teilnehmern mit dem niedrigsten Preis aufgeteilt. 
          Jeder erhält {{ group.winner_profit }} Taler.
         {% endif %}
     

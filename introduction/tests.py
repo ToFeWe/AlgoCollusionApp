@@ -15,7 +15,7 @@ class PlayerBot(Bot):
         # correct exchange rate
         assert "Dabei entsprechen 100" in self.html
         # correct rounding
-        assert "gerundet werden Spieler A 4,7" in self.html
+        assert "gerundet werden Teilnehmer A 4,7" in self.html
 
         yield(pages.Introduction_2)
 
