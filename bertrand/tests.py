@@ -171,7 +171,7 @@ class SharedPlayerBot(Bot):
                         if list(set(prices_last_round))[0] != 10:
                             assert "Für einen höheren Gesamtgewinn empfiehlt" in self.html
                         else:
-                            assert "<b>10 Talern</b> beizubehalten" in self.html
+                            assert "<b>10 Taler</b> beizubehalten" in self.html
 
                 yield(pages.Decide, {'price': 10})
 
@@ -220,7 +220,7 @@ class SharedPlayerBot(Bot):
                                              super_game = self.subsession.this_app_constants()['super_game_count']), 'Other group member error for player {} in super game {}'.format(self.participant.id_in_session,
                                                                                                                                                                                       self.subsession.this_app_constants()['super_game_count'])
                 if self.session.config['group_treatment'] != 'baseline':
-                    assert 'einen Preis von <b>10</b> Talern' in self.html
+                    assert 'einen Preis von <b>10</b> Taler' in self.html
 
             if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
                 # Check if the recommendation works properly for all rounds except the first
@@ -240,7 +240,7 @@ class SharedPlayerBot(Bot):
                         if list(set(prices_last_round))[0] != 10:
                             assert "Für einen höheren Gesamtgewinn empfiehlt" in self.html
                         else:
-                            assert "<b>10 Talern</b> beizubehalten" in self.html
+                            assert "<b>10 Taler</b> beizubehalten" in self.html
 
                 yield(pages.Decide, {'price': random.randint(1,10)})
 

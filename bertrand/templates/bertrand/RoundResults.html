@@ -40,24 +40,24 @@
     </table>
     
     {% if treatment == 'recommendation'%}
-    <b>Zur Erinnerung:</b> Der Algortihmus hatte allen einen Preis von {{group.recommendation}} Talern empfohlen.<br><br>
+    <b>Zur Erinnerung:</b> Der Algortihmus hatte allen einen Preis von {{group.recommendation}} Taler empfohlen.<br><br>
     {% endif %}
 
     Ihr Preis in dieser Runde betrug {{ player.price }} Taler. Der niedrigste Preis betrug {{ group.winning_price }} Taler.
     {% if player.is_winner %} 
     Da Sie den günstigsten Preis gewählt haben, haben Sie also gewonnen. 
         {% if group.n_winners == 1 %}
-         Da kein andere Firma diesen Preis gewählt hat, erhalten Sie einen Gewinn {{ group.winner_profit }} Talern. 
+         Da kein andere Firma diesen Preis gewählt hat, erhalten Sie einen Gewinn {{ group.winner_profit }} Taler. 
         {% else %}
          Da {{group.n_winners|add:"-1" }} andere/r Spieler auch diesen Preis gewählt haben/hat, wird der Profit dieser Runde zwischen den Spielern mit dem niedrigsten Preis aufgeteilt. 
          Jeder erhält {{ group.winner_profit }} Taler.
         {% endif %}
     
      {% else %}
-     Sie haben daher ihr Produkt nicht verkauft und erhalten einen Gewinn von {{player.profit}} Talern.
+     Sie haben daher ihr Produkt nicht verkauft und erhalten einen Gewinn von {{player.profit}} Taler.
      {% endif %}
 
-    <br><br>Insgesamt haben Sie bisher einen Gewinn von {{ player.accumulated_profit }} Taler in allen Runden im {{super_game_count}}. Spiel erwirtschaftet.
+    <br><br>Insgesamt haben Sie bisher einen Gewinn von {{ player.accumulated_profit }} Taler in allen Runden im {{super_game_count}}. Spiel erzielt.
     <br><br>
 
     {% next_button %}

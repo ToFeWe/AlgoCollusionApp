@@ -13,14 +13,14 @@
 
 		<b> Preisempfehlung in dieser Runde: </b><br>
 		{% if player.round_number == 1%}
-			Der Algorithmus empfiehlt einen Preis von <b>{{group.recommendation}}</b> Talern.
+			Der Algorithmus empfiehlt einen Preis von <b>{{group.recommendation}}</b> Taler.
 		{% else %}
 			{% if group.recommendation == Constants.monopoly_price %}
-				In der vergangenen Runde haben alle Firmen einen Preis von {{player_price_last_round}} Talern gewählt.
+				In der vergangenen Runde haben alle Firmen einen Preis von {{player_price_last_round}} Taler gewählt.
 					{% if player_price_last_round != Constants.monopoly_price %}
 						Für einen höheren Gesamtgewinn empfiehlt der Algorithmus in dieser Runde den Preis auf <b>{{group.recommendation}} Taler</b> zu erhöhen.
 					{% else %}
-						Der Algorithmus empfiehlt den Preis von <b>{{group.recommendation}} Talern</b> beizubehalten.
+						Der Algorithmus empfiehlt den Preis von <b>{{group.recommendation}} Taler</b> beizubehalten.
 					{% endif %}
 				{% else %}
 				In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis und die Firmen haben 
@@ -71,7 +71,7 @@
 <br><br>
 <b>Zur Erinnerung:</b>
 <br>
-Ein Euro entspricht {{exchange_rate}} Talern. Sie stehen im Wettbewerb mit zwei weiteren Firmen.
+Ein Euro entspricht {{exchange_rate}} Taler. Sie stehen im Wettbewerb mit zwei weiteren Firmen.
 Die {{Constants.m_consumer}} Kunden kaufen von der Firma mit dem niedrigsten Preis. Falls mehrere Firmen den gleichen Preis setzen, wird der Gewinn gleichmäßig aufgeteilt.
 
 

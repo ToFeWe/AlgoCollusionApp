@@ -97,7 +97,7 @@ class Player(BasePlayer):
 
     q_alg_comments = models.StringField(
         initial=None,
-        label='Könnte man Ihrer Meinung nach den Algorithmus optimieren? Wenn ja wie?',
+        label='Inwiefern war der Algorithmus hilfreich?',
         blank=True
     )
 
@@ -134,14 +134,14 @@ class Player(BasePlayer):
         initial=None,
         choices=['sehr sozial unangemessen', 'etwas sozial unangemessen',
                  'etwas sozial angemessen', 'sehr sozial angemessen'],
-        label='... 10 Talern zu wählen?',
+        label='... 10 Taler zu wählen?',
         widget=widgets.RadioSelectHorizontal())
 
     q_socially_appropriate_9 =  models.StringField(
         initial=None,
         choices=['sehr sozial unangemessen', 'etwas sozial unangemessen',
                  'etwas sozial angemessen', 'sehr sozial angemessen'],
-        label='... 9 Talern zu wählen?',
+        label='... 9 Taler zu wählen?',
         widget=widgets.RadioSelectHorizontal())
 
     q_socially_appropriate_1 =  models.StringField(
