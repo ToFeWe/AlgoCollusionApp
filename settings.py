@@ -24,13 +24,13 @@ SESSION_CONFIGS = [
          'bertrand_SG_2', 
          'bertrand_SG_3', 
          'survey',
-         'payment'] # TODO: Adjust
+         'payment']
     ),
     dict(
-        name='BOT_recommendation_full_9',
-        display_name="BOT_recommendation_full_9",
-        group_treatment='recommendation',
-        num_demo_participants=9,
+        name='BOT_baseline_full_27',
+        display_name="BOT_baseline_full_27",
+        group_treatment='baseline',
+        num_demo_participants=27,
         use_browser_bots=True,
         app_sequence=[
          'introduction',
@@ -38,12 +38,25 @@ SESSION_CONFIGS = [
          'bertrand_SG_2', 
          'bertrand_SG_3', 
          'survey',
-         'payment'] # TODO: Adjust
+         'payment']
     ),
     dict(
-        name='SELF_recommendation_full_9',
-        display_name="SELF_recommendation_full_9",
+        name='SELF_recommendation_full_27',
+        display_name="SELF_recommendation_full_27",
         group_treatment='recommendation',
+        num_demo_participants=27,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment']
+    ),
+    dict(
+        name='SELF_baseline_full_27',
+        display_name="SELF_baseline_full_27",
+        group_treatment='baseline',
         num_demo_participants=9,
         app_sequence=[
          'introduction',
@@ -51,57 +64,7 @@ SESSION_CONFIGS = [
          'bertrand_SG_2', 
          'bertrand_SG_3', 
          'survey',
-         'payment'] # TODO: Adjust
-    ),
-    dict(
-        name='SELF_baseline_full_9',
-        display_name="SELF_baseline_full_9",
-        group_treatment='baseline',
-        num_demo_participants=9,
-        app_sequence=[
-         'introduction',
-         'bertrand',
-         'bertrand_SG_2', 
-         'bertrand_SG_3', 
-         'survey',
-         'payment'] # TODO: Adjust
-    ),
-
-    dict(
-        name='test_survey_baseline',
-        display_name="test_survey",
-        group_treatment='baseline',
-        num_demo_participants=9,
-        app_sequence=[
-         'survey',
-         ]
-    ),
-    dict(
-        name='test_survey_recommendation',
-        display_name="test_survey_recommendation",
-        group_treatment='recommendation',
-        num_demo_participants=9,
-        app_sequence=[
-         'survey',
-         ]
-    ),
-    dict(
-        name='test_intro_baseline',
-        display_name="test_introduction",
-        group_treatment='baseline',
-        num_demo_participants=9,
-        app_sequence=[
-         'introduction',
-         ]
-    ),
-    dict(
-        name='test_intro_recommendation',
-        display_name="test_introduction_recommendation",
-        group_treatment='recommendation',
-        num_demo_participants=9,
-        app_sequence=[
-         'introduction',
-         ]
+         'payment']
     )
 ]
 

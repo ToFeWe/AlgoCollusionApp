@@ -18,11 +18,7 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     def creating_session(self):
-        # For testing purposes only # TODO: Delete later again
-        for p in self.get_players():
-            if 'group_treatment' not in p.participant.vars.keys():
-                p.participant.vars['group_treatment'] = self.session.config['group_treatment']
-
+        pass
 class Group(BaseGroup):
     pass
 

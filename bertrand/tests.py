@@ -132,7 +132,7 @@ def check_others_in_group(other_group_members, player_id, super_game):
         return True         
           
 class SharedPlayerBot(Bot):
-    cases = ['random_price', 'simple']
+    cases = ['random_price']
     #, 'simple', 
     # , 'hip_hop_player', 'deviation'
     def play_round(self):
