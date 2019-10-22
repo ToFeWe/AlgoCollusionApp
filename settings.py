@@ -57,7 +57,7 @@ SESSION_CONFIGS = [
         name='SELF_baseline_full_27',
         display_name="SELF_baseline_full_27",
         group_treatment='baseline',
-        num_demo_participants=9,
+        num_demo_participants=27,
         app_sequence=[
          'introduction',
          'bertrand',
