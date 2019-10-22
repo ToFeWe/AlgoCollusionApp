@@ -82,8 +82,7 @@ REAL_WORLD_CURRENCY_DECIMAL_PLACES = 1
 ROOMS = [
     dict(
         name='lab101',
-        display_name='DICE Lab',
-        participant_label_file='_rooms/dice_lab_labels.txt'
+        display_name='DICE Lab'
     )
 ]
 
