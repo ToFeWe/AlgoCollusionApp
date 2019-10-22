@@ -11,7 +11,7 @@
   <div class="column-left"> 
   	{% if treatment == 'recommendation'%}
 		<div class="transparent"> 
-		<b> <u>Preisempfehlung in dieser Runde: </u></b><br>
+		<b> Preisempfehlung in dieser Runde: </b><br>
 		{% if player.round_number == 1%}
 			Der Algorithmus empfiehlt einen Preis von <b>{{group.recommendation}}</b> Taler.
 		{% else %}
