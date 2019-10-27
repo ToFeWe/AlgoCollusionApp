@@ -80,7 +80,7 @@ page_sequence = [
     Introduction_1,
     Introduction_2,
     Introduction_3,
-    Introduction_4,
     Algorithm_Introduction,
+    Introduction_4,
     Quiz,
 ]
