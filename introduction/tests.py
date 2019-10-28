@@ -108,7 +108,7 @@ class PlayerBot(Bot):
                 'q_profit_2': 81,
                 'q_profit_3': 6.5
             },
-            error_fields=['q_goal_alg', 'q_profit_2']
+            error_fields=['q_after_fixed_round', 'q_profit_2']
             )
             
             assert self.player.counter_q_profit_1 == 0, 'Counter did not work'
