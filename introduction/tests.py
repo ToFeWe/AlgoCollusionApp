@@ -52,10 +52,11 @@ class PlayerBot(Bot):
                 'q_after_fixed_round': '95%',
                 'q_profit_1': 60,
                 'q_profit_2': 80,
-                'q_profit_3': 6.5
+                'q_profit_3': 6.5,
+				'q_goal_alg': 'Gesamtgewinne über alle Runden hinweg für einzelne Firmen zu maximieren.'
             })
             # Has to be zero given submission failed as we did answer nothing 
-            assert self.player.counter_goal_alg == 0, 'Counter did not work'
+            assert self.player.counter_goal_alg == 1, 'Counter did not work'
             
             yield SubmissionMustFail(pages.Quiz, {
                 'q_how_many_customer': 30,
@@ -67,7 +68,7 @@ class PlayerBot(Bot):
 
             })
             # Has to be one given submission failed as we did answer smth wrong 
-            assert self.player.counter_goal_alg == 1, 'Counter did not work'
+            assert self.player.counter_goal_alg == 2, 'Counter did not work'
 
 
             yield(pages.Quiz, {
