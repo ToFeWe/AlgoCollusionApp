@@ -2,6 +2,7 @@ from otree.api import Currency as c, currency_range
 from . import pages
 from ._builtin import Bot
 from .models import Constants
+from otree.api import SubmissionMustFail
 
 import random
 
@@ -241,7 +242,15 @@ class SharedPlayerBot(Bot):
                             assert "Für einen höheren Gesamtgewinn empfiehlt" in self.html
                         else:
                             assert "<b>10 Taler</b> beizubehalten" in self.html
-
+                
+                # Check in the first round if the price bounds are correct
+                if self.round_number == 1:
+                    yield SubmissionMustFail(pages.Decide, {'price': 0})
+                    yield SubmissionMustFail(pages.Decide, {'price': 11}) 
+                    yield SubmissionMustFail(pages.Decide, {'price': 1.1}) 
+                # Check recommendation part
+                if self.session.config['group_treatment'] != 'baseline':
+                    assert "allen Firmen" in self.html
                 yield(pages.Decide, {'price': random.randint(1,10)})
 
                 if self.player.price == self.group.winning_price:

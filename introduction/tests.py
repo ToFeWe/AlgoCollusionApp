@@ -27,8 +27,10 @@ class PlayerBot(Bot):
 
         # Correct max price
         assert "Jeder Kunde ist bereit bis zu 10" in self.html
+        assert "virtuellen Produktmarkt" in self.html
         yield(pages.Introduction_3)
         if self.session.config['group_treatment'] =='recommendation':
+            assert "erhalten dieselbe Preisempfehlung" in self.html
             yield(pages.Algorithm_Introduction)
             # Intro 4 after Algo
             yield(pages.Introduction_4)
