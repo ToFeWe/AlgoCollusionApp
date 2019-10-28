@@ -42,7 +42,9 @@ class PlayerBot(Bot):
                 'q_profit_2': 80,
                 'q_profit_3': 6.5,
                 'q_goal_alg': 'Gesamtgewinne über alle Runden hinweg für alle Firmen zu maximieren.'
-            })
+            },
+                error_fields=['q_profit_1']
+            )
             assert self.player.counter_q_profit_1 == 1, 'Counter did not work'
             assert self.player.counter_q_profit_2 == 0, 'Counter did not work'
             assert 'Ihre Antwort war leider nicht korrekt' in self.html
@@ -54,7 +56,9 @@ class PlayerBot(Bot):
                 'q_profit_2': 80,
                 'q_profit_3': 6.5,
 				'q_goal_alg': 'Gesamtgewinne über alle Runden hinweg für einzelne Firmen zu maximieren.'
-            })
+            },
+            error_fields=['q_goal_alg']
+            )
             # Has to be zero given submission failed as we did answer nothing 
             assert self.player.counter_goal_alg == 1, 'Counter did not work'
             
@@ -66,7 +70,9 @@ class PlayerBot(Bot):
                 'q_profit_3': 6.5,
                 'q_goal_alg': 'Gewinne für einzelne Firmen in einer einzelnen Runde zu maximieren.'
 
-            })
+            },
+            error_fields=['q_goal_alg']
+            )
             # Has to be one given submission failed as we did answer smth wrong 
             assert self.player.counter_goal_alg == 2, 'Counter did not work'
 
@@ -87,7 +93,9 @@ class PlayerBot(Bot):
                 'q_profit_1': 60,
                 'q_profit_2': 80,
                 'q_profit_3': 6.5
-            })
+            },
+            error_fields=['q_after_fixed_round']
+            )
             
             assert self.player.counter_q_profit_1 == 0, 'Counter did not work'
             assert self.player.counter_after_fixed_round == 1, 'Counter did not work'
@@ -99,7 +107,10 @@ class PlayerBot(Bot):
                 'q_profit_1': 60,
                 'q_profit_2': 81,
                 'q_profit_3': 6.5
-            })
+            },
+            error_fields=['q_goal_alg', 'q_profit_2']
+            )
+            
             assert self.player.counter_q_profit_1 == 0, 'Counter did not work'
             assert self.player.counter_after_fixed_round == 2, 'Counter did not work'
             assert self.player.counter_q_profit_2 == 1, 'Counter did not work'

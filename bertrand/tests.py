@@ -245,9 +245,9 @@ class SharedPlayerBot(Bot):
                 
                 # Check in the first round if the price bounds are correct
                 if self.round_number == 1:
-                    yield SubmissionMustFail(pages.Decide, {'price': 0})
-                    yield SubmissionMustFail(pages.Decide, {'price': 11}) 
-                    yield SubmissionMustFail(pages.Decide, {'price': 1.1}) 
+                    yield SubmissionMustFail(pages.Decide, {'price': 0}, error_fields=['price'])
+                    yield SubmissionMustFail(pages.Decide, {'price': 11}, error_fields=['price']) 
+                    yield SubmissionMustFail(pages.Decide, {'price': 1.1}, error_fields=['price']) 
                 # Check recommendation part
                 if self.session.config['group_treatment'] != 'baseline':
                     assert "allen Firmen" in self.html

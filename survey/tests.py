@@ -20,7 +20,8 @@ class PlayerBot(Bot):
                'q_alg_relevant_other_player': '10',
                'q_alg_comments': 'lala',
                'q_alg_improve': 'testets'
-            })
+            },
+            error_fields=['q_alg_helpful'])
 
             yield SubmissionMustFail(pages.SurveyQuestionsAlg, {
                'q_alg_helpful': '0',
@@ -29,7 +30,7 @@ class PlayerBot(Bot):
                'q_alg_relevant_other_player': '11',
                'q_alg_comments': 'lala',
                'q_alg_improve': 'testets'
-            })
+            }, error_fields=['q_alg_relevant_other_player'])
             yield(pages.SurveyQuestionsAlg, {
                'q_alg_helpful': '0',
                'q_alg_how_sure': np.random.choice(likert_choices),
@@ -45,7 +46,7 @@ class PlayerBot(Bot):
             'q_socially_appropriate_10': 'sehr sozial unangemessen',
             'q_socially_appropriate_9' :'etwas sozial unangemessen',
             'q_socially_appropriate_1': 'sehr sozial angemessen'
-        })
+        }, error_fields=['q_all_other_players'])
 
         yield(pages.SurveyQuestionsAll,  {
             'q_all_other_players': np.random.choice(likert_choices),
@@ -61,7 +62,7 @@ class PlayerBot(Bot):
             'q_falk3': np.random.choice(likert_choices),
             'q_falk4': np.random.choice(likert_choices),
             'q_falk5': np.random.choice(likert_choices)
-        })
+        }, error_fields=['q_falk1'])
 
         yield SubmissionMustFail(pages.SurveyQuestionsFalk, {
             'q_falk1': '0',
@@ -69,7 +70,7 @@ class PlayerBot(Bot):
             'q_falk3': np.random.choice(likert_choices),
             'q_falk4': np.random.choice(likert_choices),
             'q_falk5': np.random.choice(likert_choices)
-        })
+        }, error_fields=['q_falk2'])
 
         yield(pages.SurveyQuestionsFalk, {
             'q_falk1': '0',
@@ -87,7 +88,7 @@ class PlayerBot(Bot):
             'q_similar_experiment': 'Nein.',
             'q_other_notes': 'lalala'
 
-        })
+        }, error_fields=['q_age'])
         yield SubmissionMustFail(pages.GeneralQuestions, {
             'q_age': 16,
             'q_gender': 'Divers',
@@ -97,7 +98,7 @@ class PlayerBot(Bot):
             'q_similar_experiment': 'Nein.',
             'q_other_notes': 'lalala'
 
-        })
+        }, error_fields=['q_semester'])
         yield SubmissionMustFail(pages.GeneralQuestions, {
             'q_age': 30,
             'q_gender': 'Divers',
@@ -107,7 +108,7 @@ class PlayerBot(Bot):
             'q_similar_experiment': 'Nein.',
             'q_other_notes': 'lalala'
 
-        })
+        }, error_fields=['q_n_experiment'])
 
         yield(pages.GeneralQuestions, {
             'q_age': 16,
