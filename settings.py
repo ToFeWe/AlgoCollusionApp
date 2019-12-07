@@ -65,6 +65,19 @@ SESSION_CONFIGS = [
          'bertrand_SG_3', 
          'survey',
          'payment']
+    ),
+    dict(
+        name='SELF_recommendation_test',
+        display_name="SELF_recommendation_test",
+        group_treatment='recommendation',
+        num_demo_participants=9,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment']
     )
 ]
 

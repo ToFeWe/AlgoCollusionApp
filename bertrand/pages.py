@@ -86,47 +86,6 @@ class RoundResults(Page):
         }
 
 
-class HistoryResults(Page):
-
-    def is_displayed(self):
-        # Only displayed if we still play, e.g. the number of rounds is equal or
-        # below the random raw of round numbers from before
-        return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
-
-    def vars_for_template(self):
-        opponents = [p for p in self.group.get_players() if p != self.player]
-
-        player_1 = self.group.get_player_by_id(1)
-        player_2 = self.group.get_player_by_id(2)
-        player_3 = self.group.get_player_by_id(3)
-
-        prices_player_1 = [p.price for p in player_1.in_all_rounds()]
-        prices_player_2 = [p.price for p in player_2.in_all_rounds()]
-        prices_player_3 = [p.price for p in player_3.in_all_rounds()]
-
-
-        # Return treatment, to show different graphs for them
-        treatment =  self.participant.vars['group_treatment']
-
-        # +1 due to python
-        round_list = list(range(1, self.round_number + 1))
-
-        # Note that past_recommendation is simply an empty list for the baseline treatment
-        # but it is not used anyways.
-        past_recommendations = [g.recommendation for g in self.group.in_all_rounds()]
-
-        out_dict = {
-        'prices_player_1': prices_player_1,
-        'prices_player_2': prices_player_2,
-        'prices_player_3': prices_player_3,
-        'treatment': treatment,
-        'past_recommendations': past_recommendations,
-        'round_list': round_list
-        }
-
-        return out_dict
-
-
 class EndSG(Page):
 
     def is_displayed(self):
@@ -157,6 +116,5 @@ page_sequence = [
     Decide,
     RoundWaitPage,
     RoundResults,
-    HistoryResults,
     EndSG
 ]
