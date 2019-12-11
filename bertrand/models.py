@@ -45,6 +45,8 @@ class SharedBaseSubsession(BaseSubsession):
                 shuffle_structure = self.this_app_constants()['shuffle_structure_medium']
             elif self.session.num_participants == 27:
                 shuffle_structure = self.this_app_constants()['shuffle_structure_big']
+            elif self.session.num_participants == 36:
+                shuffle_structure = self.this_app_constants()['shuffle_structure_full']
             self.set_group_matrix(shuffle_structure)
         else:
             # For all other rounds in the app, we apply the group structure which we have used for
@@ -248,8 +250,12 @@ class Subsession(SharedBaseSubsession):
                                     [10, 11, 12], [13, 14, 15], [16, 17, 18]],
                 'shuffle_structure_big': [[1,2,3], [4, 5, 6], [7, 8, 9],
                                     [10, 11, 12], [13, 14, 15], [16, 17, 18],
-                                    [19, 20, 21], [22, 23, 24], [25, 26, 27]]
-                } 
+                                    [19, 20, 21], [22, 23, 24], [25, 26, 27]],
+                'shuffle_structure_full': [[1,2,3], [4, 5, 6], [7, 8, 9],
+                                    [10, 11, 12], [13, 14, 15], [16, 17, 18],
+                                    [19, 20, 21], [22, 23, 24], [25, 26, 27],
+                                    [28, 29, 30], [31, 32, 33], [34, 35, 36]]
+                }
 
 class Group(SharedBaseGroup):
     pass

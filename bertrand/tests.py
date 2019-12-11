@@ -29,7 +29,14 @@ def check_player_groups(player_id, group_id, super_game):
         return group_id == 8
     elif player_id == 25:
         return group_id == 9
-    # Test players for which the group if changes
+    elif player_id == 28:
+        return group_id == 10
+    elif player_id == 31:
+        return group_id == 11
+    elif player_id == 34:
+        return group_id == 12
+
+    # Test  some players for which the group if changes
     elif player_id == 8:
         if super_game == 1:
             return group_id == 3
@@ -64,6 +71,26 @@ def check_player_groups(player_id, group_id, super_game):
             return group_id == 9
         elif super_game == 3:
             return group_id == 8
+        else:
+            return False # Must be an error then
+
+    elif player_id == 30:
+        if super_game == 1:
+            return group_id == 10
+        elif super_game == 2:
+            return group_id == 11
+        elif super_game == 3:
+            return group_id == 12
+        else:
+            return False # Must be an error then
+    
+    elif player_id == 35:
+        if super_game == 1:
+            return group_id == 12
+        elif super_game == 2:
+            return group_id == 11
+        elif super_game == 3:
+            return group_id == 10
         else:
             return False # Must be an error then
 
@@ -114,6 +141,7 @@ def check_others_in_group(other_group_members, player_id, super_game):
                         17 in ids_other_members])
         else:
             return False # Must be an error else
+
     elif player_id == 27:
         if super_game == 1:
             return all([25 in ids_other_members, 
@@ -126,6 +154,33 @@ def check_others_in_group(other_group_members, player_id, super_game):
                         20 in ids_other_members])
         else:
             return False # Must be an error else
+
+    elif player_id == 31:
+        if super_game == 1:
+            return all([32 in ids_other_members, 
+                        33 in ids_other_members])
+        elif super_game == 2:
+            return all([35 in ids_other_members, 
+                        30 in ids_other_members])
+        elif super_game == 3:
+            return all([36 in ids_other_members, 
+                        29 in ids_other_members])
+        else:
+            return False # Must be an error else
+
+    elif player_id == 36:
+        if super_game == 1:
+            return all([35 in ids_other_members, 
+                        34 in ids_other_members])
+        elif super_game == 2:
+            return all([28 in ids_other_members, 
+                        32 in ids_other_members])
+        elif super_game == 3:
+            return all([31 in ids_other_members, 
+                        29 in ids_other_members])
+        else:
+            return False # Must be an error else
+
 
     else:
         # If we do not check the player we return
