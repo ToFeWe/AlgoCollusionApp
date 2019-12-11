@@ -11,8 +11,8 @@ class PlayerBot(Bot):
         # We test on each page the extrem cases on the likert scale
         # and else randomly
         likert_choices = [str(i) for i in range(11)]
-        
-        if self.session.config['group_treatment'] =='recommendation':
+
+        if self.session.config['group_treatment'] !='baseline':
             yield SubmissionMustFail(pages.SurveyQuestionsAlg, {
                'q_alg_helpful': '-1',
                'q_alg_how_sure': np.random.choice(likert_choices),

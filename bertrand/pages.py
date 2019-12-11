@@ -24,8 +24,12 @@ class NextRound(WaitPage):
         # given that the group is in a treatment with recommendation.
         p1 = self.group.get_player_by_id(1)
         treatment =  p1.participant.vars['group_treatment']
-        if treatment == 'recommendation':
-            self.group.get_recommendation(round_number=self.round_number)
+
+        # In the baseline treatment there is no recommendation,
+        # but else always.
+        if treatment != 'baseline':
+            self.group.get_recommendation(round_number=self.round_number,
+                                          treatment=treatment)
 
 
 class Decide(Page):
@@ -89,7 +93,7 @@ class RoundResults(Page):
 class EndSG(Page):
 
     def is_displayed(self):
-        # Only displayed in the last round, e.g. the number of rounds is equal #
+        # Only displayed in the last round, e.g. the number of rounds is equal 
         # to the random raw of round numbers from before
         return self.round_number == self.subsession.this_app_constants()['round_number_draw']
 

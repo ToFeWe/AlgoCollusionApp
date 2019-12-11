@@ -28,7 +28,7 @@ class Constants(BaseConstants):
     m_consumer = 30
 
     # Treatment names
-    treatments = ['baseline', 'recommendation']
+    treatments = ['baseline', 'recommendation_simple', 'recommendation_lowest_price']
 
     error_message_form_field = ('Ihre Antwort war leider nicht korrekt.' +
                                 ' Bitte überlegen Sie noch einmal und lesen bei' +

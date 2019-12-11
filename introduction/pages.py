@@ -39,7 +39,8 @@ class Introduction_4(Page):
 class Algorithm_Introduction(Page):
     def is_displayed(self):
         treatment =  self.participant.vars['group_treatment']
-        return treatment == 'recommendation' and self.round_number == 1
+        # Algorithmic Introduction is not shown in the baseline treatment
+        return treatment != 'baseline' and self.round_number == 1
 
  
 

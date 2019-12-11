@@ -20,14 +20,15 @@ class Constants(BaseConstants):
     maximum_price = 10
     monopoly_price = 10
 
-    # Price that is recommended if there is a deviation from a player
+    # Price that is recommended if there is a deviation from a player in
+    # the recommendation_simple treatment
     deviation_price = 1
 
     # Number of consumers
     m_consumer = 30
 
     # Treatment names
-    treatments = ['baseline', 'recommendation']
+    treatments = ['baseline', 'recommendation_simple', 'recommendation_lowest_price']
 
 class SharedBaseSubsession(BaseSubsession):
     class Meta:
@@ -99,9 +100,11 @@ class SharedBaseGroup(BaseGroup):
     # Treatment storage
     group_treatment = models.StringField()
 
-    def get_recommendation(self, round_number):
+    def get_recommendation(self, round_number, treatment):
         """ Based on the past round create a new recommendation
-        for the following period. 
+        for the following period.
+
+        if treatment=='recommendation_simple': 
         This recommendation is based on the following
         simple rule:
         - In the first round recommend the monopoly price
@@ -111,6 +114,14 @@ class SharedBaseGroup(BaseGroup):
             - If player played different prices, recommend the deviation
             price
         
+        if treatment=='recommendation_lowest_price': 
+        - In the first round recommend the monopoly price
+        - In all later round:
+            - If all players had the same price in the last period,
+              recommend the monopoly price
+            - If player played different prices, recommend the lowest price
+            in the last period.
+
         """
 
         # Get all players for the specific group
@@ -123,7 +134,15 @@ class SharedBaseGroup(BaseGroup):
             past_prices = [p.in_previous_rounds()[-1].price for p in players]
             unique_prices = set(past_prices)
             if len(unique_prices) != 1:
-                self.recommendation = Constants.deviation_price
+
+                # If we play the *recommendation_simple* treatment,
+                # recommend the lowest possible price upon deviation
+                if treatment == 'recommendation_simple':
+                    self.recommendation = Constants.deviation_price
+                elif treatment == 'recommendation_lowest_price':
+                    self.recommendation = min(past_prices)
+            # If there has been no deviation (all set the same price) recommend
+            # the monopoly price in every treatment.
             else:
                 self.recommendation = Constants.monopoly_price
         else:
@@ -133,6 +152,7 @@ class SharedBaseGroup(BaseGroup):
     def set_profits_round(self):
         """ A function to set the payoffs for a specific round for a specific 
             group.
+
         """
 
 

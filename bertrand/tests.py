@@ -156,7 +156,7 @@ class SharedPlayerBot(Bot):
             if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
 
                 # Check if the recommendation works properly for all rounds except the first
-                if self.session.config['group_treatment'] == 'recommendation' and self.round_number >1:
+                if self.session.config['group_treatment'] != 'baseline' and self.round_number >1:
                     group_last_round = self.group.in_previous_rounds()[-1]
                     prices_last_round = [p.price for p in group_last_round.get_players()]
                     n_unique_prices = len(set(prices_last_round))
@@ -164,8 +164,14 @@ class SharedPlayerBot(Bot):
                     # If there were more than one price, there must have been a deviation
                     if n_unique_prices != 1:
                         assert "In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis" in self.html
-                        assert "einen Preis von <b>1 Taler.</b>" in self.html
-                        assert self.group.recommendation == 1
+                        if self.session.config['group_treatment'] == 'recommendation_simple':
+                            assert "einen Preis von <b>1 Taler.</b>" in self.html
+                            assert self.group.recommendation == 1
+                        elif self.session.config['group_treatment'] == 'recommendation_lowest_price':
+                            min_price = min(prices_last_round)
+                            assert "einen Preis von <b>{} Taler.</b>".format(int(min_price)) in self.html
+                            assert self.group.recommendation == min_price
+
                     else:
                         assert self.group.recommendation == 10
                         assert "vergangenen Runde haben alle Firmen einen Preis" in self.html
@@ -179,12 +185,8 @@ class SharedPlayerBot(Bot):
                 # Everyone plays the same price here,
                 # Hence, everyone must be a winner.
                 assert self.player.is_winner, "The player is not a winner even though everyone played the same price"
-                assert 'Da Sie den günstigsten Preis gewählt haben' in self.html
-                if self.session.config['group_treatment'] == 'recommendation':
-                    assert "einen Preis von " + str(self.group.recommendation) in self.html
 
                 yield(pages.RoundResults)
-                yield(pages.HistoryResults)
 
             if self.round_number == self.subsession.this_app_constants()['round_number_draw']:
                 round_number_draw = self.subsession.this_app_constants()['round_number_draw']
@@ -221,20 +223,24 @@ class SharedPlayerBot(Bot):
                                              super_game = self.subsession.this_app_constants()['super_game_count']), 'Other group member error for player {} in super game {}'.format(self.participant.id_in_session,
                                                                                                                                                                                       self.subsession.this_app_constants()['super_game_count'])
                 if self.session.config['group_treatment'] != 'baseline':
-                    assert 'einen Preis von <b>10</b> Taler' in self.html
+                    assert 'einen Preis von <b>10 Taler.</b>' in self.html
 
             if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
                 # Check if the recommendation works properly for all rounds except the first
-                if self.session.config['group_treatment'] == 'recommendation' and self.round_number >1:
+                if self.session.config['group_treatment'] != 'baseline' and self.round_number >1:
                     group_last_round = self.group.in_previous_rounds()[-1]
                     prices_last_round = [p.price for p in group_last_round.get_players()]
                     n_unique_prices = len(set(prices_last_round))
-                    
+
                     # If there were more than one price, there must have been a deviation
                     if n_unique_prices != 1:
-                        assert "In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis" in self.html
-                        assert "einen Preis von <b>1 Taler.</b>" in self.html
-                        assert self.group.recommendation == 1
+                        if self.session.config['group_treatment'] == 'recommendation_simple':
+                            assert "einen Preis von <b>1 Taler.</b>" in self.html
+                            assert self.group.recommendation == 1
+                        elif self.session.config['group_treatment'] == 'recommendation_lowest_price':
+                            min_price = min(prices_last_round)
+                            assert "einen Preis von <b>{} Taler.</b>".format(int(min_price)) in self.html
+                            assert self.group.recommendation == min_price
                     else:
                         assert self.group.recommendation == 10
                         assert "vergangenen Runde haben alle Firmen einen Preis" in self.html
@@ -252,19 +258,17 @@ class SharedPlayerBot(Bot):
                 if self.session.config['group_treatment'] != 'baseline':
                     assert "allen Firmen" in self.html
                 yield(pages.Decide, {'price': random.randint(1,10)})
+                
 
+                assert str(int(self.player.price)) in self.html
+                assert str(int(self.group.winning_price)) in self.html
                 if self.player.price == self.group.winning_price:
                     assert self.player.is_winner, "The player is not a winner even though everyone played the minimal price"
                     assert str(int(self.group.winning_price/self.group.n_winners * Constants.m_consumer)) in self.html
                 else:
                     assert not self.player.is_winner
-                    assert "ihr Produkt nicht verkauft" in self.html
                 
-                if self.session.config['group_treatment'] == 'recommendation':
-                    assert "einen Preis von " + str(self.group.recommendation) in self.html
-                assert "allen Runden im {}. Spiel".format(self.subsession.this_app_constants()['super_game_count']) in self.html
                 yield(pages.RoundResults)
-                yield(pages.HistoryResults)
 
             if self.round_number == self.subsession.this_app_constants()['round_number_draw']:
                 round_number_draw = self.subsession.this_app_constants()['round_number_draw']

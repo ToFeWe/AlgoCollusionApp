@@ -9,7 +9,7 @@ class SurveyQuestionsAlg(Page):
                    'q_alg_relevant_other_player', 'q_alg_improve', 'q_alg_comments']
     def is_displayed(self):
         treatment = self.participant.vars['group_treatment']
-        return treatment == 'recommendation'
+        return treatment != 'baseline'
 
 
 class SurveyQuestionsAll(Page):    
