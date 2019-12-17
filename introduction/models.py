@@ -58,7 +58,7 @@ class Player(BasePlayer):
     q_how_many_customer = models.IntegerField(
         initial=None, 
         choices = [25, 35, 30, 40],
-        label = 'Wie viele Kunden gibt es im Markt, die das Produkt kaufen wollen??'
+        label = 'Wie viele Kunden gibt es im Markt, die das Produkt kaufen wollen?'
     )
 
     q_after_fixed_round = models.StringField(

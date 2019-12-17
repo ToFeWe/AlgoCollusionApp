@@ -36,7 +36,7 @@ def check_player_groups(player_id, group_id, super_game):
     elif player_id == 34:
         return group_id == 12
 
-    # Test  some players for which the group if changes
+    # Test some players for which the group if changes
     elif player_id == 8:
         if super_game == 1:
             return group_id == 3
@@ -226,6 +226,8 @@ class SharedPlayerBot(Bot):
                             min_price = min(prices_last_round)
                             assert "einen Preis von <b>{} Taler.</b>".format(int(min_price)) in self.html
                             assert self.group.recommendation == min_price
+                        else:
+                            assert False, "The treatment does not exist."
 
                     else:
                         assert self.group.recommendation == 10

@@ -14,3 +14,4 @@ env
 .cache
 env_test
 desktop.ini
+.vscode

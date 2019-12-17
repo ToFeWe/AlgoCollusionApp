@@ -1,7 +1,7 @@
 {% extends "global/Page.html" %}
 {% load otree %}
 
-{% block title %}Erklärung des Spiels{% endblock %}
+{% block title %}Erklärung{% endblock %}
 
 {% block content %}
 In diesem Spiel repräsentieren Sie eine Firma in einem virtuellen Produktmarkt.
@@ -21,9 +21,9 @@ In diesem Spiel repräsentieren Sie eine Firma in einem virtuellen Produktmarkt.
        Jeder Kunde ist bereit bis zu {{Constants.maximum_price}} Taler für diese Einheit des Produkts auszugeben.
 <br><br>
 Sie konkurrieren mit den anderen beiden Firmen im Markt. 
- Die Firma mit dem <b>niedrigsten Preis (Marktpreis) in der jeweiligen Runde</b> verkauft Ihre Produkte.
-  Firmen mit höheren Preisen <b>verkaufen Ihre Produkte in der jeweiligen Runde nicht und erhalten daher einen Gewinn von Null.</b>
-   Sollten zwei oder alle drei Firmen Ihr Produkt für den gleichen Preis verkaufen wollen,
+ Die Firma mit dem <b>niedrigsten Preis in der jeweiligen Runde</b> verkauft Ihre Produkte. <b>Der niedrigste Preis ist der also Marktpreis in der jeweiligen Runde.</b>
+  Firmen mit einem <b>Preis, der größer als der Marktpreis ist, verkaufen Ihre Produkte in der jeweiligen Runde nicht und erhalten daher einen Gewinn von Null.</b>
+   Sollten zwei oder alle drei Firmen Ihr Produkt für den gleichen Marktpreis verkaufen wollen,
     teilt sich die Nachfrage gleichmäßig auf die zwei bzw. drei Firmen auf.
 <br><br>
 <br><br>
@@ -31,13 +31,13 @@ Sie konkurrieren mit den anderen beiden Firmen im Markt.
 
 <h3> Beispiele </h3>
 <b>Beispiel 1:</b>
-Firma 1 setzt einen Preis von 1, Firma 2 setzt einen Preis von 1, Firma 3 setzt einen Preis von 5. Somit haben Firma 1 und 2 gemeinsam den niedrigsten Preis gesetzt. Firma 1 und 2 verkaufen beide die gleiche Anzahl an Produkten, beide Firmen haben jeweils 15 Kunden und bekommen damit den gleichen Gewinn von 15 Taler. Firma 3 verkauft nichts und hat einen Gewinn von 0. 
+Firma 1 setzt einen Preis von 1, Firma 2 setzt einen Preis von 1, Firma 3 setzt einen Preis von 5. Somit haben Firma 1 und 2 gemeinsam den niedrigsten Preis gesetzt. Firma 1 und 2 verkaufen beide die gleiche Anzahl an Produkten, beide Firmen haben jeweils 15 Kunden und bekommen damit den gleichen Gewinn von 15 Talern. Firma 3 verkauft nichts und hat einen Gewinn von 0. 
 <br><br>
 <b>Beispiel 2:</b>
-Firma 1 setzt einen Preis von 10, Firma 2 setzt einen Preis von 10, Firma 3 setzt einen Preis von 10. Somit haben Firma 1, 2 und 3 gemeinsam den niedrigsten Preis gesetzt. Sie verkaufen alle die gleiche Anzahl an Produkten (jeweils 10) und bekommen damit den gleichen Gewinn von 100 Taler. 
+Firma 1 setzt einen Preis von 10, Firma 2 setzt einen Preis von 10, Firma 3 setzt einen Preis von 10. Somit haben Firma 1, 2 und 3 gemeinsam den niedrigsten Preis gesetzt. Sie verkaufen alle die gleiche Anzahl an Produkten (jeweils 10) und bekommen damit den gleichen Gewinn von 100 Talern. 
 <br><br>
 <b>Beispiel 3:</b>
-Firma 1 setzt einen Preis von 1, Firma 2 setzt einen Preis von 4, Firma 3 setzt einen Preis von 8. Somit hat Firma 1 den niedrigsten Preis gesetzt. Firma 1 verkauft als einzige das Produkt zu einem Preis von 1 an alle 30 Kunden und bekommt damit einen Gewinn von 30 Taler. Firma 2 und 3 verkaufen beide nichts und haben einen Gewinn von 0. 
+Firma 1 setzt einen Preis von 1, Firma 2 setzt einen Preis von 4, Firma 3 setzt einen Preis von 8. Somit hat Firma 1 den niedrigsten Preis gesetzt. Firma 1 verkauft als einzige das Produkt zu einem Preis von 1 an alle 30 Kunden und bekommt damit einen Gewinn von 30 Talern. Firma 2 und 3 verkaufen beide nichts und haben einen Gewinn von 0. 
 <br><br>
 {% next_button %}
 {% endblock %}
