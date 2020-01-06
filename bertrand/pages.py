@@ -51,7 +51,7 @@ class Decide(Page):
             player_price_last_round = -1
         else:
             player_price_last_round = self.player.in_previous_rounds()[-1].price
-        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {} Taler:".format(Constants.deviation_price,
+        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {} Talern:".format(Constants.deviation_price,
                                                                                  Constants.monopoly_price)
         return {
             "label_decide": label_decide,
