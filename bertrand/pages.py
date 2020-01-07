@@ -45,7 +45,7 @@ class Decide(Page):
         treatment =  self.participant.vars['group_treatment']
 
         # In the first round there is no last price
-        # We set it here to -1, as it won't be displayed anyways,
+        # We set it here to -1 as a placerholder, as it won't be displayed anyways,
         # given the fixed recommendation in the first period.
         if self.round_number == 1:
             player_price_last_round = -1

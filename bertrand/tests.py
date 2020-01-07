@@ -193,157 +193,94 @@ class SharedPlayerBot(Bot):
     # , 'hip_hop_player', 'deviation'
     def play_round(self):
         case = self.case
-        if case == 'simple':
-            if self.round_number == 1:
-                yield(pages.StartExperiment)
-                
-                # Check the group matching for some arbitrary players conditional
-                # on the super game.
-                assert check_player_groups(player_id = self.participant.id_in_session,
-                                           group_id = self.group.id_in_subsession,
-                                           super_game = self.subsession.this_app_constants()['super_game_count']), 'Group matching Error for player {} in super game {}'.format(self.participant.id_in_session,
-                                                                                                                                                                                self.subsession.this_app_constants()['super_game_count'])
-                assert check_others_in_group(other_group_members = self.player.get_others_in_group(),
-                                             player_id = self.participant.id_in_session,
-                                             super_game = self.subsession.this_app_constants()['super_game_count']), 'Other group member error for player {} in super game {}'.format(self.participant.id_in_session,
-                                                                                                                                                                                      self.subsession.this_app_constants()['super_game_count'])
 
-            if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
+        if self.round_number == 1:
+            yield(pages.StartExperiment)
 
-                # Check if the recommendation works properly for all rounds except the first
-                if self.session.config['group_treatment'] != 'baseline' and self.round_number >1:
-                    group_last_round = self.group.in_previous_rounds()[-1]
-                    prices_last_round = [p.price for p in group_last_round.get_players()]
-                    n_unique_prices = len(set(prices_last_round))
-                    
-                    # If there were more than one price, there must have been a deviation
-                    if n_unique_prices != 1:
-                        assert "In der vergangenen Runde gab es Abweichungen vom empfohlenen Preis" in self.html
-                        if self.session.config['group_treatment'] == 'recommendation_simple':
-                            assert "einen Preis von <b>1 Taler.</b>" in self.html
-                            assert self.group.recommendation == 1
-                        elif self.session.config['group_treatment'] == 'recommendation_lowest_price':
-                            min_price = min(prices_last_round)
-                            assert "einen Preis von <b>{} Taler.</b>".format(int(min_price)) in self.html
-                            assert self.group.recommendation == min_price
-                        else:
-                            assert False, "The treatment does not exist."
+            # Check the group matching for some arbitrary players conditional
+            # on the super game.
+            assert check_player_groups(player_id = self.participant.id_in_session,
+                                        group_id = self.group.id_in_subsession,
+                                        super_game = self.subsession.this_app_constants()['super_game_count']), 'Group matching Error for player {} in super game {}'.format(self.participant.id_in_session,
+                                                                                                                                                                            self.subsession.this_app_constants()['super_game_count'])
+            assert check_others_in_group(other_group_members = self.player.get_others_in_group(),
+                                            player_id = self.participant.id_in_session,
+                                            super_game = self.subsession.this_app_constants()['super_game_count']), 'Other group member error for player {} in super game {}'.format(self.participant.id_in_session,
+                                                                                                                                                                                  self.subsession.this_app_constants()['super_game_count'])
+            if self.session.config['group_treatment'] != 'baseline':
+                assert 'einen Preis von <b>10 Taler.</b>' in self.html
 
-                    else:
+        if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
+            # Check if the recommendation works properly for all rounds except the first
+            if self.session.config['group_treatment'] != 'baseline' and self.round_number >1:
+                group_last_round = self.group.in_previous_rounds()[-1]
+                prices_last_round = [p.price for p in group_last_round.get_players()]
+                n_unique_prices = len(set(prices_last_round))
+
+                # If there were more than one price, there must have been a deviation
+                if n_unique_prices != 1:
+                    if self.session.config['group_treatment'] == 'recommendation_simple':
+                        assert "einen Preis von <b>1 Taler.</b>" in self.html
+                        assert self.group.recommendation == 1
+                    elif self.session.config['group_treatment'] == 'recommendation_lowest_price':
+                        min_price = min(prices_last_round)
+                        assert "einen Preis von <b>{} Taler.</b>".format(int(min_price)) in self.html
+                        assert self.group.recommendation == min_price
+                    elif self.session.config['group_treatment'] == 'recommendation_static':
+                        # In the static recommendation treatment we still recommend the monopoly
+                        # price upon deviation
+                        assert "einen Preis von <b>10 Taler.</b>" in self.html
                         assert self.group.recommendation == 10
-                        assert "vergangenen Runde haben alle Firmen einen Preis" in self.html
-                        if list(set(prices_last_round))[0] != 10:
-                            assert "Für einen höheren Gesamtgewinn empfiehlt" in self.html
-                        else:
-                            assert "<b>10 Taler</b> beizubehalten" in self.html
-
+                else:
+                    assert self.group.recommendation == 10
+            
+            # Check in the first round if the price bounds are correct
+            if self.round_number == 1:
+                yield SubmissionMustFail(pages.Decide, {'price': 0}, error_fields=['price'])
+                yield SubmissionMustFail(pages.Decide, {'price': 11}, error_fields=['price']) 
+                yield SubmissionMustFail(pages.Decide, {'price': 1.1}, error_fields=['price']) 
+            # Check recommendation part
+            if self.session.config['group_treatment'] != 'baseline':
+                assert "allen Firmen" in self.html
+            # Differ in cases, which price the player place
+            if case == 'simple':
                 yield(pages.Decide, {'price': 10})
-
-                # Everyone plays the same price here,
+                # Everyone plays the same price here in the *simple* case
                 # Hence, everyone must be a winner.
                 assert self.player.is_winner, "The player is not a winner even though everyone played the same price"
-
-                yield(pages.RoundResults)
-
-            if self.round_number == self.subsession.this_app_constants()['round_number_draw']:
-                round_number_draw = self.subsession.this_app_constants()['round_number_draw']
-                # Each round everyone plays a price of 10. Hence, the market is shared for each round
-                # across all rounds.
-                accumulated_payoff_in_app = round_number_draw * 10 * Constants.m_consumer / Constants.players_per_group
-                assert str(int(accumulated_payoff_in_app)) in self.html, "Not there"
-
-                sg_counter = self.subsession.this_app_constants()['super_game_count']
-                key_name = "final_payoff_sg_" + str(sg_counter)        
-                assert accumulated_payoff_in_app == self.participant.vars[key_name]
-                
-                assert "insgesamt einen Gewinn von <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
-                if sg_counter == 1 or sg_counter == 2:
-                    assert "Sie spielen jetzt das gleiche Spiel erneut" in self.html
-                else:
-                    assert "Dies war das letzte Spiel" in self.html
-                assert "dies die letzte Runde des {}. Spiels".format(self.subsession.this_app_constants()['super_game_count']) in self.html
-                yield(pages.EndSG)
-
-
-        if case == 'random_price':
-            if self.round_number == 1:
-                yield(pages.StartExperiment)
-
-                # Check the group matching for some arbitrary players conditional
-                # on the super game.
-                assert check_player_groups(player_id = self.participant.id_in_session,
-                                           group_id = self.group.id_in_subsession,
-                                           super_game = self.subsession.this_app_constants()['super_game_count']), 'Group matching Error for player {} in super game {}'.format(self.participant.id_in_session,
-                                                                                                                                                                                self.subsession.this_app_constants()['super_game_count'])
-                assert check_others_in_group(other_group_members = self.player.get_others_in_group(),
-                                             player_id = self.participant.id_in_session,
-                                             super_game = self.subsession.this_app_constants()['super_game_count']), 'Other group member error for player {} in super game {}'.format(self.participant.id_in_session,
-                                                                                                                                                                                      self.subsession.this_app_constants()['super_game_count'])
-                if self.session.config['group_treatment'] != 'baseline':
-                    assert 'einen Preis von <b>10 Taler.</b>' in self.html
-
-            if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
-                # Check if the recommendation works properly for all rounds except the first
-                if self.session.config['group_treatment'] != 'baseline' and self.round_number >1:
-                    group_last_round = self.group.in_previous_rounds()[-1]
-                    prices_last_round = [p.price for p in group_last_round.get_players()]
-                    n_unique_prices = len(set(prices_last_round))
-
-                    # If there were more than one price, there must have been a deviation
-                    if n_unique_prices != 1:
-                        if self.session.config['group_treatment'] == 'recommendation_simple':
-                            assert "einen Preis von <b>1 Taler.</b>" in self.html
-                            assert self.group.recommendation == 1
-                        elif self.session.config['group_treatment'] == 'recommendation_lowest_price':
-                            min_price = min(prices_last_round)
-                            assert "einen Preis von <b>{} Taler.</b>".format(int(min_price)) in self.html
-                            assert self.group.recommendation == min_price
-                    else:
-                        assert self.group.recommendation == 10
-                        assert "vergangenen Runde haben alle Firmen einen Preis" in self.html
-                        if list(set(prices_last_round))[0] != 10:
-                            assert "Für einen höheren Gesamtgewinn empfiehlt" in self.html
-                        else:
-                            assert "<b>10 Taler</b> beizubehalten" in self.html
-                
-                # Check in the first round if the price bounds are correct
-                if self.round_number == 1:
-                    yield SubmissionMustFail(pages.Decide, {'price': 0}, error_fields=['price'])
-                    yield SubmissionMustFail(pages.Decide, {'price': 11}, error_fields=['price']) 
-                    yield SubmissionMustFail(pages.Decide, {'price': 1.1}, error_fields=['price']) 
-                # Check recommendation part
-                if self.session.config['group_treatment'] != 'baseline':
-                    assert "allen Firmen" in self.html
+            elif case == 'random_price':
                 yield(pages.Decide, {'price': random.randint(1,10)})
-                
-
-                assert str(int(self.player.price)) in self.html
-                assert str(int(self.group.winning_price)) in self.html
+            
+                # If the player had, by chance, the  lowest price
+                # he must be the winner.
                 if self.player.price == self.group.winning_price:
                     assert self.player.is_winner, "The player is not a winner even though everyone played the minimal price"
                     assert str(int(self.group.winning_price/self.group.n_winners * Constants.m_consumer)) in self.html
                 else:
                     assert not self.player.is_winner
-                
-                yield(pages.RoundResults)
+            
+            assert str(int(self.player.price)) in self.html
+            assert str(int(self.group.winning_price)) in self.html
 
-            if self.round_number == self.subsession.this_app_constants()['round_number_draw']:
-                round_number_draw = self.subsession.this_app_constants()['round_number_draw']
+            yield(pages.RoundResults)
 
-                accumulated_payoff_in_app = sum([p_in_r.profit for p_in_r in self.player.in_all_rounds()])
-                assert str(int(accumulated_payoff_in_app)) in self.html, "Not there"
+        if self.round_number == self.subsession.this_app_constants()['round_number_draw']:
+            round_number_draw = self.subsession.this_app_constants()['round_number_draw']
 
-                sg_counter = self.subsession.this_app_constants()['super_game_count']
-                key_name = "final_payoff_sg_" + str(sg_counter)        
-                assert accumulated_payoff_in_app == self.participant.vars[key_name]
+            accumulated_payoff_in_app = sum([p_in_r.profit for p_in_r in self.player.in_all_rounds()])
+            assert str(int(accumulated_payoff_in_app)) in self.html, "Not there"
 
-                assert "insgesamt einen Gewinn von <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
-                if sg_counter == 1 or sg_counter == 2:
-                    assert "Sie spielen jetzt das gleiche Spiel erneut" in self.html
-                else:
-                    assert "Dies war das letzte Spiel" in self.html
-                assert "dies die letzte Runde des {}. Spiels".format(self.subsession.this_app_constants()['super_game_count']) in self.html
-                yield(pages.EndSG)
+            sg_counter = self.subsession.this_app_constants()['super_game_count']
+            key_name = "final_payoff_sg_" + str(sg_counter)        
+            assert accumulated_payoff_in_app == self.participant.vars[key_name]
+
+            assert "insgesamt einen Gewinn von <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
+            if sg_counter == 1 or sg_counter == 2:
+                assert "Sie spielen jetzt das gleiche Spiel erneut" in self.html
+            else:
+                assert "Dies war das letzte Spiel" in self.html
+            assert "dies die letzte Runde des {}. Spiels".format(self.subsession.this_app_constants()['super_game_count']) in self.html
+            yield(pages.EndSG)
 
 
 class PlayerBot(SharedPlayerBot):
