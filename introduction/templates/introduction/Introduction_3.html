@@ -8,7 +8,7 @@ In diesem Spiel repräsentieren Sie eine Firma in einem virtuellen Produktmarkt.
  In dem Markt verkaufen zwei weitere Firmen das gleiche Produkt wie Sie.
   Diese Firmen werden von zwei anderen Experiment-Teilnehmern repräsentiert.
    Das Spiel hat mehrere Runden.
-    Sie treffen in jeder Runde eines Spiels auf dieselben Firmen (also Experiment-Teilnehmer).
+    Sie treffen in jeder Runde des Spiels auf dieselben Firmen (also Experiment-Teilnehmer).
         Alle Firmen entscheiden in jeder Runde erneut <b>eigenständig und gleichzeitig</b>,
          für wie viele Taler Sie Ihr Produkt verkaufen möchten.
           Sie können Ihr Produkt für einen Peis von {{Constants.deviation_price}}, 2, … oder {{Constants.maximum_price}} Taler verkaufen (nur ganze Taler). 
@@ -20,7 +20,6 @@ In diesem Spiel repräsentieren Sie eine Firma in einem virtuellen Produktmarkt.
       Jeder Kunde möchte in jeder Runde eines Spiels <b>eine Einheit</b> des Produkts möglichst günstig kaufen.
        Jeder Kunde ist bereit bis zu {{Constants.maximum_price}} Taler für diese Einheit des Produkts auszugeben.
 <br><br>
-Sie konkurrieren mit den anderen beiden Firmen im Markt. 
  Die Firma mit dem <b>niedrigsten Preis in der jeweiligen Runde</b> verkauft Ihre Produkte. <b>Der niedrigste Preis ist der also Marktpreis in der jeweiligen Runde.</b>
   Firmen mit einem <b>Preis, der größer als der Marktpreis ist, verkaufen Ihre Produkte in der jeweiligen Runde nicht und erhalten daher einen Gewinn von Null.</b>
    Sollten zwei oder alle drei Firmen Ihr Produkt für den gleichen Marktpreis verkaufen wollen,
@@ -33,11 +32,81 @@ Sie konkurrieren mit den anderen beiden Firmen im Markt.
 <b>Beispiel 1:</b>
 Firma 1 setzt einen Preis von 1, Firma 2 setzt einen Preis von 1, Firma 3 setzt einen Preis von 5. Somit haben Firma 1 und 2 gemeinsam den niedrigsten Preis gesetzt. Firma 1 und 2 verkaufen beide die gleiche Anzahl an Produkten, beide Firmen haben jeweils 15 Kunden und bekommen damit den gleichen Gewinn von 15 Talern. Firma 3 verkauft nichts und hat einen Gewinn von 0. 
 <br><br>
+    <table class="table">
+        <tr align="center">
+            <th align="center">  </th>
+            <th align="center"> Firma 1 </th>
+            <th align="center"> Firma 2 </th>
+            <th align="center"> Firma 3 </th>
+        </tr>
+
+        <tr align="center">
+            <th align="center"> Preise </th>
+            <td align="center"> 1 </td>
+            <td align="center"> 1 </td>
+            <td align="center"> 5 </td>
+        </tr>
+
+        <tr align="center">
+            <th align="center"> Gewinne </th>
+            <td align="center"> 15 </td>
+            <td align="center"> 15 </td>
+            <td align="center"> 0 </td>
+        </tr>
+    </table>
+<br><br>
 <b>Beispiel 2:</b>
 Firma 1 setzt einen Preis von 10, Firma 2 setzt einen Preis von 10, Firma 3 setzt einen Preis von 10. Somit haben Firma 1, 2 und 3 gemeinsam den niedrigsten Preis gesetzt. Sie verkaufen alle die gleiche Anzahl an Produkten (jeweils 10) und bekommen damit den gleichen Gewinn von 100 Talern. 
+<br><br>
+    <table class="table">
+        <tr align="center">
+            <th align="center">  </th>
+            <th align="center"> Firma 1 </th>
+            <th align="center"> Firma 2 </th>
+            <th align="center"> Firma 3 </th>
+        </tr>
+
+        <tr align="center">
+            <th align="center"> Preise </th>
+            <td align="center"> 10 </td>
+            <td align="center"> 10 </td>
+            <td align="center"> 10 </td>
+        </tr>
+
+        <tr align="center">
+            <th align="center"> Gewinne </th>
+            <td align="center"> 100 </td>
+            <td align="center"> 100 </td>
+            <td align="center"> 100 </td>
+        </tr>
+    </table>
 <br><br>
 <b>Beispiel 3:</b>
 Firma 1 setzt einen Preis von 1, Firma 2 setzt einen Preis von 4, Firma 3 setzt einen Preis von 8. Somit hat Firma 1 den niedrigsten Preis gesetzt. Firma 1 verkauft als einzige das Produkt zu einem Preis von 1 an alle 30 Kunden und bekommt damit einen Gewinn von 30 Talern. Firma 2 und 3 verkaufen beide nichts und haben einen Gewinn von 0. 
 <br><br>
+    <table class="table">
+        <tr align="center">
+            <th align="center">  </th>
+            <th align="center"> Firma 1 </th>
+            <th align="center"> Firma 2 </th>
+            <th align="center"> Firma 3 </th>
+        </tr>
+
+        <tr align="center">
+            <th align="center"> Preise </th>
+            <td align="center"> 1 </td>
+            <td align="center"> 4 </td>
+            <td align="center"> 8 </td>
+        </tr>
+
+        <tr align="center">
+            <th align="center"> Gewinne </th>
+            <td align="center"> 30 </td>
+            <td align="center"> 0 </td>
+            <td align="center"> 0 </td>
+        </tr>
+    </table>
+<br><br>
+
 {% next_button %}
 {% endblock %}
