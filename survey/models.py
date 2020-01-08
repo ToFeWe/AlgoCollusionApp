@@ -42,22 +42,6 @@ class Player(BasePlayer):
         label='Wie hilfreich fanden Sie die Empfehlungen des Algorithmus?',
         widget=widgets.RadioSelectHorizontal())
 
-    q_alg_how_sure = models.StringField(
-        initial=None,
-        choices=[('0', 'gar nicht sicher'),
-                 ('1', ''),
-                 ('2', ''),
-                 ('3', ''),
-                 ('4', ''),
-                 ('5', ''),
-                 ('6', ''),
-                 ('7', ''),
-                 ('8', ''),
-                 ('9', ''),
-                 ('10', 'sehr sicher')],
-        label='Wie sicher waren Sie sich, dass Ihre Mitspieler der Empfehlung des Algorithmus folge leisten würden?',
-        widget=widgets.RadioSelectHorizontal())
-
     q_alg_no_recommendation = models.StringField(
         initial=None,
         choices=[('0', 'deutlich niedriger'),
@@ -103,58 +87,29 @@ class Player(BasePlayer):
         blank=True
     )
 
-    # Questions for all    
-    q_all_other_players = models.StringField(
-        initial=None,
-        choices=[('0', 'gar nicht abhängig'),
-                 ('1', ''),
-                 ('2', ''),
-                 ('3', ''),
-                 ('4', ''),
-                 ('5', ''),
-                 ('6', ''),
-                 ('7', ''),
-                 ('8', ''),
-                 ('9', ''),
-                 ('10', 'sehr stark abhängig')],
-        label='Wie sehr war Ihre Preisentscheidung von den Preisentscheidungen Ihrer Mitspieler in der letzten Runde abhängig?',
-        widget=widgets.RadioSelectHorizontal())
-
-    q_all_communication = models.StringField(
-        initial=None,
-        choices=['Ja.', 'Nein.', 'Ich weiß es nicht.'],
-        label='Hätten Sie sich gewünscht Sie könnten mit Ihren Mitspielern kommunizieren?')
-
-    # Socially appropriate
-    q_socially_appropriate_10 =  models.StringField(
-        initial=None,
-        choices=['sehr sozial unangemessen', 'etwas sozial unangemessen',
-                 'etwas sozial angemessen', 'sehr sozial angemessen'],
-        label='... 10 Taler zu wählen?',
-        widget=widgets.RadioSelectHorizontal())
-
-    q_socially_appropriate_9 =  models.StringField(
-        initial=None,
-        choices=['sehr sozial unangemessen', 'etwas sozial unangemessen',
-                 'etwas sozial angemessen', 'sehr sozial angemessen'],
-        label='... 9 Taler zu wählen?',
-        widget=widgets.RadioSelectHorizontal())
-
-    q_socially_appropriate_1 =  models.StringField(
-        initial=None,
-        choices=['sehr sozial unangemessen', 'etwas sozial unangemessen',
-                 'etwas sozial angemessen', 'sehr sozial angemessen'],
-        label='... 1 Taler zu wählen?',
-        widget=widgets.RadioSelectHorizontal())
-
     # General Questions
     q_age = models.IntegerField(label='Wie alt sind Sie?', min=16, max=99)
     q_gender = models.StringField(
         label = 'Was ist Ihr Geschlecht?',
         choices = ['Männlich', 'Weiblich', 'Divers', 'keine Angabe']
     )
-    q_study_field = models.StringField(label='Was studieren Sie?')
-    q_semester = models.IntegerField(label='Im wievielten Semester studieren Sie?', min=1, max=45)
+
+    q_study_level = models.StringField(
+        choices=[
+            "Weiterführende Schule nicht beendet",
+            "Abitur",
+            "Bachelorabschluss",
+            "Masterabschluss",
+            "Berufliche Qualifikation",
+            'keine Angabe'],
+        label='Was ist Ihr höchster Bildungsabschluss?')
+
+    q_student = models.StringField(
+        choices= ['Ja', 'Nein', 'keine Angabe'],
+        label='Befinden Sie sich noch im Studium?'
+    )
+    q_study_field = models.StringField(label='Falls Sie noch studieren: Was studieren Sie?', blank=True)
+    q_semester = models.IntegerField(label='Falls Sie noch studieren: Im wievielten Semester studieren Sie?', min=1, max=45, blank=True)
     q_n_experiment = models.IntegerField(label='An wie vielen Experimenten haben Sie bereits teilgenommen?', max=500, min=0)
     q_similar_experiment = models.StringField(label='Haben Sie schon einmal an einem ähnlichen Experiment teilgenommen?',
                                          choices=['Ja.', 'Nein.', 'Ich weiß es nicht.'])
