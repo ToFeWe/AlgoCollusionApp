@@ -112,7 +112,7 @@ SESSION_CONFIGS = [
         name='SELF_recommendation_static_full_27',
         display_name="SELF_recommendation_static_full_27",
         group_treatment='recommendation_static',
-        num_demo_participants=27,
+        num_demo_participants=9,
         app_sequence=[
          'introduction',
          'bertrand',

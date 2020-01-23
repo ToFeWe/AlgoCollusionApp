@@ -15,95 +15,96 @@ class PlayerBot(Bot):
         if self.session.config['group_treatment'] !='baseline':
             yield SubmissionMustFail(pages.SurveyQuestionsAlg, {
                'q_alg_helpful': '-1',
-               'q_alg_no_recommendation': np.random.choice(likert_choices),
-               'q_alg_relevant_other_player': '10',
-               'q_alg_comments': 'lala',
-               'q_alg_improve': 'testets'
+               'q_alg_no_recommendation': '11',
+               'q_alg_relevant_other_player': '-1',
+               'q_alg_comments': 'lala'
             },
-            error_fields=['q_alg_helpful'])
+            error_fields=['q_alg_helpful', 'q_alg_no_recommendation',
+                          'q_alg_relevant_other_player'])
 
             yield SubmissionMustFail(pages.SurveyQuestionsAlg, {
-               'q_alg_helpful': '0',
-               'q_alg_no_recommendation': np.random.choice(likert_choices),
-               'q_alg_relevant_other_player': '11',
-               'q_alg_comments': 'lala',
-               'q_alg_improve': 'testets'
-            }, error_fields=['q_alg_relevant_other_player'])
+               'q_alg_helpful': '',
+               'q_alg_no_recommendation': '-1',
+               'q_alg_relevant_other_player': '22',
+               'q_alg_comments': 'lala'
+            },
+            error_fields=['q_alg_helpful', 'q_alg_no_recommendation',
+                          'q_alg_relevant_other_player'])
+
             yield(pages.SurveyQuestionsAlg, {
                'q_alg_helpful': '0',
                'q_alg_no_recommendation': np.random.choice(likert_choices),
                'q_alg_relevant_other_player': '10',
-               'q_alg_comments': 'lala',
-               'q_alg_improve': 'testets'
+               'q_alg_comments': 'lala'
             })
-        yield SubmissionMustFail(pages.SurveyQuestionsFalk, {
-            'q_falk1': '-1',
-            'q_falk2': '10',
-            'q_falk3': np.random.choice(likert_choices),
-            'q_falk4': np.random.choice(likert_choices),
-            'q_falk5': np.random.choice(likert_choices)
-        }, error_fields=['q_falk1'])
 
         yield SubmissionMustFail(pages.SurveyQuestionsFalk, {
-            'q_falk1': '0',
-            'q_falk2': '11',
-            'q_falk3': np.random.choice(likert_choices),
-            'q_falk4': np.random.choice(likert_choices),
-            'q_falk5': np.random.choice(likert_choices)
-        }, error_fields=['q_falk2'])
+            'q_falk1': '-1',
+            'q_falk2': '22',
+            'q_falk3': '11',
+            'q_falk4': '',
+            'q_falk5': 'YOLO',
+            'q_falk6': ''
+        }, error_fields=['q_falk1', 'q_falk2', 'q_falk3',
+                         'q_falk4', 'q_falk5', 'q_falk6'
+        ])
 
         yield(pages.SurveyQuestionsFalk, {
             'q_falk1': '0',
             'q_falk2': '10',
             'q_falk3': np.random.choice(likert_choices),
             'q_falk4': np.random.choice(likert_choices),
-            'q_falk5': np.random.choice(likert_choices)
+            'q_falk5': np.random.choice(likert_choices),
+            'q_falk6': np.random.choice(likert_choices)
         })
+
         yield SubmissionMustFail(pages.GeneralQuestions, {
             'q_age': 15,
-            'q_gender': 'Divers',
-            'q_study_level': 'Weiterführende Schule nicht beendet',
-            'q_student': 'Ja',
-            'q_study_field': 'Econ',  
-            'q_semester': 12,
-            'q_n_experiment': 4,
-            'q_similar_experiment': 'Nein.',
-            'q_other_notes': 'lalala'
-
-        }, error_fields=['q_age'])
-        yield SubmissionMustFail(pages.GeneralQuestions, {
-            'q_age': 16,
-            'q_gender': 'Divers',
-            'q_study_level': 'nicht beendet',
-            'q_study_field': 'Econ',  
-            'q_semester': 10,
-            'q_student': 'Ja',
-            'q_n_experiment': 4,
-            'q_similar_experiment': 'Nein.',
-            'q_other_notes': 'lalala'
-
-        }, error_fields=['q_study_level'])
-        yield SubmissionMustFail(pages.GeneralQuestions, {
-            'q_age': 30,
-            'q_gender': 'Divers',
-            'q_study_level': 'Masterabschluss',
+            'q_gender': 'qq',
+            'q_study_level': '',
             'q_study_field': 'Econ', 
-            'q_student': 'Ja',
-            'q_semester': 1,
+            'q_semester': -1,
+            'q_abitur': 0.0,
+            'q_math': 6.1,
+            'q_budget': -1,
+            'q_spending': 1000001,
             'q_n_experiment': -1,
-            'q_similar_experiment': 'Nein.',
+            'q_similar_experiment': '',
             'q_other_notes': 'lalala'
 
-        }, error_fields=['q_n_experiment'])
+        }, error_fields=['q_age', 'q_gender', 'q_study_level',
+        'q_abitur', 'q_math', 'q_budget', 
+        'q_spending', 'q_n_experiment', 'q_similar_experiment'])
+
+        yield SubmissionMustFail(pages.GeneralQuestions, {
+            'q_age': 100,
+            'q_gender': 'Nein',
+            'q_study_level': '22',
+            'q_study_field': 'Wiwi', 
+            'q_semester': 99,
+            'q_abitur': 6.001,
+            'q_math': 0.999,
+            'q_budget': 10000000,
+            'q_spending': -9,
+            'q_n_experiment': 9999,
+            'q_similar_experiment': '',
+            'q_other_notes': 'lalala'
+
+        }, error_fields=['q_age', 'q_gender', 'q_study_level',
+        'q_abitur', 'q_math', 'q_budget', 
+        'q_spending', 'q_n_experiment', 'q_similar_experiment'])
 
         yield(pages.GeneralQuestions, {
-            'q_age': 16,
-            'q_gender': 'Divers',
-            'q_study_level': 'Masterabschluss',
-            'q_study_field': 'Econ',
-            'q_student': 'Ja', 
-            'q_semester': 12,
+            'q_age': 22,
+            'q_gender': 'Männlich',
+            'q_study_level': 'Bachelorabschluss',
+            'q_study_field': 'Wiwi', 
+            'q_semester': 3,
+            'q_abitur': 6.0,
+            'q_math': 1.0,
+            'q_budget': 100,
+            'q_spending': 90,
             'q_n_experiment': 4,
-            'q_similar_experiment': 'Nein.',
-            'q_other_notes': 'lalala'
+            'q_similar_experiment': 'Ja.',
+            'q_other_notes': 'lulu'
         })

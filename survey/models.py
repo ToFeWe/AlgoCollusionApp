@@ -81,12 +81,6 @@ class Player(BasePlayer):
         blank=True
     )
 
-    q_alg_improve = models.StringField(
-        initial=None,
-        label='Könnte man Ihrer Meinung nach den Algorithmus optimieren? Wenn ja wie?',
-        blank=True
-    )
-
     # General Questions
     q_age = models.IntegerField(label='Wie alt sind Sie?', min=16, max=99)
     q_gender = models.StringField(
@@ -104,19 +98,23 @@ class Player(BasePlayer):
             'keine Angabe'],
         label='Was ist Ihr höchster Bildungsabschluss?')
 
-    q_student = models.StringField(
-        choices= ['Ja', 'Nein', 'keine Angabe'],
-        label='Befinden Sie sich noch im Studium?'
-    )
-    q_study_field = models.StringField(label='Falls Sie noch studieren: Was studieren Sie?', blank=True)
-    q_semester = models.IntegerField(label='Falls Sie noch studieren: Im wievielten Semester studieren Sie?', min=1, max=45, blank=True)
-    q_n_experiment = models.IntegerField(label='An wie vielen Experimenten haben Sie bereits teilgenommen?', max=500, min=0)
+    q_study_field = models.StringField(label='Was studieren Sie? / Was ist Ihre Tätigkeit?')
+    q_semester = models.StringField(label='Falls Sie noch studieren: Im wievielten Semester studieren Sie?', blank=True)
+    q_n_experiment = models.IntegerField(label='An wie vielen wirtschaftswissenschaftlichen Experimenten haben Sie (ungefähr) bereits teilgenommen?', max=500, min=0)
     q_similar_experiment = models.StringField(label='Haben Sie schon einmal an einem ähnlichen Experiment teilgenommen?',
                                          choices=['Ja.', 'Nein.', 'Ich weiß es nicht.'])
+
+
+    q_abitur = models.FloatField(label="Was war Ihre Abiturdurchschnittsnote (1,0 - 6,0)?", min=1.0, max=6.0)
+    q_math = models.FloatField(label="Was war Ihre letze Mathenote (1,0 - 6,0)?", min=1.0, max=6.0)
+    q_budget = models.IntegerField(label="Wie viel Geld haben Sie monatlich (nach Abzug von Fixkosten wie Miete, Versicherungen etc.) zur Verfügung?",
+                                   min=0, max=1000000)
+    q_spending = models.IntegerField(label="Wie viel Geld geben Sie monatlich aus (nach Abzug von Fixkosten wie Miete, Versicherungen etc.)?",
+                                   min=0, max=1000000)
+
     q_other_notes = models.StringField(blank=True, label="Haben Sie weitere abschließende Anmerkungen zu diesem Experiment?")
     
     # Falk Questions
-
     # Risk
     q_falk1 = models.CharField(
         initial=None,
@@ -206,3 +204,9 @@ class Player(BasePlayer):
         verbose_name='Wenn mir jemand einen Gefallen tut, bin ich bereit, diesen zu erwidern.',
         doc="""Wenn mir jemand einen Gefallen tut, bin ich bereit, diesen zu erwidern.""",
         widget=widgets.RadioSelectHorizontal())
+
+    # Alturism
+    q_falk6 = models.IntegerField(
+        initial=None, min=0, max=1000,
+        verbose_name='Stellen Sie sich folgende Situation vor: Sie haben in einem Preisausschreiben 1.000 € gewonnen. Wie viel würden Sie in Ihrer momentanen Situation für einen gemeinnützigen Zweck spenden?',
+        doc="""Stellen Sie sich folgende Situation vor: Sie haben in einem Preisausschreiben 1.000 € gewonnen. Wie viel würden Sie in Ihrer momentanen Situation für einen gemeinnützigen Zweck spenden?""")
