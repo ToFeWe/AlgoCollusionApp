@@ -12,10 +12,10 @@
         <b>Ergebnisse der aktuellen Runde</b>
         <tr align="center">
             <th align="center">  </th>
-            <th align="center"> Sie (Firma {{player.id_in_group}}) </th>
+            <th align="center"> Sie (Firma {{player_id}}) </th>
             
-            {% for p in opponents %}
-                <th> Firma  {{p.id_in_group}} </th>
+            {% for o_id in opponents_ids %}
+                <th> Firma  {{o_id}} </th>
             {% endfor %}
         </tr>
 
@@ -23,8 +23,8 @@
             <th align="center"> Preise </th>
             <td align="center"> {{player.price}} </td>
 
-            {% for p in opponents %}
-                <td align="center"> {{p.price}} </td>
+            {% for o_p in opponents_prices %}
+                <td align="center"> {{o_p}} </td>
 
             {% endfor %}
         </tr>

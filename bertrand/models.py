@@ -30,6 +30,10 @@ class Constants(BaseConstants):
     # Treatment names
     treatments = ['baseline', 'recommendation_simple', 'recommendation_lowest_price', 'recommendation_static']
 
+    firma_id_map = {1: 'A',
+                    2: 'B',
+                    3: 'C'}
+
 class SharedBaseSubsession(BaseSubsession):
     class Meta:
       abstract = True

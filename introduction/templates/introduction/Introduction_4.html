@@ -4,12 +4,12 @@
 {% block title %}Dauer des Experiments{% endblock %}
 
 {% block content %}
-Nach jeder Runde werden alle Teilnehmer über die gewählten Preise aller drei Firmen und ihren eigenen Gewinn informiert.
+Nach jeder Runde werden alle Firmen über die gewählten Preise aller drei Firmen und ihren eigenen Gewinn informiert.
  In der nächsten Runde hat jede Firma wieder die Möglichkeit ihren Preis neu zu wählen. Sie interagieren in jeder Runde innerhalb eines Spiels mit den selben Teilnehmern.
  
 <br><br>
 Nach jeder Runde entscheidet ein Zufallsmechanismus, ob eine weitere Runde gespielt wird oder das Spiel endet.
-Die Wahrscheinlichkeit, dass eine weitere Runde gespielt liegt bei 95 %. Das Spiel endet also nach jeder Runde mit einer Wahrscheinlichkeit von 5 %.<br>
+Die Wahrscheinlichkeit, dass eine weitere Runde gespielt wird, liegt bei 95 %. Das Spiel endet also nach jeder Runde mit einer Wahrscheinlichkeit von 5 %.<br>
 Bildlich gesprochen wirft der Computer vor jeder möglichen weiteren Runde einen virtuellen Würfel mit 20 Seiten.
 Das Ergebnis entscheidet, ob eine weitere Runde gespielt wird oder nicht. Bei einer Zahl von 20 ist das Spiel vorbei, bei allen anderen Zahlen wird eine weitere Runde gespielt.
 <br><br>
@@ -20,8 +20,8 @@ Sie spielen das beschriebene Spiel insgesamt drei mal.</b> Nach jedem Spiel werd
 Das bedeutet, dass Sie in jedem der drei Spiele mit anderen Teilnehmern interagieren. 
 
 <br><br>
-Nach dem alle Spiele beendet sind, wird zufällig entschieden, welches der drei Spiele ausgezahlt wird. Diesen Gewinn erhalten Sie im Anschluss an das Experiment.
- Außerdem erhalten Sie zusätzlich {{show_up_fee}} für die Teilnahme an diesem Experiment. 
+Nachdem alle Spiele beendet sind, wird zufällig entschieden, welches der drei Spiele ausgezahlt wird. Diesen Gewinn erhalten Sie im Anschluss an das Experiment.
+ Außerdem erhalten Sie zusätzlich {{show_up_fee|floatformat:2}} Euro für die Teilnahme an diesem Experiment. 
 <br><br>
 Als Hilfsmittel blenden wir Ihnen einen virtuellen Taschenrechner ein, mit dem Sie Ihren Gewinn pro Runde berechnen können.
 <br><br>

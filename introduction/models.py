@@ -69,19 +69,19 @@ class Player(BasePlayer):
 
     q_profit_1 = models.IntegerField(
         initial=None, 
-        label='Sie sind Firma 1 und wählen einen Preis von 2, Firma 2 wählt einen Preis von 10,' +
-              ' Firma 3 wählt einen Preis von 9. Was ist Ihr Gewinn in Taler in dieser Runde?'
+        label='Sie sind Firma A und wählen einen Preis von 2, Firma B wählt einen Preis von 10,' +
+              ' Firma C wählt einen Preis von 9. Was ist Ihr Gewinn in Talern in dieser Runde?'
     )
 
     q_profit_2 = models.IntegerField(
         initial=None, 
-        label='Sie sind Firma 1 und wählen einen Preis von 8, Firma 2 wählt einen Preis von 8, ' + 
-               'Firma 3 wählt einen Preis von 8. Was ist Ihr Gewinn in Taler in dieser Runde?'
+        label='Sie sind Firma A und wählen einen Preis von 8, Firma B wählt einen Preis von 8, ' + 
+               'Firma C wählt einen Preis von 8. Was ist Ihr Gewinn in Talern in dieser Runde?'
     )
 
     q_profit_3 = models.FloatField(
         initial=None, 
-        label='Sie haben einen Gewinn von 650 Talern, was ist Ihr Gewinn in €?'
+        label='Sie haben einen Gewinn von 650 Talern, was ist Ihr Gewinn in Euro?'
     )
 
     q_goal_alg = models.StringField(

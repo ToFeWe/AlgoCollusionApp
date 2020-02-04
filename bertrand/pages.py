@@ -10,7 +10,8 @@ class StartExperiment(Page):
     
     def vars_for_template(self):
         return {
-            'super_game_count': self.subsession.this_app_constants()['super_game_count']
+            'super_game_count': self.subsession.this_app_constants()['super_game_count'],
+            'player_id': Constants.firma_id_map[self.player.id_in_group]
         }
 
 class NextRound(WaitPage):
@@ -84,7 +85,9 @@ class RoundResults(Page):
 
         opponents = [p for p in self.group.get_players() if p != self.player]
         return {
-            'opponents': opponents,
+            'opponents_prices': [p.price for p in opponents],
+            'opponents_ids': [Constants.firma_id_map[p.id_in_group] for p in opponents],
+            'player_id': Constants.firma_id_map[self.player.id_in_group],
             'treatment': treatment,
             'super_game_count': self.subsession.this_app_constants()['super_game_count']
         }

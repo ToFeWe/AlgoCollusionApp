@@ -105,7 +105,7 @@ class Player(BasePlayer):
                                          choices=['Ja.', 'Nein.', 'Ich weiß es nicht.'])
 
 
-    q_abitur = models.FloatField(label="Was war Ihre Abiturdurchschnittsnote (1,0 - 6,0)?", min=1.0, max=6.0)
+    q_abitur = models.FloatField(label="Was war die Abschlussnote Ihres letzten Schulabschlusses (1,0 - 4,0)?", min=1.0, max=6.0)
     q_math = models.FloatField(label="Was war Ihre letze Mathenote (1,0 - 6,0)?", min=1.0, max=6.0)
     q_budget = models.IntegerField(label="Wie viel Geld haben Sie monatlich (nach Abzug von Fixkosten wie Miete, Versicherungen etc.) zur Verfügung?",
                                    min=0, max=1000000)
