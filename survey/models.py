@@ -74,6 +74,69 @@ class Player(BasePlayer):
         label='Was denken Sie, wie relevant war die Empfehlung des Algorithmus für Ihre Mitspieler?',
         widget=widgets.RadioSelectHorizontal())
 
+    q_agree_statement_1 = models.StringField(
+        initial=None,
+        choices=[('0', 'stimme gar nicht zu'),
+                 ('1', ''),
+                 ('2', ''),
+                 ('3', ''),
+                 ('4', ''),
+                 ('5', ''),
+                 ('6', ''),
+                 ('7', ''),
+                 ('8', ''),
+                 ('9', ''),
+                 ('10', 'stimme voll und ganz zu')],
+        label='Die Empfehlungen des Algorithmus waren relevant für die Entscheidungen meiner Mitspieler.',
+        widget=widgets.RadioSelectHorizontal())
+
+    q_agree_statement_2 = models.StringField(
+        initial=None,
+        choices=[('0', 'stimme gar nicht zu'),
+                 ('1', ''),
+                 ('2', ''),
+                 ('3', ''),
+                 ('4', ''),
+                 ('5', ''),
+                 ('6', ''),
+                 ('7', ''),
+                 ('8', ''),
+                 ('9', ''),
+                 ('10', 'stimme voll und ganz zu')],
+        label='Die Empfehlungen des Algorithmus haben dabei geholfen, dass alle Firmen den gleichen Preis wählen.',
+        widget=widgets.RadioSelectHorizontal())
+
+    q_agree_statement_3 = models.StringField(
+        initial=None,
+        choices=[('0', 'stimme gar nicht zu'),
+                 ('1', ''),
+                 ('2', ''),
+                 ('3', ''),
+                 ('4', ''),
+                 ('5', ''),
+                 ('6', ''),
+                 ('7', ''),
+                 ('8', ''),
+                 ('9', ''),
+                 ('10', 'stimme voll und ganz zu')],
+        label='Die Empfehlungen des Algorithmus haben geholfen, sich auf einen hohen Preis zu koordinieren.',
+        widget=widgets.RadioSelectHorizontal())
+
+    q_agree_statement_4 = models.StringField(
+        initial=None,
+        choices=[('0', 'stimme gar nicht zu'),
+                 ('1', ''),
+                 ('2', ''),
+                 ('3', ''),
+                 ('4', ''),
+                 ('5', ''),
+                 ('6', ''),
+                 ('7', ''),
+                 ('8', ''),
+                 ('9', ''),
+                 ('10', 'stimme voll und ganz zu')],
+        label='Die Empfehlungen des Algorithmus haben geholfen, Firmen, die niedrige Preise gewählt haben, zu disziplinieren.',
+        widget=widgets.RadioSelectHorizontal())
 
     q_alg_comments = models.StringField(
         initial=None,
