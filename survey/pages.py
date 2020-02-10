@@ -6,7 +6,7 @@ from .models import Constants
 class SurveyQuestionsAlg(Page):    
     form_model = 'player'
     form_fields = ['q_alg_helpful', 'q_alg_no_recommendation',
-                   'q_alg_relevant_other_player', 'q_alg_comments',
+                   'q_alg_comments',
                    'q_agree_statement_1', 'q_agree_statement_2',
                    'q_agree_statement_3', 'q_agree_statement_4']
                    

@@ -58,22 +58,6 @@ class Player(BasePlayer):
         label='Nehmen Sie an, dass Sie und die Mitspieler keine Empfehlung bekommen hätten. Denken Sie, dass Ihr Gesamtgewinn höher oder niedriger gewesen wäre?',
         widget=widgets.RadioSelectHorizontal())
 
-    q_alg_relevant_other_player = models.StringField(
-        initial=None,
-        choices=[('0', 'gar nicht hilfreich'),
-                 ('1', ''),
-                 ('2', ''),
-                 ('3', ''),
-                 ('4', ''),
-                 ('5', ''),
-                 ('6', ''),
-                 ('7', ''),
-                 ('8', ''),
-                 ('9', ''),
-                 ('10', 'sehr hilfreich')],
-        label='Was denken Sie, wie relevant war die Empfehlung des Algorithmus für Ihre Mitspieler?',
-        widget=widgets.RadioSelectHorizontal())
-
     q_agree_statement_1 = models.StringField(
         initial=None,
         choices=[('0', 'stimme gar nicht zu'),
@@ -148,7 +132,7 @@ class Player(BasePlayer):
     q_age = models.IntegerField(label='Wie alt sind Sie?', min=16, max=99)
     q_gender = models.StringField(
         label = 'Was ist Ihr Geschlecht?',
-        choices = ['Männlich', 'Weiblich', 'Divers', 'keine Angabe']
+        choices = ['Männlich', 'Weiblich', 'Divers']
     )
 
     q_study_level = models.StringField(

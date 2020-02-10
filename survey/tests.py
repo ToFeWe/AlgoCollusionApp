@@ -16,7 +16,6 @@ class PlayerBot(Bot):
             yield SubmissionMustFail(pages.SurveyQuestionsAlg, {
                'q_alg_helpful': '-1',
                'q_alg_no_recommendation': '11',
-               'q_alg_relevant_other_player': '-1',
                'q_alg_comments': 'lala',
                'q_agree_statement_1': '-1',
                'q_agree_statement_2': '11',
@@ -24,14 +23,13 @@ class PlayerBot(Bot):
                'q_agree_statement_4': '-1'
             },
             error_fields=['q_alg_helpful', 'q_alg_no_recommendation',
-                          'q_alg_relevant_other_player', 'q_agree_statement_1',
+                          'q_agree_statement_1',
                           'q_agree_statement_2', 'q_agree_statement_3',
                           'q_agree_statement_4'])
 
             yield SubmissionMustFail(pages.SurveyQuestionsAlg, {
                'q_alg_helpful': '',
                'q_alg_no_recommendation': '-1',
-               'q_alg_relevant_other_player': '22',
                'q_alg_comments': 'lala',
                'q_agree_statement_1': '11',
                'q_agree_statement_2': '-1',
@@ -39,14 +37,13 @@ class PlayerBot(Bot):
                'q_agree_statement_4': '11'
             },
             error_fields=['q_alg_helpful', 'q_alg_no_recommendation',
-                          'q_alg_relevant_other_player', 'q_agree_statement_1',
+                          'q_agree_statement_1',
                           'q_agree_statement_2', 'q_agree_statement_3',
                           'q_agree_statement_4'])
 
             yield(pages.SurveyQuestionsAlg, {
                'q_alg_helpful': '0',
                'q_alg_no_recommendation': np.random.choice(likert_choices),
-               'q_alg_relevant_other_player': '10',
                'q_alg_comments': 'lala',
                'q_agree_statement_1': np.random.choice(likert_choices),
                'q_agree_statement_2': np.random.choice(likert_choices),
