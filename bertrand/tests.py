@@ -261,7 +261,11 @@ class SharedPlayerBot(Bot):
             
             assert str(int(self.player.price)) in self.html
             assert str(int(self.group.winning_price)) in self.html
-
+            if self.session.config['group_treatment'] == 'baseline':
+                assert "Algorithmus" not in self.html
+            else:
+                assert "Algorithmus" not in self.html
+                assert str(int(self.group.recommendation)) in self.html 
             yield(pages.RoundResults)
 
         if self.round_number == self.subsession.this_app_constants()['round_number_draw']:

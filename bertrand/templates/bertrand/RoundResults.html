@@ -29,7 +29,10 @@
             {% endfor %}
         </tr>
     </table>
+  	{% if treatment != 'baseline'%}
     Der Algorithmus hatte allen Firmen einen Preis von {{group.recommendation}} Taler empfohlen.<br>
+
+	{% endif %}
     Ihr Preis in dieser Runde betrug {{ player.price }} Taler. Der Marktpreis betrug {{ group.winning_price }} Taler. Sie erhalten in dieser Runde einen Gewinn von {{player.profit}} Taler. 
 
     <br><br>
