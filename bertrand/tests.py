@@ -264,7 +264,7 @@ class SharedPlayerBot(Bot):
             if self.session.config['group_treatment'] == 'baseline':
                 assert "Algorithmus" not in self.html
             else:
-                assert "Algorithmus" not in self.html
+                assert "Algorithmus" in self.html
                 assert str(int(self.group.recommendation)) in self.html 
             yield(pages.RoundResults)
 
