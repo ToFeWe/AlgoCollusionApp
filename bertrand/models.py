@@ -28,7 +28,9 @@ class Constants(BaseConstants):
     m_consumer = 30
 
     # Treatment names
-    treatments = ['baseline', 'recommendation_simple', 'recommendation_lowest_price', 'recommendation_static']
+    treatments = ['baseline', 'recommendation_simple',
+                  'recommendation_lowest_price', 'recommendation_static',
+                  'recommendation_theory']
 
     firma_id_map = {1: 'A',
                     2: 'B',
