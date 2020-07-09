@@ -68,7 +68,20 @@ SESSION_CONFIGS = [
          'survey',
          'payment']
     ),
-
+    dict(
+        name='BOT_recommendation_theory_full_27',
+        display_name="BOT_recommendation_theory_full_27",
+        group_treatment='recommendation_theory',
+        num_demo_participants=27,
+        use_browser_bots=True,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment']
+    ),
     dict(
         name='SELF_recommendation_simple_full_27',
         display_name="SELF_recommendation_simple_full_27",
@@ -112,6 +125,19 @@ SESSION_CONFIGS = [
         name='SELF_recommendation_static_full_27',
         display_name="SELF_recommendation_static_full_27",
         group_treatment='recommendation_static',
+        num_demo_participants=27,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment']
+    ),
+    dict(
+        name='SELF_recommendation_theory_full_27',
+        display_name="SELF_recommendation_theory_full_27",
+        group_treatment='recommendation_theory',
         num_demo_participants=27,
         app_sequence=[
          'introduction',

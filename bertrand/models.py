@@ -105,6 +105,11 @@ class SharedBaseGroup(BaseGroup):
     recommendation = models.IntegerField()
     n_winners = models.IntegerField()
 
+
+    # Additional variable for the theory treatment
+    punishment_phase = models.BooleanField()
+    t_punish = models.IntegerField()
+
     # Treatment storage
     group_treatment = models.StringField()
 
@@ -130,15 +135,54 @@ class SharedBaseGroup(BaseGroup):
             - If player played different prices, recommend the lowest price
             in the last period.
 
-        if treatment=='recommendation_simple':
+        if treatment=='recommendation_static':
         - Always recommend the monopoly price
         """
 
         # Get all players for the specific group
         players = self.get_players()
 
-        # Also Always recommend the monopoly price in the static treatmet
-        if treatment == 'recommendation_static':
+        if treatment == 'recommendation_theory':
+            if round_number  == 1:
+               # In the first round we always recommend the monopoly price...
+               self.recommendation = Constants.monopoly_price
+
+               #...  and we can never be in the punishment phase
+               self.punishment_phase = False
+               self.t_punish = 0
+            else:
+                # Check if we were in the punishment phase
+                if self.in_previous_rounds()[-1].punishment_phase == False:
+                    past_prices = [p.in_previous_rounds()[-1].price for p in players]
+                    all_monopoly_price = all([p == Constants.monopoly_price for p in past_prices])
+                    # If we are not punishing at the moment, look at all past prices
+                    # If they agreed on the monopoly price, recommend again 10
+                    if all_monopoly_price:
+                        self.recommendation = Constants.monopoly_price
+                        self.punishment_phase = False
+                        self.t_punish = 0
+                    else:
+                        # If they did not agree on the monopoly price, recommend
+                        # NE and enter punishment phase
+                        self.recommendation = Constants.deviation_price
+                        self.punishment_phase = True
+                        self.t_punish = 1
+                else:
+                    # If we punished for less than three periods, we punish again
+                    t_punish_last_period = self.in_previous_rounds()[-1].t_punish
+                    if  t_punish_last_period < 3:
+                        self.recommendation = Constants.deviation_price
+                        self.punishment_phase = True
+                        # Increase counter by one as we punished for an additional period.
+                        self.t_punish = t_punish_last_period + 1
+                    else:
+                        # If we punished three times, we always recommend the
+                        # monopoly price again and end the punishment phase.
+                        self.recommendation = Constants.monopoly_price
+                        self.punishment_phase = False
+                        self.t_punish = 0
+        # Always recommend the monopoly price in the static treatmet
+        elif treatment == 'recommendation_static':
             self.recommendation = Constants.monopoly_price
         else:
             if round_number == 1:
