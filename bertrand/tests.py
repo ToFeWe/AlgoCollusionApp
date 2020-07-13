@@ -188,7 +188,7 @@ def check_others_in_group(other_group_members, player_id, super_game):
         return True         
           
 class SharedPlayerBot(Bot):
-    cases = ['random_price']
+    cases = ['random_price', 'simple']
     #, 'simple', 
     # , 'hip_hop_player', 'deviation'
     def play_round(self):
@@ -217,22 +217,47 @@ class SharedPlayerBot(Bot):
                 prices_last_round = [p.price for p in group_last_round.get_players()]
                 n_unique_prices = len(set(prices_last_round))
 
-                # If there were more than one price, there must have been a deviation
-                if n_unique_prices != 1:
-                    if self.session.config['group_treatment'] == 'recommendation_simple':
+                # First check the theory treatment
+                if self.session.config['group_treatment'] == 'recommendation_theory':
+                    all_price_ten = all([p == Constants.monopoly_price for p in prices_last_round])
+
+                    # If we are not in the punishment pahse
+                    # There was a unique price of ten in the last round or
+                    # we ended a previous punishment phase
+                    if not self.group.punishment_phase:
+                        assert all_price_ten or group_last_round.t_punish == 3
+
+                    if group_last_round.t_punish == 3:
+                        assert self.group.punishment_phase == False
+                        assert group_last_round.punishment_phase == True
+                        assert self.group.t_punish == 0
+
+                    if self.group.punishment_phase:
+                        # In the punishment phase, we always recommend 1
                         assert "einen Preis von <b>1 Taler.</b>" in self.html
                         assert self.group.recommendation == 1
-                    elif self.session.config['group_treatment'] == 'recommendation_lowest_price':
-                        min_price = min(prices_last_round)
-                        assert "einen Preis von <b>{} Taler.</b>".format(int(min_price)) in self.html
-                        assert self.group.recommendation == min_price
-                    elif self.session.config['group_treatment'] == 'recommendation_static':
-                        # In the static recommendation treatment we still recommend the monopoly
-                        # price upon deviation
+                    else:
                         assert "einen Preis von <b>10 Taler.</b>" in self.html
                         assert self.group.recommendation == 10
+
+
                 else:
-                    assert self.group.recommendation == 10
+                    # If there were more than one price, there must have been a deviation
+                    if n_unique_prices != 1:
+                        if self.session.config['group_treatment'] == 'recommendation_simple':
+                            assert "einen Preis von <b>1 Taler.</b>" in self.html
+                            assert self.group.recommendation == 1
+                        elif self.session.config['group_treatment'] == 'recommendation_lowest_price':
+                            min_price = min(prices_last_round)
+                            assert "einen Preis von <b>{} Taler.</b>".format(int(min_price)) in self.html
+                            assert self.group.recommendation == min_price
+                        elif self.session.config['group_treatment'] == 'recommendation_static':
+                            # In the static recommendation treatment we still recommend the monopoly
+                            # price upon deviation
+                            assert "einen Preis von <b>10 Taler.</b>" in self.html
+                            assert self.group.recommendation == 10
+                    else:
+                        assert self.group.recommendation == 10
             
             # Check in the first round if the price bounds are correct
             if self.round_number == 1:

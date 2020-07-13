@@ -137,6 +137,13 @@ class SharedBaseGroup(BaseGroup):
 
         if treatment=='recommendation_static':
         - Always recommend the monopoly price
+
+        if treatment == 'recommendation_theory':
+        - Recommend monopoly price in the first period
+        - If players deviate from this recommendation in any way enter a punishment phase
+        of three periods 
+        - in the punishment phase always recommend NE 
+        - after three periods recommend again 10
         """
 
         # Get all players for the specific group
