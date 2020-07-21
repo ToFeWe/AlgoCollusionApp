@@ -188,9 +188,7 @@ def check_others_in_group(other_group_members, player_id, super_game):
         return True         
           
 class SharedPlayerBot(Bot):
-    cases = ['random_price', 'simple']
-    #, 'simple', 
-    # , 'hip_hop_player', 'deviation'
+    cases = ['follow_with_error', 'simple', 'random_price']
     def play_round(self):
         case = self.case
 
@@ -221,8 +219,8 @@ class SharedPlayerBot(Bot):
                 if self.session.config['group_treatment'] == 'recommendation_theory':
                     all_price_ten = all([p == Constants.monopoly_price for p in prices_last_round])
 
-                    # If we are not in the punishment pahse
-                    # There was a unique price of ten in the last round or
+                    # If we are not in the punishment phase,
+                    # there was a unique price of ten in the last round or
                     # we ended a previous punishment phase
                     if not self.group.punishment_phase:
                         assert all_price_ten or group_last_round.t_punish == 3
@@ -283,7 +281,23 @@ class SharedPlayerBot(Bot):
                     assert str(int(self.group.winning_price/self.group.n_winners * Constants.m_consumer)) in self.html
                 else:
                     assert not self.player.is_winner
-            
+            elif case == 'follow_with_error':
+                # The agent always follows the recommendation but makes errors
+                # in 5 % of the cases
+                epsilon = random.random()
+                if epsilon < 0.05:
+                    yield(pages.Decide, {'price': random.randint(1,10)})
+                else:
+                    yield(pages.Decide, {'price': self.group.recommendation})
+
+                # If the player had, by chance, the  lowest price
+                # he must be the winner.
+                if self.player.price == self.group.winning_price:
+                    assert self.player.is_winner, "The player is not a winner even though everyone played the minimal price"
+                    assert str(int(self.group.winning_price/self.group.n_winners * Constants.m_consumer)) in self.html
+                else:
+                    assert not self.player.is_winner
+
             assert str(int(self.player.price)) in self.html
             assert str(int(self.group.winning_price)) in self.html
             if self.session.config['group_treatment'] == 'baseline':

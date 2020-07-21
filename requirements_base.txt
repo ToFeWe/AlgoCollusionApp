@@ -1,2 +1,2 @@
-otree<3.0.0
-numpy>=1.17.1
+otree==2.5.8
+numpy==1.17.1
