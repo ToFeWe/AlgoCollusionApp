@@ -288,7 +288,13 @@ class SharedPlayerBot(Bot):
                 if epsilon < 0.05:
                     yield(pages.Decide, {'price': random.randint(1,10)})
                 else:
-                    yield(pages.Decide, {'price': self.group.recommendation})
+                    # If we play with recommendation, we follow it with a probaility
+                    # of 90%.
+                    # In the baseline, always play monopoly else
+                    if self.session.config['group_treatment'] == 'baseline':
+                        yield(pages.Decide, {'price', Constants.monopoly_price})
+                    else:
+                        yield(pages.Decide, {'price': self.group.recommendation})
 
                 # If the player had, by chance, the  lowest price
                 # he must be the winner.
