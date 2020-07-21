@@ -292,7 +292,7 @@ class SharedPlayerBot(Bot):
                     # of 90%.
                     # In the baseline, always play monopoly else
                     if self.session.config['group_treatment'] == 'baseline':
-                        yield(pages.Decide, {'price', Constants.monopoly_price})
+                        yield(pages.Decide, {'price': Constants.monopoly_price})
                     else:
                         yield(pages.Decide, {'price': self.group.recommendation})
 
