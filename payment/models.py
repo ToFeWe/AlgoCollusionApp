@@ -29,6 +29,7 @@ class Subsession(BaseSubsession):
             p.participant.vars['payed_sg'] = p.payed_sg
             p.participant.vars['final_money_with_show_up'] = 0
             p.participant.vars['final_money_no_show_up'] = 0
+            p.participant.vars['final_money_with_show_up_and_corona'] = 0
 
     def vars_for_admin_report(self):
         participants = self.session.get_participants()
@@ -47,6 +48,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     # Indicator which super game is payed
     payed_sg = models.IntegerField()
-
+        
     final_money_no_show_up = models.FloatField()
     final_money_with_show_up = models.FloatField()
+    final_money_with_show_up_and_corona = models.FloatField()

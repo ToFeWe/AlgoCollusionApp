@@ -41,10 +41,13 @@
             <th>Payed Super Game</th>
             <th>Participation fee</th>
             <th>Super Game Payoff</th>
+            <th>Total (with Show-up but no Corona)</th>
             <th><b>Total</b></th>
+
         </tr>
 
         {% for p in participants %}
+        
         <tr>
             <td style="font-family: 'Courier New'">{{ p.code }}</td>
             <td> {{ p.label|default_if_none:"" }}</td>
@@ -58,7 +61,8 @@
             <td>{{ p.vars.payed_sg }}</td>
             <td>{{ participation_fee }}</td>
             <td>{{ p.vars.final_money_no_show_up }}</td>
-            <td><b>{{ p.vars.final_money_with_show_up }}</b></td>
+            <td>{{ p.vars.final_money_no_show_up}}</td>
+            <td><b>{{ p.vars.final_money_with_show_up_and_corona}}</b></td>
         </tr>
         {% endfor %}
 
@@ -68,11 +72,11 @@
     <table class="table">
         <tr>
             <th>Total payments</th>
-            <td>{{total_payoff_all}}</td>
+            <td>{{total_payoff_all}}  (Excluding Coronabonus)</td>
         </tr>
         <tr>
             <th>Mean payment</th>
-            <td>{{mean_payoff_all}}</td>
+            <td>{{mean_payoff_all}} (Excluding Coronabonus)</td>
         </tr>
     </table>
 

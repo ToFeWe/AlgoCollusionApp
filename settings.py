@@ -8,6 +8,7 @@ from os import environ
 SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=0.01,
     participation_fee=4.00,
+    corona_bonus_after_end=4.00,
     doc=""
 )
 
@@ -162,8 +163,8 @@ REAL_WORLD_CURRENCY_DECIMAL_PLACES = 1
 
 ROOMS = [
     dict(
-        name='dice_lab',
-        display_name='DICE Lab',
+        name='test',
+        display_name='Test Lab',
         participant_label_file='dicelab_otree_labels.txt'
     )
 ]
