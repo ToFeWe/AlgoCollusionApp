@@ -1,0 +1,21 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Bezahlung
+{% endblock %}
+
+{% block content %}
+Das Experiment endet jetzt.
+Für die kontaktlose Auszahlung benötigen Sie neben Ihren Bankinformationen oder Ihrer PayPal Emailadresse Ihre individuelle Teilnehmer-ID, die wir Ihnen in der Erinnerungsemail mitgeteilt haben. 
+Bitte tragen Sie die nötigen Informationen unten ein. Alternativ können Sie auch Ihr Mobiltelefon benutzen und den Link zur Experiment-Auszahlungsregistrierung in der Erinnerungsemail anklicken.
+Bitte füllen Sie außerdem die Quittung, die an ihrem Platz liegt, aus.
+
+<br><br>
+<b>Erinnerung: Ihre Gesamtauszahlung ist {{final_money_with_show_up_and_corona|floatformat:2}} Euro </b>
+<br><br>
+<iframe width="100%" height="1000" src="https://www3.hhu.de/lab/dice.php?currView=mainpage&pid=[TEILNEHMER-ID_EINFÜGEN]&expId=eyJleHBEYXRhIjpbeyJpZCI6IjE1NzE3MzY2OTAiLCJuYW1lIjoiUHJpY2UifV19"></iframe>
+
+
+{% endblock %}
+

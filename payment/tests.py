@@ -34,4 +34,7 @@ class PlayerBot(Bot):
             
         assert str(payed_sg_string) + '. Spiel ausgezahlt' in self.html
         
-        yield Submission(pages.FinalResults, check_html=False)
+        yield Submission(pages.FinalResults)
+        assert str(final_coins_in_euro_rounded + 4.0 + 4.0).replace('.',',') in self.html # SG payoff + show-up + Corona
+        assert "iframe" in self.html
+        yield Submission(pages.Payment, check_html=False)

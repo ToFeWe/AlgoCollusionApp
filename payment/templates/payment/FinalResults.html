@@ -28,17 +28,22 @@ Außerdem erhalten Sie zusätzlich für Ihr Erscheinen zum Experiment {{show_up|
  <b> Ihre gesamte Auszahlung: </b>
  <table class="table">
 
-  <tr> <th> Gewinn im {{payed_sg}}. Spiel </th> <td> {{final_money_no_show_up|floatformat:1}} Euro </td> </tr>
-  <tr> <th> Bonus für Ihr pünktliches Erscheinen </th> <td>  {{show_up|floatformat:1}} Euro </td> </tr>
-  <tr> <th> Coronebedingter Extrabonus </th> <td> {{corona_bonus_after_end|floatformat:1}} Euro </td> </tr>
-  <tr> <th> <p style="color:red"> Gesamtgewinn </p></th> <th><p style="color:red">  {{final_money_with_show_up_and_corona|floatformat:1}} Euro </p></th> </tr>
+  <tr> <th> Gewinn im {{payed_sg}}. Spiel </th> <td> {{final_money_no_show_up|floatformat:2}} Euro </td> </tr>
+  <tr> <th> Bonus für Ihr pünktliches Erscheinen </th> <td>  {{show_up|floatformat:2}} Euro </td> </tr>
+  <tr> <th> Coronebedingter Extrabonus </th> <td> {{corona_bonus_after_end|floatformat:2}} Euro </td> </tr>
+  <tr> <th> <p style="color:red"> Gesamtgewinn </p></th> <th><p style="color:red">  {{final_money_with_show_up_and_corona|floatformat:2}} Euro </p></th> </tr>
 
 </table>
    <br><br>
-Die Auszahlung wird online via Paypal oder Banktransfer durchgeführt.
-Die entsprechende Auszahlungsseite wird sich gleich auf Ihrem PC öffnen. 
+Die Auszahlung wird online via Paypal oder Banktransfer durchgeführt. 
+<b>Klicken Sie auf "Weiter", um zur entsprechenden Auszahlungsseite zu gelangen.</b>
 Bitte halten Sie Ihre IBAN-Nummer oder Ihre Paypal-E-Mail-Adresse bereit.
 Außerdem benötigen Sie Ihre Teilnehmer-ID. Diese finden Sie in der Erinnerungsemail
-zu diesem Experiment. 
+zu diesem Experiment. <br>
+Bitte füllen Sie außerdem die Quittung, die an ihrem Platz liegt, aus.
+
+<br><br>
+    {% next_button %}
+
 {% endblock %}
 

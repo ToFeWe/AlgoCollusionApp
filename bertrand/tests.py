@@ -205,6 +205,7 @@ class SharedPlayerBot(Bot):
                                             player_id = self.participant.id_in_session,
                                             super_game = self.subsession.this_app_constants()['super_game_count']), 'Other group member error for player {} in super game {}'.format(self.participant.id_in_session,
                                                                                                                                                                                   self.subsession.this_app_constants()['super_game_count'])
+            # Always recommend 10 in the first round unless we are in
             if self.session.config['group_treatment'] != 'baseline':
                 assert 'einen Preis von <b>10 Taler.</b>' in self.html
 
@@ -234,26 +235,30 @@ class SharedPlayerBot(Bot):
                         # In the punishment phase, we always recommend 1
                         assert "einen Preis von <b>1 Taler.</b>" in self.html
                         assert self.group.recommendation == 1
+                        assert self.group.t_punish > 0 and self.group.t_punish < 4
                     else:
                         assert "einen Preis von <b>10 Taler.</b>" in self.html
                         assert self.group.recommendation == 10
 
-
+                # In the static recommendation treatment we recommend the monopoly
+                # price always
+                elif self.session.config['group_treatment'] == 'recommendation_static':
+                    assert "einen Preis von <b>10 Taler.</b>" in self.html
+                    assert self.group.recommendation == 10
                 else:
                     # If there were more than one price, there must have been a deviation
                     if n_unique_prices != 1:
+                        # Recommend NE in the simple design upon deviation
                         if self.session.config['group_treatment'] == 'recommendation_simple':
                             assert "einen Preis von <b>1 Taler.</b>" in self.html
                             assert self.group.recommendation == 1
+                        # Recommend the minimal price from the last round in the recommendation_lowest_price design 
+                        # upon deviation.
                         elif self.session.config['group_treatment'] == 'recommendation_lowest_price':
                             min_price = min(prices_last_round)
                             assert "einen Preis von <b>{} Taler.</b>".format(int(min_price)) in self.html
                             assert self.group.recommendation == min_price
-                        elif self.session.config['group_treatment'] == 'recommendation_static':
-                            # In the static recommendation treatment we still recommend the monopoly
-                            # price upon deviation
-                            assert "einen Preis von <b>10 Taler.</b>" in self.html
-                            assert self.group.recommendation == 10
+                    # Given no deviation, recommend 10
                     else:
                         assert self.group.recommendation == 10
             
@@ -265,7 +270,7 @@ class SharedPlayerBot(Bot):
             # Check recommendation part
             if self.session.config['group_treatment'] != 'baseline':
                 assert "allen Firmen" in self.html
-            # Differ in cases, which price the player place
+            # Differ in cases, which price the players place
             if case == 'simple':
                 yield(pages.Decide, {'price': 10})
                 # Everyone plays the same price here in the *simple* case

@@ -38,7 +38,13 @@ class FinalResults(Page):
             'payed_sg': self.player.payed_sg
         }
 
+class Payment(Page):
+    def vars_for_template(self):
+        return {
+            'final_money_with_show_up_and_corona': self.player.final_money_with_show_up_and_corona
+        }
 
 page_sequence = [
-    FinalResults
+    FinalResults,
+    Payment
     ]
