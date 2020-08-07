@@ -33,7 +33,7 @@ class Subsession(BaseSubsession):
 
     def vars_for_admin_report(self):
         participants = self.session.get_participants()
-        total_payoff_all = sum([p.vars['final_money_with_show_up'] for p in participants])
+        total_payoff_all = sum([p.vars['final_money_with_show_up_and_corona'] for p in participants])
         mean_payoff_all = total_payoff_all/self.session.num_participants
         return {
             'participants': participants,

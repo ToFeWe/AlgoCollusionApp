@@ -61,7 +61,7 @@
             <td>{{ p.vars.payed_sg }}</td>
             <td>{{ participation_fee }}</td>
             <td>{{ p.vars.final_money_no_show_up }}</td>
-            <td>{{ p.vars.final_money_no_show_up}}</td>
+            <td>{{ p.vars.final_money_with_show_up}}</td>
             <td><b>{{ p.vars.final_money_with_show_up_and_corona}}</b></td>
         </tr>
         {% endfor %}
@@ -72,11 +72,11 @@
     <table class="table">
         <tr>
             <th>Total payments</th>
-            <td>{{total_payoff_all}}  (Excluding Coronabonus)</td>
+            <td>{{total_payoff_all}} </td>
         </tr>
         <tr>
             <th>Mean payment</th>
-            <td>{{mean_payoff_all}} (Excluding Coronabonus)</td>
+            <td>{{mean_payoff_all}}</td>
         </tr>
     </table>
 
