@@ -18,21 +18,23 @@ class Subsession(SharedBaseSubsession):
         
         """
         # The number of rounds we have drawn ex ante according to some cont prob
-        return {'round_number_draw': 8,
+        return {'round_number_draw': 17,
                 #'round_number_draw': 1, # for testing TODO: Remove
                 'super_game_count': 2,
-                'shuffle_structure_small': [[1,5,9], [4, 8, 3], [7, 2, 6]],
-                'shuffle_structure_medium': [[1, 5, 9], [4, 8, 3], [7, 2, 6],
-                                            [10, 14, 18], [13, 17, 12], [16, 11, 15]],
-                'shuffle_structure_big': [[1, 5, 9], [4, 8, 3], [7, 2, 6],
-                                    [10, 14, 18], [13, 17, 12], [16, 11, 15], 
-                                    [19, 23, 27], [22, 26, 21], [25, 20, 24]],
-                'shuffle_structure_full': [[1, 5, 9], [4, 8, 3], [7, 2, 6],
-                                    [10, 14, 18], [13, 17, 12], [16, 11, 15], 
-                                    [19, 23, 27], [22, 26, 21], [25, 20, 24],
-                                    [28, 32, 36], [31, 35, 30], [34, 29, 33]]
-
+                'group_shuffle_by_size' : {
+                    3: {'shuffle_structure_small': [[1,5,9], [4, 8, 3], [7, 2, 6]],
+                        'shuffle_structure_medium': [[1, 5, 9], [4, 8, 3], [7, 2, 6],
+                                                    [10, 14, 18], [13, 17, 12], [16, 11, 15]]
+                        },
+                    2: {'shuffle_structure_small': [[1,6], [3, 2], [5, 4]],
+                        'shuffle_structure_medium': [[1,6], [3, 2], [5, 4],
+                                                    [7,12], [9, 8], [11, 10]],
+                        'shuffle_structure_big':  [[1,6], [3, 2], [5, 4],
+                                                   [7,12], [9, 8], [11, 10],
+                                                   [13,18], [15, 14], [17, 16]]
+                    }
                 } 
+                }
 
 class Group(SharedBaseGroup):
     pass

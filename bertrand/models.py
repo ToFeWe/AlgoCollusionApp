@@ -6,35 +6,33 @@ import random
 import numpy as np
 
 doc = """
-Price Recommender Game with Bertrand
+An Experiment on Algorithmic Collusion.
 """
 
 class Constants(BaseConstants):
-    players_per_group = 3
-    name_in_url = 'bertrand'
+    players_per_group = None
+    name_in_url = 'algcoll'
     
     # num_rounds is only an upper bound but not actually used
-    # Note that the maximum number we have drawn randomly is 27.
     num_rounds = 30 
 
-    maximum_price = 10
-    monopoly_price = 10
+    maximum_price = 6
+    reservation_price = 5
+    stage_game_NE = 1
+    lowest_price = 0 
 
-    # Price that is recommended if there is a deviation from a player in
-    # the recommendation_simple treatment
-    deviation_price = 1
-
+    
     # Number of consumers
-    m_consumer = 30
+    m_consumer = 60
 
     # Treatment names
-    treatments = ['baseline', 'recommendation_simple',
-                  'recommendation_lowest_price', 'recommendation_static',
-                  'recommendation_theory']
+    treatments = ['3H0A', '2H0A', '2H1A', '1H2A', '1H1A']
 
     firma_id_map = {1: 'A',
                     2: 'B',
                     3: 'C'}
+    
+
 
 class SharedBaseSubsession(BaseSubsession):
     class Meta:
@@ -43,16 +41,45 @@ class SharedBaseSubsession(BaseSubsession):
     def creating_session(self):
 
         # Apply grouping scheme for each round.
-        # Note that this is super game specific
+        # Note that this is super game and treatment specific.
         if self.round_number == 1:
-            if self.session.num_participants == 9:
-                shuffle_structure = self.this_app_constants()['shuffle_structure_small']
-            elif self.session.num_participants == 18:
-                shuffle_structure = self.this_app_constants()['shuffle_structure_medium']
-            elif self.session.num_participants == 27:
-                shuffle_structure = self.this_app_constants()['shuffle_structure_big']
-            elif self.session.num_participants == 36:
-                shuffle_structure = self.this_app_constants()['shuffle_structure_full']
+            
+            # Check for the given treatment, how large our matching group
+            # has to be.
+            if self.session.config['group_treatment'] == '3H0A':
+                group_size = 3
+            elif self.session.config['group_treatment'] in ['2H0A', '2H1A']:
+                group_size = 2
+            else:
+                group_size = 1
+            
+            # Get the group matching for the current super game
+            n_participants = self.session.num_participants
+            if group_size == 3:
+                if n_participants not in [9, 18]:
+                    raise Exception(("In the 3H0A treatment we need matching groups of 9 people.",
+                                     "The Maximum number of subjects is 18.",                                    
+                                     "One of the conditions is not met given {} participants.".format(n_participants)))
+                else:
+                    if n_participants == 9:
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_small']
+                    elif n_participants == 18:
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_medium']
+            elif group_size == 2:
+                if n_participants not in [6, 12, 18]:
+                    raise Exception(("In the 3H0A treatment we need matching groups of 6 people.",
+                                     "The Maximum number of subjects is 18.",                                    
+                                     "One of the conditions is not met given {} participants.".format(n_participants)))
+                else:
+                    if n_participants == 6:
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_small']
+                    elif n_participants == 12:
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_medium']
+                    else:
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_big']
+            else:
+                # In the individual choice treatments, we do not have a group matching
+                shuffle_structure = self.get_group_matrix()
             self.set_group_matrix(shuffle_structure)
         else:
             # For all other rounds in the app, we apply the group structure which we have used for
@@ -64,30 +91,27 @@ class SharedBaseSubsession(BaseSubsession):
         
         # treatment assignment
         if self.round_number == 1:
-            # Assign the treatment to each group
+            # Assign the treatment to each player in the session
             # Note that we store it in the *treatment* field in the 
             # first round but also in the participant variables of
             # the first participant in the group to access it across rounds. 
-            for g in self.get_groups():
+            for p in self.get_players():
                 # *group_treatment* has to be specified in the session config
                 treatment_draw = self.session.config['group_treatment']
                 
                 # Store it in the variable *group_treatment* for first round for the group
-                g.group_treatment = treatment_draw
+                p.group_treatment = treatment_draw
 
                 # Furthermore, store it in the participant variables for the each player in each
                 # group to access it accross rounds.
-                for p in g.get_players():
-                    p.participant.vars['group_treatment'] = treatment_draw
-
-                    # Init payoff variable for dict to zero at the start of the game
-                    # to avoid errors on the admin page.
-                    # Will be adjusted over the course of the game.
-                    sg_counter = self.this_app_constants()['super_game_count']
-                    key_name = "final_payoff_sg_" + str(sg_counter)        
-                    p.participant.vars[key_name] = 0
-
-
+                p.participant.vars['group_treatment'] = treatment_draw
+                
+                # Init payoff variable for dict to zero at the start of the game
+                # to avoid errors on the admin page.
+                # Will be adjusted over the course of the game.
+                sg_counter = self.this_app_constants()['super_game_count']
+                key_name = "final_payoff_sg_" + str(sg_counter)        
+                p.participant.vars[key_name] = 0
     
     def vars_for_admin_report(self):
         all_groups = self.get_groups()
@@ -97,161 +121,7 @@ class SharedBaseSubsession(BaseSubsession):
 
 class SharedBaseGroup(BaseGroup):
     class Meta:
-        abstract = True
-
-    # Group specific variables for each round in the given SG
-    winning_price = models.IntegerField()
-    winner_profit = models.IntegerField()
-    recommendation = models.IntegerField()
-    n_winners = models.IntegerField()
-
-
-    # Additional variable for the theory treatment
-    punishment_phase = models.BooleanField()
-    t_punish = models.IntegerField()
-
-    # Treatment storage
-    group_treatment = models.StringField()
-
-    def get_recommendation(self, round_number, treatment):
-        """ Based on the past round create a new recommendation
-        for the following period.
-
-        if treatment=='recommendation_simple': 
-        This recommendation is based on the following
-        simple rule:
-        - In the first round recommend the monopoly price
-        - In all later round:
-            - If all players had the same price in the last period,
-              recommend the monopoly price
-            - If player played different prices, recommend the deviation
-            price
-        
-        if treatment=='recommendation_lowest_price': 
-        - In the first round recommend the monopoly price
-        - In all later round:
-            - If all players had the same price in the last period,
-              recommend the monopoly price
-            - If player played different prices, recommend the lowest price
-            in the last period.
-
-        if treatment=='recommendation_static':
-        - Always recommend the monopoly price
-
-        if treatment == 'recommendation_theory':
-        - Recommend monopoly price in the first period
-        - If players deviate from this recommendation in any way enter a punishment phase
-        of three periods 
-        - in the punishment phase always recommend NE 
-        - after three periods recommend again 10
-        """
-
-        # Get all players for the specific group
-        players = self.get_players()
-
-        if treatment == 'recommendation_theory':
-            if round_number  == 1:
-               # In the first round we always recommend the monopoly price...
-               self.recommendation = Constants.monopoly_price
-
-               #...  and we can never be in the punishment phase
-               self.punishment_phase = False
-               self.t_punish = 0
-            else:
-                # Check if we were in the punishment phase
-                if self.in_previous_rounds()[-1].punishment_phase == False:
-                    past_prices = [p.in_previous_rounds()[-1].price for p in players]
-                    all_monopoly_price = all([p == Constants.monopoly_price for p in past_prices])
-                    # If we are not punishing at the moment, look at all past prices
-                    # If they agreed on the monopoly price, recommend again 10
-                    if all_monopoly_price:
-                        self.recommendation = Constants.monopoly_price
-                        self.punishment_phase = False
-                        self.t_punish = 0
-                    else:
-                        # If they did not agree on the monopoly price, recommend
-                        # NE and enter punishment phase
-                        self.recommendation = Constants.deviation_price
-                        self.punishment_phase = True
-                        self.t_punish = 1
-                else:
-                    # If we punished for less than three periods, we punish again
-                    t_punish_last_period = self.in_previous_rounds()[-1].t_punish
-                    if  t_punish_last_period < 3:
-                        self.recommendation = Constants.deviation_price
-                        self.punishment_phase = True
-                        # Increase counter by one as we punished for an additional period.
-                        self.t_punish = t_punish_last_period + 1
-                    else:
-                        # If we punished three times, we always recommend the
-                        # monopoly price again and end the punishment phase.
-                        self.recommendation = Constants.monopoly_price
-                        self.punishment_phase = False
-                        self.t_punish = 0
-        # Always recommend the monopoly price in the static treatmet
-        elif treatment == 'recommendation_static':
-            self.recommendation = Constants.monopoly_price
-        else:
-            if round_number == 1:
-                # In the first round we always recommend the monopoly price
-                self.recommendation = Constants.monopoly_price
-            else:
-                # If we are not in the first round or if players had the same price in the last period
-                #  we recommend the monopoly price
-                # and else the deviation price
-                past_prices = [p.in_previous_rounds()[-1].price for p in players]
-                unique_prices = set(past_prices)
-                if len(unique_prices) != 1:
-
-                    # If we play the *recommendation_simple* treatment,
-                    # recommend the lowest possible price upon deviation
-                    if treatment == 'recommendation_simple':
-                        self.recommendation = Constants.deviation_price
-                    elif treatment == 'recommendation_lowest_price':
-                        self.recommendation = min(past_prices)
-                # If there has been no deviation (all set the same price) recommend
-                # the monopoly price in every treatment.
-                else:
-                    self.recommendation = Constants.monopoly_price
-
-
-    def set_profits_round(self):
-        """ A function to set the payoffs for a specific round for a specific 
-            group.
-
-        """
-
-
-        # Get all players for the specific group
-        players = self.get_players()
-
-        # Retrieve the winning price for the given round
-        self.winning_price = min([p.price for p in players])
-
-        # Get a list of winners in the group, e.g. those who played the winning price
-        winners = [p for p in players if p.price == self.winning_price]
-        
-        # There can be multiple players with the lowest price
-        self.n_winners = len(winners)
-        
-        # Market is shared among all winners
-        self.winner_profit = int(self.winning_price * Constants.m_consumer / self.n_winners)
-
-        for p in players:
-            if p in winners:
-                p.is_winner = True
-                p.profit = self.winner_profit
-                
-            else:
-                p.is_winner = False
-                p.profit = 0
-            
-            # Accumulate profit if we played more than one round
-            if self.round_number == 1:
-                p.accumulated_profit = p.profit
-            else:
-                p.accumulated_profit = p.in_round(self.round_number - 1).accumulated_profit + p.profit
-    
+        abstract = True    
 
 class SharedBasePlayer(BasePlayer):
     class Meta:
@@ -274,6 +144,157 @@ class SharedBasePlayer(BasePlayer):
     # Final payoff is stored again
     final_payoff_sg = models.FloatField()
 
+    #### NOTE: Usually we would define the following variables ########
+    #### in the Group model. This is not possible as some treatments ##
+    #### are indivdiual choice (with Algos only) ######################
+    # Market specific variables for each round in the given SG
+    winning_price = models.IntegerField()
+    winner_profit = models.IntegerField()
+    n_winners = models.IntegerField()
+
+    # Treatment storage
+    group_treatment = models.StringField()
+
+
+    # Prices of the algorithm(s)
+    # Note that in markets with two algorithms,
+    # the price of those algorithms must be
+    # symmetric, given its the same with the same input.
+    price_algorithm = models.IntegerField()
+
+
+    def get_market_infos(self):
+        """
+
+        A function that returns the relevant market informations
+        for the participants in a given round as a tuple.
+        (player_id, opponent_ids, opponent_prices)
+        """
+        treatment = self.participant.vars['group_treatment']
+
+        # First the individual choice treatments
+        # Algorithms are here always in second or thrid place
+        if treatment == '1H1A':
+            player_id = 1
+            opponent_ids = [2]
+            opponent_prices = [self.price_algorithm]
+        elif treatment == '1H2A':
+            player_id = 1
+            opponent_ids = [2, 3]
+            opponent_prices = [self.price_algorithm, self.price_algorithm]
+        else:
+            # If we are not in an indivdual choice treatment
+            # the group will come into play.
+            player_id = self.id_in_group
+            opponents = self.get_others_in_group()
+            opponent_ids_no_algo = [o.id_in_group for o in opponents]
+            opponent_prices_no_algo = [o.price for o in opponents]
+            
+            if treatment in ['2H0A', '3H0A']:
+                opponent_ids = opponent_ids_no_algo
+                opponent_prices = opponent_prices_no_algo
+            elif treatment == '2H1A':
+                # Algorithm is always the last group member
+                # TODO: Do I want to mention this in the instructions?
+                opponent_ids = opponent_ids_no_algo + [3]
+                opponent_prices = opponent_prices_no_algo + [self.price_algorithm]
+        
+        # Map the integer to letters from A to C
+        player_letter = Constants.firma_id_map[player_id]
+        opponent_letters = list(map(Constants.firma_id_map.get, opponent_ids))
+        return (player_letter, opponent_letters, opponent_prices)
+
+
+    def set_algo_price(self):
+        """
+        
+        A function to get the price of the algortihmic player
+        in the given round given the prices that haven been played
+        in the last round.
+        """
+        treatment = self.participant.vars['group_treatment']
+        past_algo_price = self.in_previous_rounds()[-1].price_algorithm
+        past_human_price = self.in_previous_rounds()[-1].price
+        if treatment == '1H2A':
+            past_prices_tuple = (past_algo_price, past_algo_price, past_human_price)
+        elif treatment == '1H1A':
+            past_prices_tuple = (past_algo_price, past_human_price)
+        elif treatment == '2H1A':
+            # Note that in the 2H1A treatment we have to use the whole
+            # group element to obtain the algorithmic price for the round.
+            # The reason is that the order of prices matters when creating the 
+            # past_prices_tuple. We use the structure provided by the 
+            # group s.t. the algorihmic price is the same for each group
+            # member (as it should be).
+            all_group_members = self.group.get_players()
+            past_all_human_prices = (p.in_previous_rounds()[-1].price for p in all_group_members)
+            # Like this the person who is "first" in the group is also first  after the algo 
+            # in the *past_prices_tuple*.
+            past_prices_tuple = (past_algo_price,) + past_all_human_prices
+        
+        # TODO: Import algorithms and save to Constants
+        # # differ which algorithm to use by treatment (3 or 2 firm market)
+        # if treatment in ['1H2A', '2H1A']:
+        #     self.price_algorithm = Constants.three_firm_agent[past_prices_tuple]
+        # else:
+        #     self.price_algorithm = Constants.two_firm_agent[past_prices_tuple]
+        self.price_algorithm  = Constants.maximum_price        
+
+    def set_profits_round(self, treatment):
+        """
+        
+        A function to set the payoffs for a specific round.
+        Note that usually this would be a group method. Given
+        that we have some treatments with individual choice,
+        it is however easier to implement it here.
+        """
+
+        # First for the treatments with only one human
+        if treatment == '1H1A':
+            all_prices = [self.price_algorithm, self.price]
+        elif treatment == '1H2A':
+            all_prices = [self.price_algorithm, self.price_algorithm, self.price]
+        else:
+            # Now for the treatments where we acutally have a group
+            other_group_members = self.get_others_in_group()
+            other_prices = [p.price for p in other_group_members]
+            if treatment == '2H1A':
+                all_prices = [self.price_algorithm] + [self.price] + other_prices
+            else: # 2H0A and 3H0A
+                all_prices = [self.price] + other_prices
+
+        # Calculate the profit for the participant in the given round
+        self.profit, self.winning_price, self.n_winners = calc_round_profit(p_i=self.price,
+                                                                            all_prices = all_prices)
+    
+        if self.price == self.winning_price:
+            self.is_winner = True
+                        
+        # Accumulate profit if we played more than one round
+        if self.round_number == 1:
+            self.accumulated_profit = self.profit
+        else:
+            self.accumulated_profit = self.in_round(self.round_number - 1).accumulated_profit + self.profit
+    
+    def calc_round_profit(self, p_i, all_prices):
+        """
+
+        A function that takes the price of the participant, *p_i*,
+        and *all_prices* in the market and returns the profit
+        for the participant, the market price and 
+        the number of firms that played this market price as a tuple
+        """
+        winning_price = min(all_prices)
+        n_winning_price = len([price for price in all_prices if price == winning_price])
+
+        if p_i  > Constants.reservation_price:
+            profit =  0
+        elif p_i == winning_price:
+            profit = int((1 / n_winning_price) * p_i * Constants.m_consumer)
+        else:
+            profit = 0
+        return (profit, winning_price, n_winning_price)
+        
     def set_final_payoff(self):
         # We take the accumulated payoff from the last round we 
         # played.
@@ -288,7 +309,6 @@ class SharedBasePlayer(BasePlayer):
         final_payoff_sg = total_coins
         # Note, we do not save this to payoff as we will randomly select one of the 
         # super games for payoff.
-
         # Save the final accumulated payoff for the last subgame in the participant dict.
         self.sg_payoff_to_dict(sg_counter = self.subsession.this_app_constants()['super_game_count'],
                                final_payoff = total_coins)
@@ -307,19 +327,23 @@ class Subsession(SharedBaseSubsession):
         
         """
         # The number of rounds we have drawn ex ante according to some cont prob
-        return {'round_number_draw': 27, 
+        return {'round_number_draw': 11, 
                 #'round_number_draw': 1, # for testing TODO: Remove
                 'super_game_count': 1,
-                'shuffle_structure_small': [[1,2,3], [4, 5, 6], [7, 8, 9]],
-                'shuffle_structure_medium': [[1,2,3], [4, 5, 6], [7, 8, 9],
-                                    [10, 11, 12], [13, 14, 15], [16, 17, 18]],
-                'shuffle_structure_big': [[1,2,3], [4, 5, 6], [7, 8, 9],
-                                    [10, 11, 12], [13, 14, 15], [16, 17, 18],
-                                    [19, 20, 21], [22, 23, 24], [25, 26, 27]],
-                'shuffle_structure_full': [[1,2,3], [4, 5, 6], [7, 8, 9],
-                                    [10, 11, 12], [13, 14, 15], [16, 17, 18],
-                                    [19, 20, 21], [22, 23, 24], [25, 26, 27],
-                                    [28, 29, 30], [31, 32, 33], [34, 35, 36]]
+                'group_shuffle_by_size' : {
+                    3: {'shuffle_structure_small': [[1,2,3], [4, 5, 6], [7, 8, 9]],
+                       'shuffle_structure_medium': [[1,2,3], [4, 5, 6], [7, 8, 9],
+                                                   [10, 11, 12], [13, 14, 15], [16, 17, 18]]
+                    },
+                    2: {'shuffle_structure_small': [[1,2], [3, 4], [5, 6]],
+                        'shuffle_structure_medium': [[1,2], [3, 4], [5, 6],
+                                                    [7,8], [9, 10], [11, 12]],
+                        'shuffle_structure_big':  [[1,2], [3, 4], [5, 6],
+                                                   [7,8], [9, 10], [11, 12],
+                                                   [13,14], [15, 16], [17, 18]]
+                    }
+                }
+
                 }
 
 class Group(SharedBaseGroup):

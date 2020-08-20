@@ -14,25 +14,6 @@ class StartExperiment(Page):
             'player_id': Constants.firma_id_map[self.player.id_in_group]
         }
 
-class NextRound(WaitPage):
-    def is_displayed(self):
-        # Only displayed if we still play, e.g. the number of rounds is equal or
-        # below the random raw of round numbers from before
-        return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
-
-    def after_all_players_arrive(self):
-        # Get the recommendation for the current round
-        # given that the group is in a treatment with recommendation.
-        p1 = self.group.get_player_by_id(1)
-        treatment =  p1.participant.vars['group_treatment']
-
-        # In the baseline treatment there is no recommendation,
-        # but else always.
-        if treatment != 'baseline':
-            self.group.get_recommendation(round_number=self.round_number,
-                                          treatment=treatment)
-
-
 class Decide(Page):
     form_model = 'player'
     form_fields = ['price']
@@ -43,22 +24,11 @@ class Decide(Page):
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def vars_for_template(self):
-        treatment =  self.participant.vars['group_treatment']
-
-        # In the first round there is no last price
-        # We set it here to -1 as a placerholder, as it won't be displayed anyways,
-        # given the fixed recommendation in the first period.
-        if self.round_number == 1:
-            player_price_last_round = -1
-        else:
-            player_price_last_round = self.player.in_previous_rounds()[-1].price
-        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {} Talern:".format(Constants.deviation_price,
-                                                                                 Constants.monopoly_price)
+        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {} Talern:".format(Constants.maximum_price,
+                                                                                        Constants.lowest_price)
         return {
             "label_decide": label_decide,
             'exchange_rate': int(1 / self.session.config['real_world_currency_per_point']), # To avoid comma
-            'treatment': treatment,
-            'player_price_last_round': player_price_last_round,
             'super_game_count': self.subsession.this_app_constants()['super_game_count']
             }
 
@@ -71,7 +41,10 @@ class RoundWaitPage(WaitPage):
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def after_all_players_arrive(self):
-        self.group.set_profits_round()
+        # First set the price of the algorithm(s)
+        self.player.set_algo_price()
+        # Then set the profits for the round
+        self.player.set_profits_round()
 
 class RoundResults(Page):
 
@@ -81,14 +54,12 @@ class RoundResults(Page):
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def vars_for_template(self):
-        treatment =  self.participant.vars['group_treatment']
-
-        opponents = [p for p in self.group.get_players() if p != self.player]
+        
+        player_letter, opponent_letters, opponent_prices = self.player.get_market_infos()
         return {
-            'opponents_prices': [p.price for p in opponents],
-            'opponents_ids': [Constants.firma_id_map[p.id_in_group] for p in opponents],
-            'player_id': Constants.firma_id_map[self.player.id_in_group],
-            'treatment': treatment,
+            'opponents_prices': opponent_prices,
+            'opponent_letters': opponent_letters,
+            'player_letter': player_letter,
             'super_game_count': self.subsession.this_app_constants()['super_game_count']
         }
 
@@ -119,7 +90,6 @@ class EndSG(Page):
 
 page_sequence = [
     StartExperiment,
-    NextRound,
     Decide,
     RoundWaitPage,
     RoundResults,

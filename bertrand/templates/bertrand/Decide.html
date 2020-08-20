@@ -9,13 +9,6 @@
 
 <div class="row">
   <div class="column-left"> 
-  	{% if treatment != 'baseline'%}
-		<div class="transparent"> 
-		<b> Preisempfehlung in dieser Runde: </b><br>
-			Der Algorithmus empfiehlt allen Firmen einen Preis von <b>{{group.recommendation}} Taler.</b>
-		</div>
-	{% endif %}
-    <br><br>
     <b>
     {% formfield player.price label=label_decide %}
     </b>
@@ -85,7 +78,7 @@
 </style>
 
 
-<link href="{% static "pricerec/calculator.css" %}" rel="stylesheet">
+<link href="{% static "calculator/calculator.css" %}" rel="stylesheet">
 
 
 <script>
