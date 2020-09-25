@@ -12,23 +12,19 @@ doc = """ An App for a price recommendation system in a market experiment.
 
 class Constants(BaseConstants):
     name_in_url = 'introduction'
-    # Groups of nine to ensure that matching groups work properly
-    players_per_group = 9
+    # Group only needed later in the market game
+    players_per_group = None
     num_rounds = 1
 
-    fixed_rounds = 1
 
-    maximum_price = 10
-    monopoly_price = 10
+    maximum_price = 6
+    reservation_price = 5
+    stage_game_NE = 1
+    lowest_price = 0 
 
-    # Price that is recommended if there is a deviation from a player
-    deviation_price = 1
-
+    
     # Number of consumers
-    m_consumer = 30
-
-    # Treatment names
-    treatments = ['baseline', 'recommendation_simple', 'recommendation_lowest_price']
+    m_consumer = 60
 
     error_message_form_field = ('Ihre Antwort war leider nicht korrekt.' +
                                 ' Bitte überlegen Sie noch einmal und lesen bei' +
@@ -57,7 +53,7 @@ class Player(BasePlayer):
     # Quiz Questions
     q_how_many_customer = models.IntegerField(
         initial=None, 
-        choices = [25, 35, 30, 40],
+        choices = [35, 30, 40, 60],
         label = 'Wie viele Kunden gibt es im Markt, die das Produkt kaufen wollen?'
     )
 
@@ -84,15 +80,6 @@ class Player(BasePlayer):
         label='Sie haben einen Gewinn von 650 Talern, was ist Ihr Gewinn in Euro?'
     )
 
-    q_goal_alg = models.StringField(
-        initial=None, 
-        choices = ['Gewinne für alle Firmen in einer einzelnen Runde zu maximieren.',
-                   'Gesamtgewinne über alle Runden hinweg für alle Firmen zu maximieren.',
-                   'Gesamtgewinne über alle Runden hinweg für einzelne Firmen zu maximieren.',
-                   'Gewinne für einzelne Firmen in einer einzelnen Runde zu maximieren.'],
-        label= 'Welches Ziel verfolgt der Algorithmus?'
-    )
-
     # Counter variable how often the player has answered smth wrong
     counter_how_many_customer = models.IntegerField(initial = 0)
     counter_after_fixed_round = models.IntegerField(initial = 0)
@@ -104,7 +91,7 @@ class Player(BasePlayer):
 
     # Error evaluation of form fields
     def q_how_many_customer_error_message(self, value):
-        if value != 30:
+        if value != Constants.m_consumer:
             # Count +1 if the player answered the question wrong
             self.counter_how_many_customer += 1
             return Constants.error_message_form_field

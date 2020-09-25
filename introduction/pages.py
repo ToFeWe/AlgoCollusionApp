@@ -36,33 +36,18 @@ class Introduction_4(Page):
             'show_up_fee': self.session.config['participation_fee']
         }
 
-class Algorithm_Introduction(Page):
-    def is_displayed(self):
-        treatment =  self.participant.vars['group_treatment']
-        # Algorithmic Introduction is not shown in the baseline treatment
-        return treatment != 'baseline' and self.round_number == 1
-
- 
-
-
 class Quiz(Page):
     form_model = 'player'
 
     def get_form_fields(self):
         treatment =  self.participant.vars['group_treatment']
-        if treatment == 'baseline':
-            return ['q_how_many_customer',
-                    'q_after_fixed_round',
-                    'q_profit_1',
-                    'q_profit_2',
-                    'q_profit_3']
-        else:
-            return ['q_how_many_customer',
-                    'q_after_fixed_round',
-                    'q_profit_1',
-                    'q_profit_2',
-                    'q_profit_3',
-                    'q_goal_alg']
+        return ['q_how_many_customer',
+                'q_after_fixed_round',
+                'q_profit_1',
+                'q_profit_2',
+                'q_profit_3']
+        #TODO: Maybe ask how many players are an algo
+        # Ask who receives payoff from algorithm 
     
     def is_displayed(self):
         return self.round_number == 1
@@ -81,7 +66,6 @@ page_sequence = [
     Introduction_1,
     Introduction_2,
     Introduction_3,
-    Algorithm_Introduction,
     Introduction_4,
-    Quiz,
+    #Quiz,
 ]

@@ -4,7 +4,7 @@ from otree.api import (
 )
 import random
 import numpy as np
-
+import math
 doc = """
 An Experiment on Algorithmic Collusion.
 """
@@ -75,11 +75,15 @@ class SharedBaseSubsession(BaseSubsession):
                         shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_small']
                     elif n_participants == 12:
                         shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_medium']
-                    else:
+                    elif n_participants == 18:
                         shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_big']
             else:
                 # In the individual choice treatments, we do not have a group matching
-                shuffle_structure = self.get_group_matrix()
+                # but everyone is in his/her own group.
+                # This is still needed as we use the group class for all market information.
+                shuffle_structure = [[i] for i in range(1, self.session.num_participants + 1)]
+
+            print(shuffle_structure)
             self.set_group_matrix(shuffle_structure)
         else:
             # For all other rounds in the app, we apply the group structure which we have used for
@@ -89,29 +93,28 @@ class SharedBaseSubsession(BaseSubsession):
             # shuffle_structure_***
             self.group_like_round(1)
         
-        # treatment assignment
-        if self.round_number == 1:
-            # Assign the treatment to each player in the session
-            # Note that we store it in the *treatment* field in the 
-            # first round but also in the participant variables of
-            # the first participant in the group to access it across rounds. 
-            for p in self.get_players():
-                # *group_treatment* has to be specified in the session config
-                treatment_draw = self.session.config['group_treatment']
-                
-                # Store it in the variable *group_treatment* for first round for the group
-                p.group_treatment = treatment_draw
+        # Assign the treatment to each player in the session
+        # Note that we store it in the *treatment* field in the 
+        # all rounds but also in the participant variables of
+        # the first participant in the group to access it across rounds. 
+        for g in self.get_groups():
+            # *group_treatment* has to be specified in the session config
+            # Store it in the variable *group_treatment* for first round for the group
+            g.group_treatment = self.session.config['group_treatment']
 
-                # Furthermore, store it in the participant variables for the each player in each
-                # group to access it accross rounds.
-                p.participant.vars['group_treatment'] = treatment_draw
-                
-                # Init payoff variable for dict to zero at the start of the game
-                # to avoid errors on the admin page.
-                # Will be adjusted over the course of the game.
-                sg_counter = self.this_app_constants()['super_game_count']
-                key_name = "final_payoff_sg_" + str(sg_counter)        
-                p.participant.vars[key_name] = 0
+            # Also store it for each participant
+            if self.round_number == 1:
+                for p in g.get_players():
+                    # Furthermore, store it in the participant variables for the each player in each
+                    # group to access it accross rounds.
+                    p.participant.vars['group_treatment'] = self.session.config['group_treatment']
+                    
+                    # Init payoff variable for dict to zero at the start of the game
+                    # to avoid errors on the admin page.
+                    # Will be adjusted over the course of the game.
+                    sg_counter = self.this_app_constants()['super_game_count']
+                    key_name = "final_payoff_sg_" + str(sg_counter)        
+                    p.participant.vars[key_name] = 0
     
     def vars_for_admin_report(self):
         all_groups = self.get_groups()
@@ -123,65 +126,168 @@ class SharedBaseGroup(BaseGroup):
     class Meta:
         abstract = True    
 
-class SharedBasePlayer(BasePlayer):
-    class Meta:
-        abstract = True
-
-    price = models.IntegerField(
-        min=Constants.deviation_price, max=Constants.maximum_price,
-        doc= """Price player offers to sell product for"""
-    )
-
-    # Define all as Integer as they are points/tokens
-    # Round specific profit and accumulated profit as points
-    # I do not use CurrencyFields since those are weird.
-    profit = models.IntegerField()
-    accumulated_profit = models.IntegerField()
-
-    is_winner = models.BooleanField()
-
-
-    # Final payoff is stored again
-    final_payoff_sg = models.FloatField()
-
-    #### NOTE: Usually we would define the following variables ########
-    #### in the Group model. This is not possible as some treatments ##
-    #### are indivdiual choice (with Algos only) ######################
-    # Market specific variables for each round in the given SG
+    # We use the group as a market level
+    # Hence, also in the "individual" choice treatments
+    # e.g. the treatments with only one human and algorithms
+    # those variables are used to store outcomes.
     winning_price = models.IntegerField()
     winner_profit = models.IntegerField()
     n_winners = models.IntegerField()
-
-    # Treatment storage
-    group_treatment = models.StringField()
-
 
     # Prices of the algorithm(s)
     # Note that in markets with two algorithms,
     # the price of those algorithms must be
     # symmetric, given its the same with the same input.
     price_algorithm = models.IntegerField()
+    profit_algorithm = models.FloatField()
+    accumulated_profit_algorithm = models.FloatField()
 
+    # Treatment storage
+    group_treatment = models.StringField()
+
+    def set_algo_price(self):
+        """
+        
+        A function to get the price of the algorithmic player
+        in the given round given the prices that haven been played
+        in the last round.
+        Also calculates the profit of the algorithmic seller.
+
+        TODO: Do I want a delay for the algorithm to get its price?
+        Else, in comparison to humans, it is much faster in a treatment
+        with algorithms.
+        TODO: I should somehow define a data structure that saves the decisions
+        of the algorithms in a more structured level on the group level
+        to be able to save it for the pay out of the players who "use"
+        the algorithm
+        """
+        treatment = self.group_treatment
+        
+        # Price for the algorithm is only needed if
+        # there is actually an algorithm at play!
+        if treatment not in ['3H0A', '2H0A']:
+            # We have an initial condition problem here
+            # Assumption will be that the state in the 
+            # hypothetical state 0 is the state of convergence
+            # from the simulation study.
+            if self.round_number == 1:
+                # TODO: Adjust for state of convergence
+                if treatment == '1H1A':
+                    past_prices_tuple = (Constants.reservation_price, Constants.reservation_price)
+                else:
+                    past_prices_tuple = (Constants.reservation_price, Constants.reservation_price,
+                                        Constants.reservation_price)
+            # In later round we can look back on the history of the game
+            # and use this information to get the current prices for the algorithm
+            else:
+                past_algo_price = [self.in_previous_rounds()[-1].price_algorithm]
+                all_past_human_prices = [p.in_previous_rounds()[-1].price for p in self.get_players()]
+                
+                if treatment == '1H2A':
+                    past_prices_tuple = tuple(past_algo_price + past_algo_price + all_past_human_prices)
+                else:
+                    past_prices_tuple = tuple(past_algo_price + all_past_human_prices)
+            
+            # TODO: Import algorithms and save to Constants
+            # # differ which algorithm to use by treatment (3 or 2 firm market)
+            # if treatment in ['1H2A', '2H1A']:
+            #     self.price_algorithm = Constants.three_firm_agent[past_prices_tuple]
+            # else:
+            #     self.price_algorithm = Constants.two_firm_agent[past_prices_tuple]
+            self.price_algorithm  = Constants.reservation_price  
+
+    def calc_round_profit(self,):
+        """
+
+        A function that calculates all profits in a given market.
+        """
+        treatment = self.group_treatment
+
+        # Create the set of all prices for the given treatment
+        all_human_prices = [p.price for p in self.get_players()]
+        if treatment in ['3H0A', '2H0A']:
+            all_prices = all_human_prices
+        else:
+            algo_price = [self.price_algorithm]
+            if treatment == '1H2A':
+                all_prices = algo_price + algo_price + all_human_prices
+            else:
+                all_prices = algo_price + algo_price
+
+        # Calculate the market outcome
+        self.winning_price = min(all_prices)
+        self.n_winners = len([price for price in all_prices if price == self.winning_price])
+
+        for p in self.get_players():
+            p.profit = self.calc_profit(p.price)
+            # Accumulate profit if we played more than one round
+            if self.round_number == 1:
+                p.accumulated_profit = p.profit
+            else:
+                p.accumulated_profit = p.in_round(self.round_number - 1).accumulated_profit + p.profit
+
+        self.profit_algorithm = self.calc_profit(self.price_algorithm)
+        # Accumulated profit for the algorithm
+        if self.round_number == 1:
+            self.accumulated_profit_algorithm = self.profit_algorithm
+        else:
+            self.accumulated_profit_algorithm = self.in_round(self.round_number - 1).accumulated_profit_algorithm + self.profit_algorithm
+        
+
+    def calc_profit(self, price):
+        """
+
+        Calculate the profit for the given price
+        and market information.
+        """
+        if price  > Constants.reservation_price:
+            profit =  0
+        elif price == self.winning_price:
+            # Math ceil bcs of floating points
+            # Int() would round down
+            profit = math.ceil((1 / self.n_winners) * price * Constants.m_consumer)
+        else:
+            profit = 0
+        return profit
+
+class SharedBasePlayer(BasePlayer):
+    class Meta:
+        abstract = True
+
+    price = models.IntegerField(
+        min=Constants.lowest_price, max=Constants.maximum_price,
+        doc= """Price player offers to sell product for"""
+    )
+
+    # Define all as Integer as they are points/tokens
+    # Round specific profit and accumulated profit as points
+    # I do not use CurrencyFields since those are a weird
+    # otree invention.
+    profit = models.IntegerField()
+    accumulated_profit = models.IntegerField()
+
+    # Final payoff is stored again
+    final_payoff_sg = models.FloatField()
 
     def get_market_infos(self):
         """
 
-        A function that returns the relevant market informations
+        A function that returns the relevant market information
         for the participants in a given round as a tuple.
         (player_id, opponent_ids, opponent_prices)
         """
         treatment = self.participant.vars['group_treatment']
 
         # First the individual choice treatments
-        # Algorithms are here always in second or thrid place
+        # Algorithms are here always in second or third place
         if treatment == '1H1A':
             player_id = 1
             opponent_ids = [2]
-            opponent_prices = [self.price_algorithm]
+            opponent_prices = [self.group.price_algorithm]
         elif treatment == '1H2A':
             player_id = 1
             opponent_ids = [2, 3]
-            opponent_prices = [self.price_algorithm, self.price_algorithm]
+            opponent_prices = [self.group.price_algorithm, self.group.price_algorithm]
         else:
             # If we are not in an indivdual choice treatment
             # the group will come into play.
@@ -197,104 +303,13 @@ class SharedBasePlayer(BasePlayer):
                 # Algorithm is always the last group member
                 # TODO: Do I want to mention this in the instructions?
                 opponent_ids = opponent_ids_no_algo + [3]
-                opponent_prices = opponent_prices_no_algo + [self.price_algorithm]
+                opponent_prices = opponent_prices_no_algo + [self.group.price_algorithm]
         
         # Map the integer to letters from A to C
         player_letter = Constants.firma_id_map[player_id]
         opponent_letters = list(map(Constants.firma_id_map.get, opponent_ids))
         return (player_letter, opponent_letters, opponent_prices)
-
-
-    def set_algo_price(self):
-        """
-        
-        A function to get the price of the algortihmic player
-        in the given round given the prices that haven been played
-        in the last round.
-        """
-        treatment = self.participant.vars['group_treatment']
-        past_algo_price = self.in_previous_rounds()[-1].price_algorithm
-        past_human_price = self.in_previous_rounds()[-1].price
-        if treatment == '1H2A':
-            past_prices_tuple = (past_algo_price, past_algo_price, past_human_price)
-        elif treatment == '1H1A':
-            past_prices_tuple = (past_algo_price, past_human_price)
-        elif treatment == '2H1A':
-            # Note that in the 2H1A treatment we have to use the whole
-            # group element to obtain the algorithmic price for the round.
-            # The reason is that the order of prices matters when creating the 
-            # past_prices_tuple. We use the structure provided by the 
-            # group s.t. the algorihmic price is the same for each group
-            # member (as it should be).
-            all_group_members = self.group.get_players()
-            past_all_human_prices = (p.in_previous_rounds()[-1].price for p in all_group_members)
-            # Like this the person who is "first" in the group is also first  after the algo 
-            # in the *past_prices_tuple*.
-            past_prices_tuple = (past_algo_price,) + past_all_human_prices
-        
-        # TODO: Import algorithms and save to Constants
-        # # differ which algorithm to use by treatment (3 or 2 firm market)
-        # if treatment in ['1H2A', '2H1A']:
-        #     self.price_algorithm = Constants.three_firm_agent[past_prices_tuple]
-        # else:
-        #     self.price_algorithm = Constants.two_firm_agent[past_prices_tuple]
-        self.price_algorithm  = Constants.maximum_price        
-
-    def set_profits_round(self, treatment):
-        """
-        
-        A function to set the payoffs for a specific round.
-        Note that usually this would be a group method. Given
-        that we have some treatments with individual choice,
-        it is however easier to implement it here.
-        """
-
-        # First for the treatments with only one human
-        if treatment == '1H1A':
-            all_prices = [self.price_algorithm, self.price]
-        elif treatment == '1H2A':
-            all_prices = [self.price_algorithm, self.price_algorithm, self.price]
-        else:
-            # Now for the treatments where we acutally have a group
-            other_group_members = self.get_others_in_group()
-            other_prices = [p.price for p in other_group_members]
-            if treatment == '2H1A':
-                all_prices = [self.price_algorithm] + [self.price] + other_prices
-            else: # 2H0A and 3H0A
-                all_prices = [self.price] + other_prices
-
-        # Calculate the profit for the participant in the given round
-        self.profit, self.winning_price, self.n_winners = calc_round_profit(p_i=self.price,
-                                                                            all_prices = all_prices)
-    
-        if self.price == self.winning_price:
-            self.is_winner = True
-                        
-        # Accumulate profit if we played more than one round
-        if self.round_number == 1:
-            self.accumulated_profit = self.profit
-        else:
-            self.accumulated_profit = self.in_round(self.round_number - 1).accumulated_profit + self.profit
-    
-    def calc_round_profit(self, p_i, all_prices):
-        """
-
-        A function that takes the price of the participant, *p_i*,
-        and *all_prices* in the market and returns the profit
-        for the participant, the market price and 
-        the number of firms that played this market price as a tuple
-        """
-        winning_price = min(all_prices)
-        n_winning_price = len([price for price in all_prices if price == winning_price])
-
-        if p_i  > Constants.reservation_price:
-            profit =  0
-        elif p_i == winning_price:
-            profit = int((1 / n_winning_price) * p_i * Constants.m_consumer)
-        else:
-            profit = 0
-        return (profit, winning_price, n_winning_price)
-        
+            
     def set_final_payoff(self):
         # We take the accumulated payoff from the last round we 
         # played.
@@ -317,7 +332,7 @@ class SharedBasePlayer(BasePlayer):
         """ A helper function to save payoff for each subgame (*final_payoff* for subgame *sg_counter*) to the participant dict.
         """
         key_name = "final_payoff_sg_" + str(sg_counter)        
-        self.participant.vars[key_name] = final_payoff
+        self.participant.vars[key_name] = final_payoff                        
 
 class Subsession(SharedBaseSubsession):
     pass

@@ -13,6 +13,50 @@ SESSION_CONFIG_DEFAULTS = dict(
 )
 
 SESSION_CONFIGS = [
+    dict(
+        name='SELF_treatment_3H0A_players_18',
+        display_name="SELF_treatment_3H0A_players_18",
+        group_treatment='3H0A',
+        num_demo_participants=18,
+        use_browser_bots=False,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment']
+    ),
+    dict(
+        name='SELF_treatment_1H2A_players_18',
+        display_name="SELF_treatment_1H2A_players_18",
+        group_treatment='1H2A',
+        num_demo_participants=18,
+        use_browser_bots=False,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment']
+    ),
+    dict(
+        name='SELF_treatment_2H1A_players_18',
+        display_name="SELF_treatment_2H1A_players_18",
+        group_treatment='2H1A',
+        num_demo_participants=18,
+        use_browser_bots=False,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'survey',
+         'payment']
+    )
+
+
 ]
 
 

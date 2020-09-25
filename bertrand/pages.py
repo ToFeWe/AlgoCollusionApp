@@ -24,8 +24,8 @@ class Decide(Page):
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def vars_for_template(self):
-        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {} Talern:".format(Constants.maximum_price,
-                                                                                        Constants.lowest_price)
+        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {} Talern:".format(Constants.lowest_price,
+                                                                                        Constants.maximum_price)
         return {
             "label_decide": label_decide,
             'exchange_rate': int(1 / self.session.config['real_world_currency_per_point']), # To avoid comma
@@ -41,10 +41,10 @@ class RoundWaitPage(WaitPage):
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def after_all_players_arrive(self):
-        # First set the price of the algorithm(s)
-        self.player.set_algo_price()
+        # First set the price of the algorithm(s) if needed
+        self.group.set_algo_price()
         # Then set the profits for the round
-        self.player.set_profits_round()
+        self.group.calc_round_profit()
 
 class RoundResults(Page):
 

@@ -11,14 +11,15 @@ In diesem Spiel repräsentieren Sie eine Firma in einem virtuellen Produktmarkt.
     Sie treffen in jeder Runde des Spiels auf dieselben Firmen (also Experiment-Teilnehmer).<br>
         Alle Firmen entscheiden in jeder Runde erneut <b>eigenständig und gleichzeitig</b>,
          für wie viele Taler Sie Ihr Produkt verkaufen möchten.
-          Sie können Ihr Produkt für einen Preis von {{Constants.deviation_price}}, 2, … oder {{Constants.maximum_price}} Taler verkaufen (nur ganze Taler). 
+          Sie können Ihr Produkt für einen Preis von {{Constants.lowest_price}}, 2, … oder {{Constants.maximum_price}} Taler verkaufen (nur ganze Taler). 
           <b>Es gibt keine Produktionskosten.</b> Ihr Gewinn ist das Produkt aus Preis und der Anzahl verkaufter Einheiten. Formal ausgedrückt:
           <br><br>
           <b> Gewinn = Preis x verkaufte Einheiten </b>
           <br><br>
      Der Markt hat {{Constants.m_consumer}} identische Kunden.
       Jeder Kunde möchte in jeder Runde eines Spiels <b>eine Einheit</b> des Produkts möglichst günstig kaufen.
-       Jeder Kunde ist bereit bis zu {{Constants.maximum_price}} Taler für diese Einheit des Produkts auszugeben.
+       Jeder Kunde ist bereit bis zu {{Constants.reservation_price}} Taler für diese Einheit des Produkts auszugeben.
+       TODO Extend
 <br><br>
  Die Firma mit dem <b>niedrigsten Preis in der jeweiligen Runde</b> verkauft Ihre Produkte. <b>Der niedrigste Preis ist also der Marktpreis in der jeweiligen Runde.</b>
   Firmen mit einem <b>Preis, der größer als der Marktpreis ist, verkaufen Ihre Produkte in der jeweiligen Runde nicht und erhalten daher einen Gewinn von Null.</b>
