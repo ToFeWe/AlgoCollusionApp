@@ -42,6 +42,8 @@ class RoundWaitPage(WaitPage):
 
     def after_all_players_arrive(self):
         # First set the price of the algorithm(s) if needed
+        # Note that we use the prices from the last period here in
+        # the function and not from this round!
         self.group.set_algo_price()
         # Then set the profits for the round
         self.group.calc_round_profit()

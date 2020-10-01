@@ -17,8 +17,8 @@ class Constants(BaseConstants):
     num_rounds = 1
 
 
-    maximum_price = 6
-    reservation_price = 5
+    maximum_price = 5
+    reservation_price = 4
     stage_game_NE = 1
     lowest_price = 0 
 
@@ -60,19 +60,21 @@ class Player(BasePlayer):
     q_after_fixed_round = models.StringField(
         initial=None, 
         choices = ['95%', '5%', '50%'],
-        label='Was ist die Wahrscheinlichkeit, dass nach Abschluss einer Runde eine weitere Runde gespielt wird?'
+        label='Was ist die Wahrscheinlichkeit, dass nach Abschluss einer Periode eine weitere gespielt wird?'
     )
 
     q_profit_1 = models.IntegerField(
-        initial=None, 
-        label='Sie sind Firma A und wählen einen Preis von 2, Firma B wählt einen Preis von 10,' +
-              ' Firma C wählt einen Preis von 9. Was ist Ihr Gewinn in Talern in dieser Runde?'
+        initial=None
+        # Note: Made treatment specific directly in the template
+        # label='Sie sind Firma A und wählen einen Preis von 2, Firma B wählt einen Preis von 3,' +
+        #       ' Firma C wählt einen Preis von 5. Was ist Ihr Gewinn in Talern in dieser Runde?'
     )
 
     q_profit_2 = models.IntegerField(
-        initial=None, 
-        label='Sie sind Firma A und wählen einen Preis von 8, Firma B wählt einen Preis von 8, ' + 
-               'Firma C wählt einen Preis von 8. Was ist Ihr Gewinn in Talern in dieser Runde?'
+        initial=None
+        # Note: Made treatment specific directly in the template
+        # label='Sie sind Firma A und wählen einen Preis von 3, Firma B wählt einen Preis von 3, ' + 
+        #        'Firma C wählt einen Preis von 3. Was ist Ihr Gewinn in Talern in dieser Runde?'
     )
 
     q_profit_3 = models.FloatField(
@@ -86,14 +88,14 @@ class Player(BasePlayer):
     counter_q_profit_1 = models.IntegerField(initial = 0)
     counter_q_profit_2 = models.IntegerField(initial = 0)
     counter_q_profit_3 = models.IntegerField(initial = 0)
-    counter_goal_alg = models.IntegerField(initial = 0, blank=True)
-
+    
 
     # Error evaluation of form fields
     def q_how_many_customer_error_message(self, value):
         if value != Constants.m_consumer:
             # Count +1 if the player answered the question wrong
             self.counter_how_many_customer += 1
+            self.q_after_fixed_round
             return Constants.error_message_form_field
 
     def q_after_fixed_round_error_message(self, value):
@@ -109,7 +111,15 @@ class Player(BasePlayer):
             return Constants.error_message_form_field
 
     def q_profit_2_error_message(self, value):
-        if value != 80:
+        # The correct answer here depends on the number of firms in the market
+        # which is different for different treatments.
+        if self.session.config['group_treatment'] in ['1H1A', '2H0A']:
+            # 60 * 3 / 2 = 90
+            correct_answer = 90
+        else:
+            # 60 * 3 / 3 = 60
+            correct_answer = 60
+        if value != correct_answer:
             # Count +1 if the player answered the question wrong
             self.counter_q_profit_2 += 1
             return Constants.error_message_form_field
@@ -119,10 +129,4 @@ class Player(BasePlayer):
         if value != correct_answer:
             # Count +1 if the player answered the question wrong
             self.counter_q_profit_3 += 1
-            return Constants.error_message_form_field
-
-    def q_goal_alg_error_message(self, value):
-        if value != 'Gesamtgewinne über alle Runden hinweg für alle Firmen zu maximieren.':
-            # Count +1 if the player answered the question wrong
-            self.counter_goal_alg += 1
             return Constants.error_message_form_field
