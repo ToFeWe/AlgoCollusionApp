@@ -6,15 +6,15 @@
 {% block content %}
 
 
-    Der Zufallsmechanismus hat entschieden, dass dies die letzte Runde des {{super_game_count}}. Spiels war. 
-    Sie haben im {{super_game_count}}. Spiel insgesamt einen Gewinn von <b>{{accumulated_profit}} Talern </b> erzielt. <br>
+    Der Zufallsmechanismus hat entschieden, dass dies die letzte Runde des {{super_game_count}}. Durchgangs war. 
+    Sie haben im {{super_game_count}}. Durchgang insgesamt einen Gewinn von <b>{{accumulated_profit}} Talern </b> erzielt. <br>
     <br><br>
     <br><br>
 
     {% if super_game_count != 3 %}
     
     
-        <b>Sie spielen jetzt das gleiche Spiel erneut.</b> Es besteht wieder eine Wahrscheinlichkeit von 95%, dass nach jeder Runde eine weitere Runde gespielt wird.
+        <b>Sie spielen jetzt vom gleichen Spiel einen neuen Durchgang.</b> Es besteht wieder eine Wahrscheinlichkeit von 95%, dass nach jeder Runde eine weitere Runde gespielt wird.
         <br><br>
 
         <b>WICHTIG:</b> Beachten Sie, dass Sie im folgenden Spiel mit anderen Experimentteilnehmern als zuvor in einem
@@ -26,7 +26,7 @@
         
         
     {% else %}
-    Dies war das letzte Spiel. Das Experiment endet jetzt. <br>
+    Dies war der letzte Durchgang. Das Experiment endet jetzt. <br>
     Bitte beantworten Sie nun noch die folgenden Fragen. Ihre Antworten bleiben anonym und dienen nur zu Forschungszwecken. Daher können und werden wir Sie nicht auf Ihre Antworten ansprechen.
 
     {% endif %}

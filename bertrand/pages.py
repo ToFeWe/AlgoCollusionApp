@@ -32,6 +32,12 @@ class Decide(Page):
             'super_game_count': self.subsession.this_app_constants()['super_game_count']
             }
 
+    def before_next_page(self):
+        # Algorithm also decides on its price if there is any
+        # Note that we use the prices from the last period here in
+        # the function and not from this round!
+        if self.group.group_treatment not in ['3H0A', '2H0A']:
+            self.group.set_algo_price()
 
 class RoundWaitPage(WaitPage):
 
@@ -41,14 +47,7 @@ class RoundWaitPage(WaitPage):
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def after_all_players_arrive(self):
-        # First set the price of the algorithm(s) if needed
-        # Note that we use the prices from the last period here in
-        # the function and not from this round!
-        # TODO: Maybe move to Decide page and put it to the
-        # before next page function, Result the same but maybe more clear
-        # then checking the code
-        self.group.set_algo_price()
-        # Then set the profits for the round
+        # Set the profits for the round
         self.group.calc_round_profit()
 
 class RoundResults(Page):

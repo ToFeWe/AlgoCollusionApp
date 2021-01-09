@@ -6,15 +6,23 @@
 {% block content %}
 
     <center>
-    <b>Klicken Sie auf "Weiter", um mit dem {{super_game_count}}. von 3 Spielen zu beginnen.
+    <b>Klicken Sie auf "Weiter", um mit dem {{super_game_count}}. von 3 Durchgängen zu beginnen.
     <br><br>    
-    Ihr Markt besteht aus ingesamt drei Firmen. Sie sind in diesem Spiel Firma {{player_id}}. Ihre Mitspieler werden sich innerhalb dieses Spiels nicht ändern. 
+    Ihr Markt besteht aus ingesamt drei Firmen. Sie sind in diesem Durchgang Firma {{player_id}}. Ihre Mitspieler werden sich innerhalb dieses Durchgangs nicht ändern. 
     
-    {% if  super_game_count != 1 %}
+    {% if  super_game_count == 2 %}
     <br><br>
-    Beachten Sie, dass sich beide Mitspieler in Ihrer Gruppe im Vergleich zum letzten Spiel geändert haben.
+    Beachten Sie, dass sich beide Mitspieler in Ihrer Gruppe im Vergleich zum letzten Durchgang geändert haben.
 
     {% endif %}
+
+
+    {% if  super_game_count == 3 %}
+    <br><br>
+    Beachten Sie, dass sich beide Mitspieler in Ihrer Gruppe im Vergleich zu den letzten beiden Durchgängen geändert haben.
+
+    {% endif %}
+
     <br><br>
     </b>
     {% next_button %}
