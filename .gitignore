@@ -13,5 +13,6 @@ __pycache__/
 env
 .cache
 env_test
+env_algo
 desktop.ini
 .vscode

@@ -25,39 +25,6 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    # Question for the treatment
-    q_alg_helpful = models.StringField(
-        initial=None,
-        choices=[('0', 'gar nicht hilfreich'),
-                 ('1', ''),
-                 ('2', ''),
-                 ('3', ''),
-                 ('4', ''),
-                 ('5', ''),
-                 ('6', ''),
-                 ('7', ''),
-                 ('8', ''),
-                 ('9', ''),
-                 ('10', 'sehr hilfreich')],
-        label='Wie hilfreich fanden Sie die Empfehlungen des Algorithmus?',
-        widget=widgets.RadioSelectHorizontal())
-
-    q_alg_no_recommendation = models.StringField(
-        initial=None,
-        choices=[('0', 'deutlich niedriger'),
-                 ('1', ''),
-                 ('2', ''),
-                 ('3', ''),
-                 ('4', ''),
-                 ('5', ''),
-                 ('6', ''),
-                 ('7', ''),
-                 ('8', ''),
-                 ('9', ''),
-                 ('10', 'deutlich höher')],
-        label='Nehmen Sie an, dass Sie und die Mitspieler keine Empfehlung bekommen hätten. Denken Sie, dass Ihr Gesamtgewinn höher oder niedriger gewesen wäre?',
-        widget=widgets.RadioSelectHorizontal())
-
     q_agree_statement_1 = models.StringField(
         initial=None,
         choices=[('0', 'stimme gar nicht zu'),
@@ -71,62 +38,8 @@ class Player(BasePlayer):
                  ('8', ''),
                  ('9', ''),
                  ('10', 'stimme voll und ganz zu')],
-        label='Die Empfehlungen des Algorithmus waren relevant für die Entscheidungen meiner Mitspieler.',
+        label='Ich denke, dass Firmen, die einen Algorithmus für die Preisentscheidung genutzt haben, einen höheren Gewinn erwirtschaftet haben.',
         widget=widgets.RadioSelectHorizontal())
-
-    q_agree_statement_2 = models.StringField(
-        initial=None,
-        choices=[('0', 'stimme gar nicht zu'),
-                 ('1', ''),
-                 ('2', ''),
-                 ('3', ''),
-                 ('4', ''),
-                 ('5', ''),
-                 ('6', ''),
-                 ('7', ''),
-                 ('8', ''),
-                 ('9', ''),
-                 ('10', 'stimme voll und ganz zu')],
-        label='Die Empfehlungen des Algorithmus haben dabei geholfen, dass alle Firmen den gleichen Preis wählen.',
-        widget=widgets.RadioSelectHorizontal())
-
-    q_agree_statement_3 = models.StringField(
-        initial=None,
-        choices=[('0', 'stimme gar nicht zu'),
-                 ('1', ''),
-                 ('2', ''),
-                 ('3', ''),
-                 ('4', ''),
-                 ('5', ''),
-                 ('6', ''),
-                 ('7', ''),
-                 ('8', ''),
-                 ('9', ''),
-                 ('10', 'stimme voll und ganz zu')],
-        label='Die Empfehlungen des Algorithmus haben geholfen, sich auf einen hohen Preis zu koordinieren.',
-        widget=widgets.RadioSelectHorizontal())
-
-    q_agree_statement_4 = models.StringField(
-        initial=None,
-        choices=[('0', 'stimme gar nicht zu'),
-                 ('1', ''),
-                 ('2', ''),
-                 ('3', ''),
-                 ('4', ''),
-                 ('5', ''),
-                 ('6', ''),
-                 ('7', ''),
-                 ('8', ''),
-                 ('9', ''),
-                 ('10', 'stimme voll und ganz zu')],
-        label='Die Empfehlungen des Algorithmus haben geholfen, Firmen, die niedrige Preise gewählt haben, zu disziplinieren.',
-        widget=widgets.RadioSelectHorizontal())
-
-    q_alg_comments = models.StringField(
-        initial=None,
-        label='Inwiefern war der Algorithmus hilfreich?',
-        blank=True
-    )
 
     # General Questions
     q_age = models.IntegerField(label='Wie alt sind Sie?', min=16, max=99)

@@ -63,6 +63,9 @@ class Player(BasePlayer):
         label='Was ist die Wahrscheinlichkeit, dass nach Abschluss einer Periode eine weitere gespielt wird?'
     )
 
+    q_consumer_wtp = models.IntegerField(initial=None,
+    label="Was ist der maximale Preis, den die Kunden bereit sind für das Produkt zu zahlen?")
+
     q_profit_1 = models.IntegerField(
         initial=None
         # Note: Made treatment specific directly in the template
@@ -85,6 +88,7 @@ class Player(BasePlayer):
     # Counter variable how often the player has answered smth wrong
     counter_how_many_customer = models.IntegerField(initial = 0)
     counter_after_fixed_round = models.IntegerField(initial = 0)
+    counter_consumer_wtp = models.IntegerField(initial = 0)
     counter_q_profit_1 = models.IntegerField(initial = 0)
     counter_q_profit_2 = models.IntegerField(initial = 0)
     counter_q_profit_3 = models.IntegerField(initial = 0)
@@ -103,6 +107,12 @@ class Player(BasePlayer):
             # Count +1 if the player answered the question wrong
             self.counter_after_fixed_round += 1
             return Constants.error_message_form_field
+
+    def q_consumer_wtp_error_message(self, value):
+        if value != Constants.reservation_price:
+            self.counter_consumer_wtp += 1
+            return Constants.error_message_form_field
+
 
     def q_profit_1_error_message(self, value):
         if value != 60:

@@ -2,26 +2,27 @@ from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
 )
-import random
+import pickle
 import numpy as np
 import math
+
 doc = """
 An Experiment on Algorithmic Collusion.
 """
 
+
 class Constants(BaseConstants):
     players_per_group = None
     name_in_url = 'algcoll'
-    
+
     # num_rounds is only an upper bound but not actually used
-    num_rounds = 30 
+    num_rounds = 30
 
-    maximum_price = 6
-    reservation_price = 5
+    maximum_price = 5
+    reservation_price = 4
     stage_game_NE = 1
-    lowest_price = 0 
+    lowest_price = 0
 
-    
     # Number of consumers
     m_consumer = 60
 
@@ -31,19 +32,38 @@ class Constants(BaseConstants):
     firma_id_map = {1: 'A',
                     2: 'B',
                     3: 'C'}
-    
+
+
+    # Load the Q learning agents for the experiment.
+    with open("./bertrand/static/q_learning_agents/otree_super_star_2_agents.pickle", "rb") as f:
+        two_firm_agent = pickle.load(f)
+
+    with open("./bertrand/static/q_learning_agents/otree_super_star_3_agents.pickle", "rb") as f:
+        three_firm_agent = pickle.load(f)
+
+    # Keys (tuples) and values (int price) have been saved as strings
+    two_firm_agent['prices_to_br'] = {
+        eval(k): eval(v) for k, v in two_firm_agent["prices_to_br"].items()
+    }
+
+    three_firm_agent['prices_to_br'] = {
+        eval(k): eval(v) for k, v in three_firm_agent["prices_to_br"].items()
+    }
+    # The state of convergence has been saved in string format
+    two_firm_agent['state_of_convergence'] = eval(two_firm_agent['state_of_convergence'])
+    three_firm_agent['state_of_convergence'] = eval(three_firm_agent['state_of_convergence'])
 
 
 class SharedBaseSubsession(BaseSubsession):
     class Meta:
-      abstract = True
+        abstract = True
 
     def creating_session(self):
 
         # Apply grouping scheme for each round.
         # Note that this is super game and treatment specific.
         if self.round_number == 1:
-            
+
             # Check for the given treatment, how large our matching group
             # has to be.
             if self.session.config['group_treatment'] == '3H0A':
@@ -52,31 +72,36 @@ class SharedBaseSubsession(BaseSubsession):
                 group_size = 2
             else:
                 group_size = 1
-            
+
             # Get the group matching for the current super game
             n_participants = self.session.num_participants
             if group_size == 3:
                 if n_participants not in [9, 18]:
                     raise Exception(("In the 3H0A treatment we need matching groups of 9 people.",
-                                     "The Maximum number of subjects is 18.",                                    
+                                     "The Maximum number of subjects is 18.",
                                      "One of the conditions is not met given {} participants.".format(n_participants)))
                 else:
                     if n_participants == 9:
-                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_small']
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size][
+                            'shuffle_structure_small']
                     elif n_participants == 18:
-                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_medium']
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size][
+                            'shuffle_structure_medium']
             elif group_size == 2:
                 if n_participants not in [6, 12, 18]:
                     raise Exception(("In the 3H0A treatment we need matching groups of 6 people.",
-                                     "The Maximum number of subjects is 18.",                                    
+                                     "The Maximum number of subjects is 18.",
                                      "One of the conditions is not met given {} participants.".format(n_participants)))
                 else:
                     if n_participants == 6:
-                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_small']
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size][
+                            'shuffle_structure_small']
                     elif n_participants == 12:
-                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_medium']
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size][
+                            'shuffle_structure_medium']
                     elif n_participants == 18:
-                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size]['shuffle_structure_big']
+                        shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size][
+                            'shuffle_structure_big']
             else:
                 # In the individual choice treatments, we do not have a group matching
                 # but everyone is in his/her own group.
@@ -92,11 +117,11 @@ class SharedBaseSubsession(BaseSubsession):
             # Note however that we change it from super game to super game as we change the 
             # shuffle_structure_***
             self.group_like_round(1)
-        
-        # Assign the treatment to each player in the session
-        # Note that we store it in the *treatment* field in the 
-        # all rounds but also in the participant variables of
-        # the first participant in the group to access it across rounds. 
+
+        # Assign the treatment to each player and group in the session
+        # Note that we store it in the *group_treatment* field in the 
+        # all rounds but also in the participant variables for each
+        # participant in the group to easily access it across rounds. 
         for g in self.get_groups():
             # *group_treatment* has to be specified in the session config
             # Store it in the variable *group_treatment* for first round for the group
@@ -108,25 +133,27 @@ class SharedBaseSubsession(BaseSubsession):
                     # Furthermore, store it in the participant variables for the each player in each
                     # group to access it accross rounds.
                     p.participant.vars['group_treatment'] = self.session.config['group_treatment']
-                    
+
                     # Init payoff variable for dict to zero at the start of the game
                     # to avoid errors on the admin page.
                     # Will be adjusted over the course of the game.
                     sg_counter = self.this_app_constants()['super_game_count']
-                    key_name = "final_payoff_sg_" + str(sg_counter)        
+                    key_name = "final_payoff_sg_" + str(sg_counter)
                     p.participant.vars[key_name] = 0
-    
+
     def vars_for_admin_report(self):
         all_groups = self.get_groups()
         return {
             'all_groups': all_groups
         }
 
+
 class SharedBaseGroup(BaseGroup):
     class Meta:
-        abstract = True    
+        abstract = True
 
-    # We use the group as a market level
+        # We use the group as a market level
+
     # Hence, also in the "individual" choice treatments
     # e.g. the treatments with only one human and algorithms
     # those variables are used to store outcomes.
@@ -134,7 +161,7 @@ class SharedBaseGroup(BaseGroup):
     winner_profit = models.IntegerField()
     n_winners = models.IntegerField()
 
-    # Prices of the algorithm(s)
+    # Outcomes for the algorithm(s)
     # Note that in markets with two algorithms,
     # the price of those algorithms must be
     # symmetric, given its the same with the same input.
@@ -156,47 +183,37 @@ class SharedBaseGroup(BaseGroup):
         TODO: Do I want a delay for the algorithm to get its price?
         Else, in comparison to humans, it is much faster in a treatment
         with algorithms.
-        TODO: I should somehow define a data structure that saves the decisions
-        of the algorithms in a more structured level on the group level
-        to be able to save it for the pay out of the players who "use"
-        the algorithm
         """
+        # Group treatment is all rounds the same and stored for all rounds
+        # when creating the session.
         treatment = self.group_treatment
-        
+
         # Price for the algorithm is only needed if
         # there is actually an algorithm at play!
         if treatment not in ['3H0A', '2H0A']:
-            # We have an initial condition problem here
-            # Assumption will be that the state in the 
-            # hypothetical state 0 is the state of convergence
-            # from the simulation study.
             if self.round_number == 1:
-                # TODO: Adjust for state of convergence
+                # Inital state is assumed to be the state of convergence
+                past_prices_tuple = Constants.three_firm_agent['state_of_convergence']
                 if treatment == '1H1A':
-                    past_prices_tuple = (Constants.reservation_price, Constants.reservation_price)
-                else:
-                    past_prices_tuple = (Constants.reservation_price, Constants.reservation_price,
-                                        Constants.reservation_price)
-            # In later round we can look back on the history of the game
-            # and use this information to get the current prices for the algorithm
+                    past_prices_tuple = Constants.two_firm_agent['state_of_convergence']
+            # Current state is the set of past prices
             else:
                 past_algo_price = [self.in_previous_rounds()[-1].price_algorithm]
                 all_past_human_prices = [p.in_previous_rounds()[-1].price for p in self.get_players()]
-                
+
+                # Price of the Algorithm is always assumed to be first, given how it learned
                 if treatment == '1H2A':
                     past_prices_tuple = tuple(past_algo_price + past_algo_price + all_past_human_prices)
                 else:
                     past_prices_tuple = tuple(past_algo_price + all_past_human_prices)
-            
-            # TODO: Import algorithms and save to Constants
-            # # differ which algorithm to use by treatment (3 or 2 firm market)
-            # if treatment in ['1H2A', '2H1A']:
-            #     self.price_algorithm = Constants.three_firm_agent[past_prices_tuple]
-            # else:
-            #     self.price_algorithm = Constants.two_firm_agent[past_prices_tuple]
-            self.price_algorithm  = Constants.reservation_price  
 
-    def calc_round_profit(self,):
+            # Differ which algorithm to use by treatment (3 or 2 firm market)
+            if treatment in ['1H2A', '2H1A']:
+                self.price_algorithm = Constants.three_firm_agent['prices_to_br'][past_prices_tuple]
+            else:
+                self.price_algorithm = Constants.two_firm_agent['prices_to_br'][past_prices_tuple]
+
+    def calc_round_profit(self):
         """
 
         A function that calculates all profits in a given market.
@@ -212,7 +229,7 @@ class SharedBaseGroup(BaseGroup):
             if treatment == '1H2A':
                 all_prices = algo_price + algo_price + all_human_prices
             else:
-                all_prices = algo_price + algo_price
+                all_prices = algo_price + all_human_prices
 
         # Calculate the market outcome
         self.winning_price = min(all_prices)
@@ -226,13 +243,17 @@ class SharedBaseGroup(BaseGroup):
             else:
                 p.accumulated_profit = p.in_round(self.round_number - 1).accumulated_profit + p.profit
 
-        self.profit_algorithm = self.calc_profit(self.price_algorithm)
-        # Accumulated profit for the algorithm
-        if self.round_number == 1:
-            self.accumulated_profit_algorithm = self.profit_algorithm
-        else:
-            self.accumulated_profit_algorithm = self.in_round(self.round_number - 1).accumulated_profit_algorithm + self.profit_algorithm
-        
+        # Calculate the algorithms profits in case there is one in the market.
+        # Makes our live easier when paying passive subjects in the end 
+        if treatment not in ['3H0A', '2H0A']:
+            self.profit_algorithm = self.calc_profit(self.price_algorithm)
+
+            # Accumulated profit for the algorithm
+            if self.round_number == 1:
+                self.accumulated_profit_algorithm = self.profit_algorithm
+            else:
+                self.accumulated_profit_algorithm = self.in_round(
+                    self.round_number - 1).accumulated_profit_algorithm + self.profit_algorithm
 
     def calc_profit(self, price):
         """
@@ -240,8 +261,8 @@ class SharedBaseGroup(BaseGroup):
         Calculate the profit for the given price
         and market information.
         """
-        if price  > Constants.reservation_price:
-            profit =  0
+        if price > Constants.reservation_price:
+            profit = 0
         elif price == self.winning_price:
             # Math ceil bcs of floating points
             # Int() would round down
@@ -250,13 +271,14 @@ class SharedBaseGroup(BaseGroup):
             profit = 0
         return profit
 
+
 class SharedBasePlayer(BasePlayer):
     class Meta:
         abstract = True
 
     price = models.IntegerField(
         min=Constants.lowest_price, max=Constants.maximum_price,
-        doc= """Price player offers to sell product for"""
+        doc="""Price player offers to sell product for"""
     )
 
     # Define all as Integer as they are points/tokens
@@ -279,7 +301,9 @@ class SharedBasePlayer(BasePlayer):
         treatment = self.participant.vars['group_treatment']
 
         # First the individual choice treatments
-        # Algorithms are here always in second or third place
+        # The group class is here only used to store the information
+        # on the algorithm and not on the ids in the group.
+        # We assume that the algorithms are here always has the id two and/or three
         if treatment == '1H1A':
             player_id = 1
             opponent_ids = [2]
@@ -295,21 +319,21 @@ class SharedBasePlayer(BasePlayer):
             opponents = self.get_others_in_group()
             opponent_ids_no_algo = [o.id_in_group for o in opponents]
             opponent_prices_no_algo = [o.price for o in opponents]
-            
+
             if treatment in ['2H0A', '3H0A']:
                 opponent_ids = opponent_ids_no_algo
                 opponent_prices = opponent_prices_no_algo
             elif treatment == '2H1A':
                 # Algorithm is always the last group member
-                # TODO: Do I want to mention this in the instructions?
+                # TODO: I have to mention this in the instructions!
                 opponent_ids = opponent_ids_no_algo + [3]
                 opponent_prices = opponent_prices_no_algo + [self.group.price_algorithm]
-        
+
         # Map the integer to letters from A to C
         player_letter = Constants.firma_id_map[player_id]
         opponent_letters = list(map(Constants.firma_id_map.get, opponent_ids))
         return (player_letter, opponent_letters, opponent_prices)
-            
+
     def set_final_payoff(self):
         # We take the accumulated payoff from the last round we 
         # played.
@@ -320,19 +344,20 @@ class SharedBasePlayer(BasePlayer):
         # Take the accumulated profit from the last round
         # IMPORTANT: Only use this method once the profit for the round has been calculated
         # using *set_profits_round* from the group method
-        total_coins = self.in_round(last_played_round).accumulated_profit 
-        final_payoff_sg = total_coins
+        total_coins = self.in_round(last_played_round).accumulated_profit
+        # final_payoff_sg = total_coins
         # Note, we do not save this to payoff as we will randomly select one of the 
         # super games for payoff.
         # Save the final accumulated payoff for the last subgame in the participant dict.
-        self.sg_payoff_to_dict(sg_counter = self.subsession.this_app_constants()['super_game_count'],
-                               final_payoff = total_coins)
+        self.sg_payoff_to_dict(sg_counter=self.subsession.this_app_constants()['super_game_count'],
+                               final_payoff=total_coins)
 
     def sg_payoff_to_dict(self, sg_counter, final_payoff):
         """ A helper function to save payoff for each subgame (*final_payoff* for subgame *sg_counter*) to the participant dict.
         """
-        key_name = "final_payoff_sg_" + str(sg_counter)        
-        self.participant.vars[key_name] = final_payoff                        
+        key_name = "final_payoff_sg_" + str(sg_counter)
+        self.participant.vars[key_name] = final_payoff
+
 
 class Subsession(SharedBaseSubsession):
     pass
@@ -342,29 +367,29 @@ class Subsession(SharedBaseSubsession):
         
         """
         # The number of rounds we have drawn ex ante according to some cont prob
-        return {'round_number_draw': 11, 
-                #'round_number_draw': 1, # for testing TODO: Remove
+        return {'round_number_draw': 11,
+                # 'round_number_draw': 1, # for testing TODO: Remove
                 'super_game_count': 1,
-                'group_shuffle_by_size' : {
-                    3: {'shuffle_structure_small': [[1,2,3], [4, 5, 6], [7, 8, 9]],
-                       'shuffle_structure_medium': [[1,2,3], [4, 5, 6], [7, 8, 9],
-                                                   [10, 11, 12], [13, 14, 15], [16, 17, 18]]
-                    },
-                    2: {'shuffle_structure_small': [[1,2], [3, 4], [5, 6]],
-                        'shuffle_structure_medium': [[1,2], [3, 4], [5, 6],
-                                                    [7,8], [9, 10], [11, 12]],
-                        'shuffle_structure_big':  [[1,2], [3, 4], [5, 6],
-                                                   [7,8], [9, 10], [11, 12],
-                                                   [13,14], [15, 16], [17, 18]]
-                    }
+                'group_shuffle_by_size': {
+                    3: {'shuffle_structure_small': [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+                        'shuffle_structure_medium': [[1, 2, 3], [4, 5, 6], [7, 8, 9],
+                                                     [10, 11, 12], [13, 14, 15], [16, 17, 18]]
+                        },
+                    2: {'shuffle_structure_small': [[1, 2], [3, 4], [5, 6]],
+                        'shuffle_structure_medium': [[1, 2], [3, 4], [5, 6],
+                                                     [7, 8], [9, 10], [11, 12]],
+                        'shuffle_structure_big': [[1, 2], [3, 4], [5, 6],
+                                                  [7, 8], [9, 10], [11, 12],
+                                                  [13, 14], [15, 16], [17, 18]]
+                        }
                 }
 
                 }
+
 
 class Group(SharedBaseGroup):
     pass
 
+
 class Player(SharedBasePlayer):
     pass
-
-

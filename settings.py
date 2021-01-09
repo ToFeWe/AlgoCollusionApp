@@ -20,11 +20,11 @@ SESSION_CONFIGS = [
         num_demo_participants=18,
         use_browser_bots=False,
         app_sequence=[
-         'introduction',
+         #'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
-         'survey',
+         #'survey',
          'payment']
     ),
     dict(
@@ -34,11 +34,11 @@ SESSION_CONFIGS = [
         num_demo_participants=18,
         use_browser_bots=False,
         app_sequence=[
-         'introduction',
+         #'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
-         'survey',
+         #'survey',
          'payment']
     ),
     dict(
@@ -48,13 +48,28 @@ SESSION_CONFIGS = [
         num_demo_participants=18,
         use_browser_bots=False,
         app_sequence=[
-         'introduction',
+        #  'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
-         'survey',
+        #  'survey',
+         'payment']
+    ),
+    dict(
+        name='SELF_treatment_1H1A_players_18',
+        display_name="SELF_treatment_1H1A_players_18",
+        group_treatment='1H1A',
+        num_demo_participants=18,
+        use_browser_bots=False,
+        app_sequence=[
+        #  'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+        #  'survey',
          'payment']
     )
+
 
 
 ]
