@@ -9,7 +9,14 @@ class StartExperiment(Page):
         return self.round_number == 1
     
     def vars_for_template(self):
+        n_players = 2 if self.group.group_treatment in ['2H0A', '1H1A'] else 3
+        group_treatment = self.group.group_treatment
+        algo_treatment = True if group_treatment not in ['2H0A', '3H0A'] else False
+        
         return {
+            'algo_treatment': algo_treatment,
+            'group_treatment': group_treatment,
+            'n_players': n_players,
             'super_game_count': self.subsession.this_app_constants()['super_game_count'],
             'player_id': Constants.firma_id_map[self.player.id_in_group]
         }

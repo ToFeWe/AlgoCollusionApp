@@ -18,23 +18,25 @@ class Constants(BaseConstants):
     # num_rounds is only an upper bound but not actually used
     num_rounds = 30
 
+    # Define market constants
     maximum_price = 5
     reservation_price = 4
     stage_game_NE = 1
     lowest_price = 0
 
-    # Number of consumers
+    # Number of (computerized) consumers
     m_consumer = 60
 
     # Treatment names
     treatments = ['3H0A', '2H0A', '2H1A', '1H2A', '1H1A']
 
+    # Mapping dict for displaying purposes
     firma_id_map = {1: 'A',
                     2: 'B',
                     3: 'C'}
 
 
-    # Load the Q learning agents for the experiment.?
+    # Load the Q learning agents for the experiment.
     with open("./bertrand/static/q_learning_agents/otree_super_star_2_agents.pickle", "rb") as f:
         two_firm_agent = pickle.load(f)
 

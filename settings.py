@@ -68,6 +68,20 @@ SESSION_CONFIGS = [
          'bertrand_SG_3', 
         #  'survey',
          'payment']
+    ),
+    dict(
+        name='SELF_treatment_2H0A_players_18',
+        display_name="SELF_treatment_2H0A_players_18",
+        group_treatment='2H0A',
+        num_demo_participants=18,
+        use_browser_bots=False,
+        app_sequence=[
+        #  'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+        #  'survey',
+         'payment']
     )
 
 
