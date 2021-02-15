@@ -1,0 +1,133 @@
+{% load otree %}
+<br>
+<div class="right">
+	<button type="button" id="instruct_btn" onclick=myFunction()> Zeige Instruktionen </button><br>
+</div>
+<p>
+	<div id='instruct' class="instructions well well-lg" xmlns="http://www.w3.org/1999/html"  style="display: none;border-style: solid;">
+    <p>
+    <b>Besonders wichtig:</b> Sollten Sie irgendwelche Fragen haben, melden Sie sich mit Hilfe der Chat in der Webex-Konferenz beim Administrator.
+    </p>
+    <h3> Instrukionen </h3>
+    <p>
+    In diesem Experiment treffen Sie wiederholt Preisentscheidungen. Diese ermöglichen es Ihnen echtes Geld zu verdienen.
+    Wie viel Sie verdienen ist abhängig von Ihren Entscheidungen und denen der anderen Teilnehmerinnen und Teilnehmer.
+    <b>Unabhängig davon erhalten Sie 6,00 Euro für die Teilnahme.</b><br>
+    </p>
+    <p>
+    Im Experiment verwenden wir eine fiktive Geldeinheit namens Taler.
+    Im Anschluss an das Experiment werden die Taler in Euro umgerechnet und Ihnen ausgezahlt.
+    <b>Dabei entsprechen 100 Taler einem Euro.</b> Die Euro-Beträge werden auf die erste
+    Nachkommastelle gerundet.
+    </p>
+    <p>
+    <b>Beispiel:</b> Teilnehmer A hat im Experiment 465 Taler verdient. Umgerechnet entspricht das 4,65 Euro.
+    Auf die erste Nachkommastelle gerundet werden Teilnehmer A 4,70 Euro ausgezahlt.<br>
+    </p>
+    <p>
+    In diesem Experiment repräsentieren Sie eine Firma in einem virtuellen Produktmarkt.
+    In jedem Markt verkaufen X weitere Firmen das gleiche Produkt wie Sie. #TODO
+    Diese Firmen werden von X anderen Experiment- Teilnehmerinnen bzw. Teilnehmer repräsentiert.
+    Alle Firmen bieten 60 Einheiten des vergleichbaren Produktes an.
+    Bei der Produktion des Produktes entstehen für die Firma keine Kosten.
+    Das Spiel hat mehrere Runden, wobei die genau Anzahl durch einen Zufallsmechanismus entschieden wird.
+    Sie spielen das Spiel für drei Durchgänge.
+    Sie treffen in jeder Runde eines Durchgangs auf dieselben Firmen (also Experiment-Teilnehmer).
+    Die Firmen in Ihrem Markt ändern sich jedoch nach jedem Durchgang.
+    </p>
+
+    <p>
+    Der Markt hat {{Constants.m_consumer}} identische Kunden.
+    Jeder Kunde möchte in jeder Runde eines Durchgangs <b>eine Einheit</b> des Produkts möglichst günstig kaufen.
+    Jeder Kunde ist bereit maximal <b>{{Constants.reservation_price}} Taler</b> für diese Einheit des Produkts auszugeben.
+    </p>
+    <p>
+    Alle Firmen entscheiden in jeder Runde erneut <b>gleichzeitig</b>, für wie viele Taler Sie Ihr Produkt verkaufen möchten.
+    Sie können Ihr Produkt für einen Preis von {{Constants.lowest_price}}, 1, … oder {{Constants.maximum_price}} Taler verkaufen
+    (nur ganze Taler). Ihr Gewinn ist der Preis multipliziert mit der Anzahl an verkauften Einheiten.
+    Formal ausgedrückt:
+    </p>
+    <p>
+    <center><b>Gewinn = Preis x verkaufte Einheiten</b></center>
+    </p>
+    </p>
+    Die Firma mit dem <b>niedrigsten Preis in der jeweiligen Runde</b> verkauft Ihre Produkte,
+    solange der Preis nicht größer als 4 Taler ist. Firmen mit einem höheren Preis verkaufen ihr Produkt nicht.
+    <b>Der niedrigste Preis ist der Marktpreis in der jeweiligen Runde.</b> Firmen mit einem <b>Preis, der größer als der Marktpreis ist,
+    verkaufen Ihre Produkte in der jeweiligen Runde nicht.</b> Sollten zwei oder alle drei Firmen Ihre Produkte für den gleichen Marktpreis
+    verkaufen wollen, teilt sich die Nachfrage gleichmäßig auf die zwei bzw. drei Firmen auf.
+    </p>
+
+    <h3>Marktentscheidungen durch Algorithmen</h3>
+    <p>
+    In ihren Märkten entscheiden zwei Teilnehmerinnen und Teilnehmer selbst, für welchen Preis sie ihre Güter für ihre Firma verkaufen
+    wollen und bekommen den Gewinn, den ihre Firma macht, am Ende des Experiments ausgezahlt.
+    </p>
+    <p>
+    <b>Firma C #TODO wird in allen Runden mit einem Algorithmus ausgestattet sein,
+    welcher die erforderlichen Preisentscheidungen für den Teilnehmer oder die Teilnehmerin übernimmt.</b>
+    In diesem Fall trifft die Teilnehmerin oder der Teilnehmer keine Entscheidungen,
+    <b>bekommt aber dennoch den Gewinn, den ihre/seine Firma macht,</b> ausgezahlt.
+    </p>
+
+    <h3>Ablauf des Experiments</h3>
+    <p>
+    Nach jeder Runde werden alle Firmen über die gewählten Preise aller drei Firmen und ihren eigenen Gewinn informiert.
+    In der nächsten Runde hat jede Firma wieder die Möglichkeit ihren Preis neu zu wählen.
+    Sie interagieren in jeder Runde innerhalb eines Durchgangs mit denselben Teilnehmern.
+    </p>
+    <p>
+    Nach jeder Runde entscheidet ein Zufallsmechanismus, ob eine weitere Runde gespielt wird oder der Durchgang endet.
+    Die Wahrscheinlichkeit, dass eine weitere Periode gespielt wird, liegt bei 95 %.
+    Der Durchgang endet also nach jeder Runde mit einer Wahrscheinlichkeit von 5 %.
+    Der Durchgang wir so lange fortgesetzt, bis der Zufall das Ende bestimmt.
+    </p>
+    <p>
+    Bildlich gesprochen wirft der Computer vor jeder möglichen weiteren Runde einen virtuellen Würfel mit 20 Seiten.
+    Das Ergebnis entscheidet, ob eine weitere Runde gespielt wird oder nicht.
+    Bei einer Zahl von 20 ist der Durchgang vorbei, bei allen anderen Zahlen wird eine weitere Runde gespielt.
+    </p>
+    <p>
+    <b>Beachten Sie:</b><br>
+    <b>Sie spielen das beschriebene Spiel insgesamt für drei Durchgänge.</b>
+    Nach jedem Durchgang werden sie mit neuen Teilnehmern zu einem neuen Markt zusammengesetzt.
+    Das bedeutet, dass Sie in jedem der drei Durchgänge mit anderen Teilnehmern interagieren.
+    </p>
+    <p>
+    <b>Nachdem alle Durchgänge beendet sind, wird zufällig entschieden, welcher der drei Durchgänge ausgezahlt wird.</b>
+    Diesen Gewinn erhalten Sie im Anschluss an das Experiment.
+    Außerdem erhalten Sie zusätzlich 6,00 Euro für die Teilnahme an diesem Experiment.
+    </p>
+    <h3>Durchführungshinweis</h3>
+    <p>
+    Sobald Sie eine Entscheidung auf der jeweiligen Seite getroffen und alle Informationen aufgenommen haben,
+    klicken Sie bitte auf den „Weiter“-Button, damit das Experiment fortgesetzt werden kann.
+    Sollten Sie für eine längere Zeit keine Eingabe tätigen oder diese Internetseite vorübergehend verlassen,
+    werden wir Sie aus dem Experiment entfernen.
+    Sie erhalten in diesem Fall keine Bezahlung und werden von zukünftigen Onlineexperimenten ausgeschlossen.
+    </p>
+	</div>
+</p>
+<audio id="alarm_sound" src="{% static "alarm_sound.wav" %}" preload="auto"></audio>
+
+<script>
+// Show/Hide Instructions
+function myFunction() {
+  var instruct = document.getElementById("instruct");
+  var btn = document.getElementById("instruct_btn");
+
+  if (instruct.style.display === "none") {
+    instruct.style.display = "block";
+	btn.innerHTML = "Verstecke Instruktionen";
+  } else {
+    instruct.style.display = "none";
+	btn.innerHTML = "Zeige Instruktionen";
+  }
+}
+</script>
+
+<style>
+.right {
+  float: right;
+}
+</style>

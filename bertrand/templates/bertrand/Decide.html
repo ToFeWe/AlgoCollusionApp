@@ -6,16 +6,16 @@
 {% endblock %}
 
 {% block content %}
-
-<div class="row">
-  <div class="column-left"> 
-    <b>
-    {% formfield player.price label=label_decide %}
-    </b>
-    <br>
-<p>{% next_button %}</p>
-  </div>
-  <div class="column-right">
+<div class="container">
+  <div class="row">
+		<div class="col-sm">
+		<b>
+		{% formfield player.price label=label_decide %}
+		</b>
+		<br>
+	<p>{% next_button %}</p>
+    </div>
+    <div class="col-sm">
           <div id="calculator">
             <!-- Screen and clear key -->
             <div class="top">
@@ -42,14 +42,16 @@
                 <span class="eval">=</span>
                 <span class="operator">x</span>
             </div>
-        </div>
+    </div>
+  </div>
+</div>
 
   
   </div>
 </div>
 
 
-
+{% include "bertrand/instructions.html" %}
 
 
 {% endblock %}
@@ -73,7 +75,7 @@
   margin: auto;
 
   float: left;
-  width: 20%;
+  width: 30%;
 }
 </style>
 
@@ -82,6 +84,23 @@
 
 
 <script>
+// Timeout for the page 
+setTimeout(
+    function () {
+    document.getElementById('alarm_sound').play();
+    alert("Bitte treffen Sie jetzt Ihre Entscheidung!");
+    },
+    60*1000 // *1000 due to miliseconds
+);
+
+function playSound() {
+	
+  const audio = new Audio();
+  audio.play();
+}
+
+
+// Calculator
 // Get all the keys from document
 var keys = document.querySelectorAll('#calculator span');
 var operators = ['+', '-', 'x', '÷'];

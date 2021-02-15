@@ -18,6 +18,10 @@ class Constants(BaseConstants):
     # num_rounds is only an upper bound but not actually used
     num_rounds = 30
 
+    # Timeouts in seconds
+    timeout_soft = 30
+    timeout_hard = 120
+
     # Define market constants
     maximum_price = 5
     reservation_price = 4
