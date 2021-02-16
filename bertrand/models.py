@@ -262,6 +262,22 @@ class SharedBaseGroup(BaseGroup):
             profit = 0
         return profit
 
+    def get_additional_template_variables(self):
+        """
+        Simple helper method that returns information for the template, which are mainly
+        used in the instructions.
+
+        """
+        n_players = 2 if self.group_treatment in ['2H0A', '1H1A'] else 3
+        group_treatment = self.group_treatment
+        algo_treatment = True if group_treatment not in ['2H0A', '3H0A'] else False
+        return {
+            'algo_treatment': algo_treatment,
+            'group_treatment': group_treatment,
+            'n_players': n_players,
+            'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
+            'show_up': self.session.config['participation_fee']
+        }
 
 class SharedBasePlayer(BasePlayer):
     class Meta:
