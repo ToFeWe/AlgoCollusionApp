@@ -6,7 +6,7 @@ import random
 
 class StartExperiment(Page):
     def is_displayed(self):
-        return self.round_number == 1
+        return (self.round_number == 1) & (not self.participant.vars['is_dropout'])
     
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
@@ -17,14 +17,37 @@ class StartExperiment(Page):
         template_vars.update(additional_template_vars)
         return template_vars
 
+    def get_timeout_seconds(self):
+        return Constants.timeout_hard
+
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
+
 class Decide(Page):
     form_model = 'player'
     form_fields = ['price']
 
     def is_displayed(self):
-        # Only displayed if we still play, e.g. the number of rounds is equal or
-        # below the random raw of round numbers from before
-        return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
+        if self.participant.vars['is_dropout']:
+            
+            # If the player is a dropout, we take the action 
+            # for her/him.
+            self.player.take_action_for_player()
+
+            # Possibly we have not saved to the database in this round
+            # that the player is a dropout given that this is the first 
+            # page after round 1.
+            self.player.record_dropout()
+
+
+            # We do not show the page anymore if the player dropout
+            return False
+        else:
+            # Only displayed if we still play, e.g. the number of rounds is equal or
+            # below the random raw of round numbers from before
+            return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
@@ -38,30 +61,38 @@ class Decide(Page):
         template_vars.update(additional_template_vars)
         return template_vars
 
+    def get_timeout_seconds(self):
+        return Constants.timeout_hard
+
     def before_next_page(self):
-        # Algorithm also decides on its price if there is any
-        # Note that we use the prices from the last period here in
-        # the function and not from this round!
-        if self.group.group_treatment not in ['3H0A', '2H0A']:
-            self.group.set_algo_price()
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
+            self.player.take_action_for_player()
+
 
 class RoundWaitPage(WaitPage):
 
     def is_displayed(self):
-        # Only displayed if we still play, e.g. the number of rounds is equal or
-        # below the random raw of round numbers from before
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def after_all_players_arrive(self):
+        # Algorithm also decides on its price if there is any
+        # Note that we use the prices from the last period in
+        # the method and not from this round!
+        if self.group.group_treatment not in ['3H0A', '2H0A']:
+            self.group.set_algo_price()
+
         # Set the profits for the round
         self.group.calc_round_profit()
 
 class RoundResults(Page):
 
     def is_displayed(self):
-        # Only displayed if we still play, e.g. the number of rounds is equal or
-        # below the random raw of round numbers from before
-        return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
+        if self.participant.vars['is_dropout']:
+            return False
+        else:
+            return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
@@ -75,13 +106,21 @@ class RoundResults(Page):
         template_vars.update(additional_template_vars)
         return template_vars
 
+    def get_timeout_seconds(self):
+        return Constants.timeout_hard
+
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
 
 class EndSG(Page):
 
     def is_displayed(self):
-        # Only displayed in the last round, e.g. the number of rounds is equal 
-        # to the random raw of round numbers from before
-        return self.round_number == self.subsession.this_app_constants()['round_number_draw']
+        if self.participant.vars['is_dropout']:
+            return False
+        else:
+            return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def vars_for_template(self):
         # Set the final payoff for player for the given Super Game
@@ -99,6 +138,13 @@ class EndSG(Page):
         template_vars.update(additional_template_vars)
         return template_vars
 
+    def get_timeout_seconds(self):
+        return Constants.timeout_hard
+
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
         
 
 

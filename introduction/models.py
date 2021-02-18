@@ -42,6 +42,10 @@ class Subsession(BaseSubsession):
                 p.participant.vars['group_treatment'] = self.session.config['group_treatment']
                 p.treatment = self.session.config['group_treatment']
 
+                # We have a participant variable to record if the participant dropped out of 
+                # the experiment, to be able to replace him/her with a bot
+                p.participant.vars['is_dropout'] = False
+
 class Group(BaseGroup):
     pass
 
@@ -50,6 +54,9 @@ class Player(BasePlayer):
 
     treatment = models.StringField()
 
+    # TODO: add it to this app
+    is_dropout = models.BooleanField()
+    
     # Quiz Questions
     q_how_many_customer = models.IntegerField(
         initial=None, 

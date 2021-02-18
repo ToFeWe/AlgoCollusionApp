@@ -20,7 +20,7 @@ class Constants(BaseConstants):
 
     # Timeouts in seconds
     timeout_soft = 30
-    timeout_hard = 120
+    timeout_hard = 10 # TODO Change
 
     # Define market constants
     maximum_price = 5
@@ -136,7 +136,10 @@ class SharedBaseSubsession(BaseSubsession):
             # Also store it for each participant
             if self.round_number == 1:
                 for p in g.get_players():
-                    p.participant.vars['group_treatment'] = self.session.config['group_treatment']
+                    p.participant.vars['group_treatment'] = self.session.config['group_treatment']                     
+
+                    if 'is_dropout' not in p.participant.vars.keys():
+                        p.participant.vars['is_dropout'] = False
 
                     # Init payoff variable for dict to zero at the start of the game
                     sg_counter = self.this_app_constants()['super_game_count']
@@ -279,10 +282,15 @@ class SharedBaseGroup(BaseGroup):
             'show_up': self.session.config['participation_fee']
         }
 
+
 class SharedBasePlayer(BasePlayer):
     class Meta:
         abstract = True
+    
+    # Dropout indicator
+    is_dropout = models.BooleanField()
 
+    # Price chosen by participant
     price = models.IntegerField(
         min=Constants.lowest_price, max=Constants.maximum_price,
         doc="""Price player offers to sell product for"""
@@ -358,6 +366,22 @@ class SharedBasePlayer(BasePlayer):
         """
         key_name = "final_payoff_sg_" + str(sg_counter)
         self.participant.vars[key_name] = final_payoff
+
+    def take_action_for_player(self):
+        """
+        In case a participant drops out of the experiment
+        we need to a default choice for the player, such 
+        that the experiment, with the group matching can
+        progress. This default choice will be the price
+        just below the monopoly price.
+
+        """
+        self.price = Constants.reservation_price - 1 
+
+    def record_dropout(self):
+        """ Small helper function to record that a player dropout"""
+        self.participant.vars['is_dropout'] = True
+        self.is_dropout = True
 
 
 class Subsession(SharedBaseSubsession):

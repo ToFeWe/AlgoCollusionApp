@@ -3,7 +3,10 @@ from ._builtin import Page, WaitPage
 from .models import Constants
 import math
 
-class FinalResults(Page):    
+class FinalResults(Page):
+    def is_displayed(self):
+        return not self.participant.vars['is_dropout']
+
     def vars_for_template(self):
         # Set the payoff as the randomly selected super game
         payed_sg_string = str(self.player.payed_sg)
@@ -39,12 +42,20 @@ class FinalResults(Page):
         }
 
 class Payment(Page):
+    def is_displayed(self):
+        return not self.participant.vars['is_dropout']
+
     def vars_for_template(self):
         return {
             'final_money_with_show_up_and_corona': self.player.final_money_with_show_up_and_corona
         }
 
+class DropOut(Page):
+    def is_displayed(self):
+        return self.participant.vars['is_dropout']
+
 page_sequence = [
     FinalResults,
-    Payment
+    Payment,
+    DropOut
     ]
