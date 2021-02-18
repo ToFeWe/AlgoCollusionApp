@@ -3,7 +3,7 @@ from otree.api import (
     Currency as c, currency_range
 )
 import pickle
-import numpy as np
+import random
 import math
 
 doc = """
@@ -373,10 +373,11 @@ class SharedBasePlayer(BasePlayer):
         we need to a default choice for the player, such 
         that the experiment, with the group matching can
         progress. This default choice will be the price
-        just below the monopoly price.
+        just below the monopoly price with a random error
+        of +/- 1.
 
         """
-        self.price = Constants.reservation_price - 1 
+        self.price = Constants.reservation_price - 1 + random.randint(-1,1) 
 
     def record_dropout(self):
         """ Small helper function to record that a player dropout"""

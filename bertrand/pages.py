@@ -72,11 +72,20 @@ class Decide(Page):
 
 
 class RoundWaitPage(WaitPage):
+    def vars_for_template(self):
+        # Different body text if dropout
+        if self.participant.vars['is_dropout']:
+            return dict(body_text="TODO Du bist ein dropout") #TODO
 
     def is_displayed(self):
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def after_all_players_arrive(self):
+        # TODO: I could check here if the entire group is a dropout
+        # Then I could skip this page as well I guess and would avoid
+        # this ERR_TOO_MANY_REDIRECTS. Not sure if this is actually 
+        # so important tho.
+
         # Algorithm also decides on its price if there is any
         # Note that we use the prices from the last period in
         # the method and not from this round!
@@ -120,7 +129,7 @@ class EndSG(Page):
         if self.participant.vars['is_dropout']:
             return False
         else:
-            return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
+            return self.round_number == self.subsession.this_app_constants()['round_number_draw']
 
     def vars_for_template(self):
         # Set the final payoff for player for the given Super Game
