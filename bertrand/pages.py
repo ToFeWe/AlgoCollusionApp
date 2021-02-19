@@ -6,6 +6,10 @@ import random
 
 class StartExperiment(Page):
     def is_displayed(self):
+        # Saved it to the database if the participant is
+        # a dropout (group and player model).
+        if self.participant.vars['is_dropout']:
+            self.player.record_dropout()
         return (self.round_number == 1) & (not self.participant.vars['is_dropout'])
     
     def vars_for_template(self):
@@ -35,12 +39,6 @@ class Decide(Page):
             # If the player is a dropout, we take the action 
             # for her/him.
             self.player.take_action_for_player()
-
-            # Possibly we have not saved to the database in this round
-            # that the player is a dropout given that this is the first 
-            # page after round 1.
-            self.player.record_dropout()
-
 
             # We do not show the page anymore if the player dropout
             return False

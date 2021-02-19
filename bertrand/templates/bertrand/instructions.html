@@ -1,8 +1,8 @@
 {% load otree %}
 <br>
-<div class="right">
+<p>
   <button type="button" id="instruct_btn" onclick=ShowInstruct()> Zeige Instruktionen </button><br>
-</div>
+</p>
 <p>
 <div id='instruct' class="instructions well well-lg" xmlns="http://www.w3.org/1999/html"
   style="display: none;border-style: solid;">
@@ -201,7 +201,7 @@ setTimeout(
     document.getElementById('alarm_sound').play();
     alert("Bitte treffen Sie jetzt Ihre Entscheidung!");
     },
-    15*1000 // *1000 due to miliseconds //TODO
+    6000*1000 // *1000 due to miliseconds //TODO
 );
 
 function playSound() {
@@ -212,8 +212,3 @@ function playSound() {
 
 </script>
 
-<style>
-  .right {
-    margin-left: auto;
-  }
-</style>

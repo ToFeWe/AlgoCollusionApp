@@ -1,4 +1,4 @@
-{% extends "global/Page.html" %}
+{% extends "bertrand/BertrandPage.html" %}
 {% load otree %}
 
 {% block title %}
@@ -6,16 +6,16 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
+
 	<div class="row">
-		<div class="col-sm">
+		<div class="col">
 			<b>
 			{% formfield player.price label=label_decide %}
 			</b>
 			<br>
 		<p>{% next_button %}</p>
 		</div>
-		<div class="col-sm">
+		<div class="col">
 			<div id="calculator">
 				<!-- Screen and clear key -->
 				<div class="top">
@@ -45,44 +45,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col">
-			{% include "bertrand/instructions.html" %}
-		</div>
-	</div>
-</div>
-
-  
-  </div>
-</div>
-
-
 
 
 {% endblock %}
+
 {% block scripts %}
-<style>
-.transparent {
- text-align: center;
-  width: auto;
-  padding: auto;
-  border: 3px solid gray;
-  margin: auto;
-}
 
-.column-left {
-  float: left;
-  margin: auto;
-
-  width: 70%;
-}
-.column-right {
-  margin: auto;
-
-  float: left;
-  width: 30%;
-}
-</style>
 
 
 <link href="{% static "calculator/calculator.css" %}" rel="stylesheet">

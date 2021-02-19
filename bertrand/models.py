@@ -20,7 +20,7 @@ class Constants(BaseConstants):
 
     # Timeouts in seconds
     timeout_soft = 30
-    timeout_hard = 10 # TODO Change
+    timeout_hard = 15 # TODO Change
 
     # Define market constants
     maximum_price = 5
@@ -176,6 +176,10 @@ class SharedBaseGroup(BaseGroup):
     # Treatment storage
     group_treatment = models.StringField()
 
+    # Record on the group level if there was d dropout
+    # in the group
+    dropout_in_group = models.BooleanField()
+
     def set_algo_price(self):
         """
         
@@ -279,7 +283,8 @@ class SharedBaseGroup(BaseGroup):
             'group_treatment': group_treatment,
             'n_players': n_players,
             'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
-            'show_up': self.session.config['participation_fee']
+            'show_up': self.session.config['participation_fee'],
+            'group_dropout': self.dropout_in_group
         }
 
 
@@ -377,13 +382,14 @@ class SharedBasePlayer(BasePlayer):
         of +/- 1.
 
         """
+        # TODO: Think about this
         self.price = Constants.reservation_price - 1 + random.randint(-1,1) 
 
     def record_dropout(self):
-        """ Small helper function to record that a player dropout"""
+        """ Small helper function to record that a player dropout. """
         self.participant.vars['is_dropout'] = True
         self.is_dropout = True
-
+        self.group.dropout_in_group = True
 
 class Subsession(SharedBaseSubsession):
     pass
