@@ -20,7 +20,7 @@ class Constants(BaseConstants):
 
     # Timeouts in seconds
     timeout_soft = 30
-    timeout_hard = 15 # TODO Change
+    timeout_hard = 1000 # TODO Change
 
     # Define market constants
     maximum_price = 5
@@ -399,8 +399,8 @@ class Subsession(SharedBaseSubsession):
         
         """
         # The number of rounds we have drawn ex ante according to some cont prob
-        return {'round_number_draw': 11,
-                # 'round_number_draw': 1, # for testing TODO: Remove
+        return {#'round_number_draw': 11, #TODO Change
+                'round_number_draw': 2, # for testing TODO: Remove
                 'super_game_count': 1,
                 'group_shuffle_by_size': {
                     3: {'shuffle_structure_small': [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
