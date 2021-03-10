@@ -2,6 +2,7 @@ from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
 )
+from bertrand.models import Constants as ConstantsBertrand
 
 
 author = 'Tobias Werner'
@@ -16,15 +17,12 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 1
 
-
-    maximum_price = 5
-    reservation_price = 4
-    stage_game_NE = 1
-    lowest_price = 0 
-
-    
-    # Number of consumers
-    m_consumer = 60
+    # Load constants from main app
+    maximum_price = ConstantsBertrand.maximum_price
+    reservation_price = ConstantsBertrand.reservation_price
+    stage_game_NE = ConstantsBertrand.stage_game_NE
+    lowest_price = ConstantsBertrand.lowest_price
+    m_consumer = ConstantsBertrand.m_consumer
 
     error_message_form_field = ('Ihre Antwort war leider nicht korrekt.' +
                                 ' Bitte überlegen Sie noch einmal und lesen bei' +
@@ -40,15 +38,30 @@ class Subsession(BaseSubsession):
                 # Save treatment in participant vars for future apps and also in formfield for
                 # analysis.
                 p.participant.vars['group_treatment'] = self.session.config['group_treatment']
-                p.treatment = self.session.config['group_treatment']
-
+                p.group.group_treatment = self.session.config['group_treatment']
                 # We have a participant variable to record if the participant dropped out of 
                 # the experiment, to be able to replace him/her with a bot
                 p.participant.vars['is_dropout'] = False
 
 class Group(BaseGroup):
-    pass
+    group_treatment = models.StringField()
 
+    def get_additional_template_variables(self):
+        """
+        Simple helper method that returns information for the template, which are mainly
+        used in the instructions.
+
+        """
+        n_players = 2 if self.group_treatment in ['2H0A', '1H1A'] else 3
+        group_treatment = self.group_treatment
+        algo_treatment = True if group_treatment not in ['2H0A', '3H0A'] else False
+        return {
+            'algo_treatment': algo_treatment,
+            'group_treatment': group_treatment,
+            'n_players': n_players,
+            'exchange_rate': 1 / self.session.config['real_world_currency_per_point'],
+            'show_up': self.session.config['participation_fee']
+        }
 
 class Player(BasePlayer):
 

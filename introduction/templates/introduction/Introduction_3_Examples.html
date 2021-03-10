@@ -1,0 +1,13 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block content %}
+
+    {% if n_players == 2%}
+      {% include "bertrand/examples_2_firms.html" %}
+    {% else %}
+      {% include "bertrand/examples_3_firms.html" %}
+    {% endif %}
+
+{% next_button %}
+{% endblock %}

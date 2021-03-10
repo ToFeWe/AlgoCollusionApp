@@ -4,78 +4,79 @@ from .models import Constants
 
 import math
 
-class Introduction_1(Page):
-    def is_displayed(self):
-        return self.round_number == 1
+class Introduction_1_Welcome(Page):
+    def vars_for_template(self):
+        additional_template_vars = self.group.get_additional_template_variables()
 
-class Introduction_2(Page):
+        return additional_template_vars
+
+class Introduction_2_Main(Page):
+    def vars_for_template(self):
+        additional_template_vars = self.group.get_additional_template_variables()
+
+        return additional_template_vars
+
+class Introduction_3_Examples(Page):
+    def vars_for_template(self):
+        additional_template_vars = self.group.get_additional_template_variables()
+
+        return additional_template_vars
+
+class Introduction_4_Algos(Page):
     def is_displayed(self):
-        return self.round_number == 1
+        return self.group.group_treatment not in ['2H0A', '3H0A']
 
     def vars_for_template(self):
-        exchange_rate = 1 / self.session.config['real_world_currency_per_point']
-        coins_in_euro = 465 / exchange_rate
+        additional_template_vars = self.group.get_additional_template_variables()
 
-        return {
-            'exchange_rate': int(exchange_rate), # Int to avoid comma
-            'show_up_fee': self.session.config['participation_fee'],
-            'coins_in_euro': coins_in_euro,
-            'coins_in_euro_rounded': math.ceil(coins_in_euro * 10) / 10 # Round up first decimal digit
-        }
+        return additional_template_vars
 
-class Introduction_3(Page):
-    def is_displayed(self):
-        return self.round_number == 1
-
-class Introduction_4(Page):
-    def is_displayed(self):
-        return self.round_number == 1
-        
+class Introduction_5_Procedure(Page):
     def vars_for_template(self):
-        return {
-            'show_up_fee': self.session.config['participation_fee']
-        }
+        additional_template_vars = self.group.get_additional_template_variables()
 
-class Quiz(Page):
-    form_model = 'player'
-    form_fields =  ['q_how_many_customer',
-                    'q_after_fixed_round',
-                    'q_profit_1',
-                    'q_profit_2',
-                    'q_profit_3']
+        return additional_template_vars
+
+# class Quiz(Page):
+#     form_model = 'player'
+#     form_fields =  ['q_how_many_customer',
+#                     'q_after_fixed_round',
+#                     'q_profit_1',
+#                     'q_profit_2',
+#                     'q_profit_3']
     
-    def is_displayed(self):
-        return self.round_number == 1
+#     def is_displayed(self):
+#         return self.round_number == 1
 
-    def vars_for_template(self):
-        # Group treatment stored in participant.vars of
-        # first group member.
-        treatment =  self.participant.vars['group_treatment']
+#     def vars_for_template(self):
+#         # Group treatment stored in participant.vars of
+#         # first group member.
+#         treatment =  self.participant.vars['group_treatment']
         
-        # Make label treatment specific
-        if treatment in ['1H1A', '2H0A']:
-            label_profit_1 = ('Sie sind Firma A und wählen einen Preis von 1, Firma B wählt einen Preis von 2.',
-                              ' Was ist Ihr Gewinn in Talern in dieser Runde?')
-            label_profit_2 = ('Sie sind Firma A und wählen einen Preis von 3, Firma B wählt einen Preis von 3.',
-                              ' Was ist Ihr Gewinn in Talern in dieser Runde?')
+#         # Make label treatment specific
+#         if treatment in ['1H1A', '2H0A']:
+#             label_profit_1 = ('Sie sind Firma A und wählen einen Preis von 1, Firma B wählt einen Preis von 2.',
+#                               ' Was ist Ihr Gewinn in Talern in dieser Runde?')
+#             label_profit_2 = ('Sie sind Firma A und wählen einen Preis von 3, Firma B wählt einen Preis von 3.',
+#                               ' Was ist Ihr Gewinn in Talern in dieser Runde?')
 
-        else:
-            label_profit_1 = ('Sie sind Firma A und wählen einen Preis von 1, Firma B wählt einen Preis von 2,' +
-                             ' Firma C wählt einen Preis von 3. Was ist Ihr Gewinn in Talern in dieser Runde?')
-            label_profit_2 = ('Sie sind Firma A und wählen einen Preis von 3, Firma B wählt einen Preis von 3,' +
-                              ' Firma C wählt einen Preis von 3. Was ist Ihr Gewinn in Talern in dieser Runde?')
+#         else:
+#             label_profit_1 = ('Sie sind Firma A und wählen einen Preis von 1, Firma B wählt einen Preis von 2,' +
+#                              ' Firma C wählt einen Preis von 3. Was ist Ihr Gewinn in Talern in dieser Runde?')
+#             label_profit_2 = ('Sie sind Firma A und wählen einen Preis von 3, Firma B wählt einen Preis von 3,' +
+#                               ' Firma C wählt einen Preis von 3. Was ist Ihr Gewinn in Talern in dieser Runde?')
 
-        return {
-            'treatment': treatment,
-            'label_profit_1': label_profit_1,
-            'label_profit_2': label_profit_2
-        }
+#         return {
+#             'treatment': treatment,
+#             'label_profit_1': label_profit_1,
+#             'label_profit_2': label_profit_2
+#         }
 
 
 page_sequence = [
-    Introduction_1,
-    Introduction_2,
-    Introduction_3,
-    Introduction_4,
-    Quiz,
+    Introduction_1_Welcome,
+    Introduction_2_Main,
+    Introduction_3_Examples,
+    Introduction_4_Algos,
+    Introduction_5_Procedure,
 ]

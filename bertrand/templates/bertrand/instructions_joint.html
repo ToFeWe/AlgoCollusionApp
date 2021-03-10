@@ -1,0 +1,63 @@
+{% load otree %}
+<br>
+<p>
+  <button type="button" id="instruct_btn" onclick=ShowInstruct()> Zeige Instruktionen </button><br>
+</p>
+<p>
+  <div id='instruct' class="instructions well well-lg" xmlns="http://www.w3.org/1999/html"
+    style="display: none;border-style: solid;">
+
+    {% include "bertrand/instructions_note.html" %}
+
+    {% include "bertrand/instructions_main.html" %}
+
+
+    {% if n_players == 2%}
+      {% include "bertrand/examples_2_firms.html" %}
+    {% else %}
+      {% include "bertrand/examples_3_firms.html" %}
+    {% endif %}
+
+    {% if algo_treatment %}
+      {% include "bertrand/instructions_algo.html" %}
+    {% endif %}
+    
+    {% include "bertrand/instructions_procedure.html" %}
+
+  </div>
+</p>
+
+<audio id="alarm_sound" src="{% static "alarm_sound.wav" %}" preload="auto"></audio>
+
+<script>
+  // Show/Hide Instructions
+  function ShowInstruct() {
+    var instruct = document.getElementById("instruct");
+    var btn = document.getElementById("instruct_btn");
+
+    if (instruct.style.display === "none") {
+      instruct.style.display = "block";
+      btn.innerHTML = "Verstecke Instruktionen";
+    } else {
+      instruct.style.display = "none";
+      btn.innerHTML = "Zeige Instruktionen";
+    }
+  }
+
+// Timeout for the page 
+setTimeout(
+    function () {
+    document.getElementById('alarm_sound').play();
+    alert("Bitte treffen Sie jetzt Ihre Entscheidung!");
+    },
+    6000*1000 // *1000 due to miliseconds //TODO
+);
+
+function playSound() {
+	
+  const audio = new Audio();
+  audio.play();
+}
+
+</script>
+

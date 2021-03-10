@@ -1,0 +1,73 @@
+{% load otree %}
+
+  <h3> Instrukionen </h3>
+  <p>
+    In diesem Experiment treffen Sie wiederholt Preisentscheidungen. Diese ermöglichen es Ihnen echtes Geld zu
+    verdienen.
+    Wie viel Sie verdienen ist abhängig von Ihren Entscheidungen und denen der anderen Teilnehmerinnen und Teilnehmer.
+    <b>Unabhängig davon erhalten Sie {{show_up|floatformat:2}} Euro für die Teilnahme.</b><br>
+  </p>
+  <p>
+    Im Experiment verwenden wir eine fiktive Geldeinheit namens Taler.
+    Im Anschluss an das Experiment werden die Taler in Euro umgerechnet und Ihnen ausgezahlt.
+    <b>Dabei entsprechen 100 Taler einem Euro.</b> Die Euro-Beträge werden auf die erste
+    Nachkommastelle gerundet.
+  </p>
+  <p>
+    <b>Beispiel:</b> Teilnehmer A hat im Experiment 465 Taler verdient. Umgerechnet entspricht das 4,65 Euro.
+    Auf die erste Nachkommastelle gerundet werden Teilnehmer A 4,70 Euro ausgezahlt.<br>
+  </p>
+  <p>
+    In diesem Experiment repräsentieren Sie eine Firma in einem virtuellen Produktmarkt.
+    {% if n_players == 2%}
+    In jedem Markt verkauft eine weitere Firma das gleiche Produkt wie Sie.
+    Diese Firma wird von einer anderen Experimentteilnehmerinnen bzw. einem Experimentteilnehmer repräsentiert.
+    {% else %}
+    In jedem Markt verkaufen zwei weitere Firmen das gleiche Produkt wie Sie.
+    Diese Firmen werden von zwei anderen Experimentteilnehmerinnen bzw. Experiment-Teilnehmer repräsentiert
+    {% endif %}
+    Alle Firmen bieten 60 Einheiten des vergleichbaren Produktes an.
+    Bei der Produktion des Produktes entstehen für die Firma keine Kosten.
+    Das Spiel hat mehrere Runden, wobei die genau Anzahl durch einen Zufallsmechanismus entschieden wird.
+    Sie spielen das Spiel für drei Durchgänge.
+    {% if n_players == 2%}
+    Sie treffen in jeder Runde eines Durchgangs auf dieselbe Firma (also eine Experimentteilnehmerin bzw. einen Experimentteilnehmer).
+    Die andere Firma in Ihrem Markt ändert sich jedoch nach jedem Durchgang.
+    {% else %}
+    Sie treffen in jeder Runde eines Durchgangs auf dieselben Firmen (also Experiment-Teilnehmerinnen bzw. Experimentteilnehmer).
+    Die Firmen in Ihrem Markt ändern sich jedoch nach jedem Durchgang.
+    {% endif %}
+  </p>
+
+  <p>
+    Der Markt hat {{Constants.m_consumer}} identische Kunden.
+    Jeder Kunde möchte in jeder Runde eines Durchgangs <b>eine Einheit</b> des Produkts möglichst günstig kaufen.
+    Jeder Kunde ist bereit maximal <b>{{Constants.reservation_price}} Taler</b> für diese Einheit des Produkts
+    auszugeben.
+  </p>
+  <p>
+    Alle Firmen entscheiden in jeder Runde erneut <b>gleichzeitig</b>, für wie viele Taler Sie Ihr Produkt verkaufen
+    möchten.
+    Sie können Ihr Produkt für einen Preis von {{Constants.lowest_price}}, 1, … oder {{Constants.maximum_price}} Taler
+    verkaufen
+    (nur ganze Taler). Ihr Gewinn ist der Preis multipliziert mit der Anzahl an verkauften Einheiten.
+    Formal ausgedrückt:
+  </p>
+  <p>
+    <center><b>Gewinn = Preis x verkaufte Einheiten</b></center>
+  </p>
+  <p>
+  Die Firma mit dem <b>niedrigsten Preis in der jeweiligen Runde</b> verkauft Ihre Produkte,
+  solange der Preis nicht größer als 4 Taler ist. Firmen mit einem höheren Preis verkaufen ihr Produkt nicht.
+  <b>Der niedrigste Preis ist der Marktpreis in der jeweiligen Runde.</b> Firmen mit einem <b>Preis, der größer als der
+    Marktpreis ist,
+    verkaufen Ihre Produkte in der jeweiligen Runde nicht.</b> 
+  {% if n_players == 2%}
+  Sollten beide Firmen Ihre Produkte für den gleichen Marktpreis
+  verkaufen wollen, teilt sich die Nachfrage gleichmäßig auf die zwei Firmen auf.
+  {% else %}
+  Sollten zwei oder alle drei Firmen Ihre Produkte für den gleichen Marktpreis
+  verkaufen wollen, teilt sich die Nachfrage gleichmäßig auf die zwei bzw. drei Firmen auf.
+  {% endif %}
+
+  </p>

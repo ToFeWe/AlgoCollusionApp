@@ -1,0 +1,39 @@
+{% load otree %}
+
+    <h3>Ablauf des Experiments</h3>
+    <p>
+      Nach jeder Runde werden alle Firmen über die gewählten Preise aller Firmen und ihren eigenen Gewinn informiert.
+      In der nächsten Runde hat jede Firma wieder die Möglichkeit ihren Preis neu zu wählen.
+      Sie interagieren in jeder Runde innerhalb eines Durchgangs mit 
+      {% if n_players == 2%}
+      derselben Teilnehmerin bzw. demselben Teilnehmer.
+      {% else %}
+      mit denselben Teilnehmern bzw. Teilnehmerinnen.
+      {% endif %}
+    </p>
+    <p>
+      Nach jeder Runde entscheidet ein Zufallsmechanismus, ob eine weitere Runde gespielt wird oder der Durchgang endet.
+      Die Wahrscheinlichkeit, dass eine weitere Periode gespielt wird, liegt bei 95 %.
+      Der Durchgang endet also nach jeder Runde mit einer Wahrscheinlichkeit von 5 %.
+      Der Durchgang wir so lange fortgesetzt, bis der Zufall das Ende bestimmt.
+    </p>
+    <p>
+      Bildlich gesprochen wirft der Computer vor jeder möglichen weiteren Runde einen virtuellen Würfel mit 20 Seiten.
+      Das Ergebnis entscheidet, ob eine weitere Runde gespielt wird oder nicht.
+      Bei einer Zahl von 20 ist der Durchgang vorbei, bei allen anderen Zahlen wird eine weitere Runde gespielt.
+    </p>
+    <p>
+      <b>Beachten Sie:</b><br>
+      <b>Sie spielen das beschriebene Spiel insgesamt für drei Durchgänge.</b>
+      {% if n_players == 2 %}
+      Nach jedem Durchgang werden sie mit einer/einem anderen Teilnehmer:in zu einem neuen Markt zusammengesetzt.
+      {% else %}
+      Nach jedem Durchgang werden sie mit anderen Teilnehmer:innen zu einem neuen Markt zusammengesetzt. 
+      {% endif %}
+      Das bedeutet, dass Sie in jedem der drei Durchgänge mit anderen Teilnehmer:innen interagieren.
+    </p>
+    <p>
+      <b>Nachdem alle Durchgänge beendet sind, wird zufällig entschieden, welcher der drei Durchgänge ausgezahlt wird.</b>
+      Diesen Gewinn erhalten Sie im Anschluss an das Experiment.
+      Außerdem erhalten Sie zusätzlich {{show_up|floatformat:2}} Euro für die Teilnahme an diesem Experiment.
+    </p>

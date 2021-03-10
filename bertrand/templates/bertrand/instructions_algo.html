@@ -1,0 +1,39 @@
+{% load otree %}
+
+    <h3>Marktentscheidungen durch Algorithmen</h3>
+    {% if group_treatment == '2H1A' %}
+    <p>
+      In ihren Märkten entscheiden zwei Teilnehmerinnen und Teilnehmer selbst, für welchen Preis sie das Produkt ihrer
+      Firma verkaufen wollen und bekommen den Gewinn, den ihre Firma macht, am Ende des Experiments ausgezahlt.
+    </p>
+    {% else %}
+    <p>
+      In ihren Märkten entscheidet eine Teilnehmerin bzw. ein Teilnehmer selbst, für welchen Preis sie/er das Produkt
+      ihrer/seiner Firma verkaufen will und bekommt den Gewinn, den die Firma macht, am Ende des Experiments ausgezahlt. 
+    </p>
+    {% endif %}
+    
+    {% if group_treatment == '1H2A' %}
+      <p>
+        <b>
+        Firma B und C werden in allen Runden mit einem Algorithmus ausgestattet sein, welcher die erforderlichen Preisentscheidungen
+        für die Teilnehmer oder die Teilnehmerinnen übernimmt.
+        </b>
+        In diesem Fall treffen die Teilnehmerinnen oder die Teilnehmer keine Entscheidungen,
+        <b>bekommen aber dennoch den Gewinn, den ihre Firmen machen,</b> ausgezahlt.
+      </p>
+    {% else %}
+      <p>
+        <b>
+        {% if group_treatment == '2H1A' %}
+        Firma C 
+        {% elif group_treatment == '1H1A' %}
+        Firma B
+        {% endif %}
+        wird in allen Runden mit einem Algorithmus ausgestattet sein, welcher die erforderlichen Preisentscheidungen
+        für den Teilnehmer oder die Teilnehmerin übernimmt.
+        </b>
+        In diesem Fall trifft die Teilnehmerin oder der Teilnehmer keine Entscheidungen,
+        <b>bekommt aber dennoch den Gewinn, den ihre/seine Firma macht,</b> ausgezahlt.
+      </p>
+    {% endif %}
