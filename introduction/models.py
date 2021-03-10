@@ -68,6 +68,7 @@ class Player(BasePlayer):
     treatment = models.StringField()
 
     # TODO: add it to this app
+    # TODO: Or maybe I dont need it in the instructions?
     is_dropout = models.BooleanField()
     
     # Quiz Questions
@@ -84,8 +85,8 @@ class Player(BasePlayer):
     )
 
     q_consumer_wtp = models.IntegerField(initial=None,
-    label="Was ist der maximale Preis, den die Kunden bereit sind für das Produkt zu zahlen?")
-
+        label="Was ist der maximale Preis, den die Kunden bereit sind für das Produkt zu zahlen?")
+    
     q_profit_1 = models.IntegerField(
         initial=None
         # Note: Made treatment specific directly in the template
@@ -113,6 +114,19 @@ class Player(BasePlayer):
     counter_q_profit_2 = models.IntegerField(initial = 0)
     counter_q_profit_3 = models.IntegerField(initial = 0)
     
+    # Evaluation if some questions have been answered incorrect three times
+    # In this case I will show the correct answers to the participants.
+    three_times_wrong = models.BooleanField(initial=False)
+
+    def check_three_times_wrong(self):
+        all_values = [self.counter_how_many_customer,
+                      self.counter_after_fixed_round,
+                      self.counter_consumer_wtp,
+                      self.counter_q_profit_1,
+                      self.counter_q_profit_2,
+                      self.counter_q_profit_3]
+
+        self.three_times_wrong = any(v >= 3 for v in all_values)
 
     # Error evaluation of form fields
     def q_how_many_customer_error_message(self, value):
@@ -120,30 +134,50 @@ class Player(BasePlayer):
             # Count +1 if the player answered the question wrong
             self.counter_how_many_customer += 1
             self.q_after_fixed_round
-            return Constants.error_message_form_field
+
+            # If less than three times wrong, show error message
+            # Else we skip the page.
+            self.check_three_times_wrong()
+            if not self.three_times_wrong:
+                return Constants.error_message_form_field
 
     def q_after_fixed_round_error_message(self, value):
         if value != '95%':
             # Count +1 if the player answered the question wrong
             self.counter_after_fixed_round += 1
-            return Constants.error_message_form_field
+
+            # If less than three times wrong, show error message
+            # Else we skip the page.
+            self.check_three_times_wrong()
+            if not self.three_times_wrong:
+                return Constants.error_message_form_field
 
     def q_consumer_wtp_error_message(self, value):
         if value != Constants.reservation_price:
             self.counter_consumer_wtp += 1
-            return Constants.error_message_form_field
+
+            # If less than three times wrong, show error message
+            # Else we skip the page.
+            self.check_three_times_wrong()
+            if not self.three_times_wrong:
+                return Constants.error_message_form_field
 
 
     def q_profit_1_error_message(self, value):
         if value != 60:
             # Count +1 if the player answered the question wrong
             self.counter_q_profit_1 += 1
-            return Constants.error_message_form_field
+
+            # If less than three times wrong, show error message
+            # Else we skip the page.
+            self.check_three_times_wrong()
+            if not self.three_times_wrong:
+                return Constants.error_message_form_field
 
     def q_profit_2_error_message(self, value):
         # The correct answer here depends on the number of firms in the market
         # which is different for different treatments.
-        if self.session.config['group_treatment'] in ['1H1A', '2H0A']:
+        if self.group.group_treatment in ['1H1A', '2H0A']:
             # 60 * 3 / 2 = 90
             correct_answer = 90
         else:
@@ -152,11 +186,20 @@ class Player(BasePlayer):
         if value != correct_answer:
             # Count +1 if the player answered the question wrong
             self.counter_q_profit_2 += 1
-            return Constants.error_message_form_field
+
+            # If less than three times wrong, show error message
+            # Else we skip the page.
+            self.check_three_times_wrong()
+            if not self.three_times_wrong:
+                return Constants.error_message_form_field
 
     def q_profit_3_error_message(self, value):
         correct_answer = round(650 * self.session.config['real_world_currency_per_point'], 1)
         if value != correct_answer:
             # Count +1 if the player answered the question wrong
             self.counter_q_profit_3 += 1
-            return Constants.error_message_form_field
+            # If less than three times wrong, show error message
+            # Else we skip the page.
+            self.check_three_times_wrong()
+            if not self.three_times_wrong:
+                return Constants.error_message_form_field

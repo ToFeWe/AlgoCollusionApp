@@ -1,0 +1,150 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}Antworten auf die Verständnisfragen{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col alert alert-danger"> 
+	<b>Beachten Sie: Sie haben mindestens eine Frage falsch beantwortet.</b><br>
+	Sie sehen unten die richtigen Antworten zu den Fragen, die Sie falsch beantwortet
+	haben. Bitte lesen Sie sich diese gute durch und schauen Sie bei Bedarf erneut
+	in die Instruktionen. Sollten Sie irgendwelche Fragen haben,
+	melden Sie sich mit Hilfe der Chatfunktion in der Webex-Konferenz
+	beim Administrator.<br><br>
+	<p>
+	<b> Sobald sie die Antworten gelesen haben, klicken Sie bitte auf "Weiter".</b>
+	</p>
+  </div>
+</div>
+
+{% if player.counter_how_many_customer == 3 %}
+<div class="row">
+  <div class="col alert alert-secondary"> 
+	<p>
+	<b>Frage 1: Wie viele Kunden gibt es im Markt, die das Produkt kaufen wollen?</b>
+	</p>
+	<p>
+	<b>Antwort: </b>Der Markt hat 60 identische Kunden.
+	Jeder Kunde möchte in jeder Runde eines Durchgangs eine Einheit des Produkts 
+	möglichst günstig kaufen.
+	</p>
+  </div>
+</div>
+{% endif %}
+{% if player.counter_after_fixed_round == 3 %}
+
+<div class="row">
+  <div class="col alert alert-secondary"> 
+	<p>
+	<b>Frage 2: Was ist die Wahrscheinlichkeit, dass nach Abschluss einer Periode eine weitere gespielt wird?</b>
+	</p>
+	<p>
+	<b>Antwort: </b>Nach jeder Runde entscheidet ein Zufallsmechanismus,
+	 ob eine weitere Runde gespielt wird oder der Durchgang endet.
+	 Die Wahrscheinlichkeit, dass eine weitere Periode gespielt wird, liegt bei 95 %.
+	 Der Durchgang endet also nach jeder Runde mit einer Wahrscheinlichkeit von 5 %.
+	 Der Durchgang wir so lange fortgesetzt, bis der Zufall das Ende bestimmt.
+	</p>
+  </div>
+</div>
+{% endif %}
+
+{% if player.counter_consumer_wtp == 3 %}
+<div class="row">
+  <div class="col alert alert-secondary"> 
+	<p>
+	<b>Frage 3: Was ist der maximale Preis, den die Kunden bereit sind für das Produkt zu zahlen?</b>
+	</p>
+	<p>
+	<b>Antwort: </b>Jeder Kunde ist bereit maximal 4 Taler für diese Einheit des Produkts auszugeben.
+	</p>
+  </div>
+</div>
+{% endif %}
+
+{% if player.counter_q_profit_1 == 3 %}
+<div class="row">
+  <div class="col alert alert-secondary"> 
+	<p>
+	<b>Frage 4: 
+	{% if n_players == 2%}
+	  Sie sind Firma A und wählen einen Preis von 1,
+	  Firma B wählt einen Preis von 2. Was ist Ihr Gewinn in Talern in 
+	  dieser Runde?
+	{% else %}
+      Sie sind Firma A und wählen einen Preis von 1,
+	  Firma B wählt einen Preis von 2, Firma C wählt einen Preis
+	  von 3. Was ist Ihr Gewinn in Talern in dieser Runde?
+	{% endif %}
+	</b>
+	</p>
+	<p>
+	<b>Antwort: </b>
+	Sie sind Firma A und haben alleinig den niedrigsten Preis gewählt.
+	Alle Kunden kaufen das Produkt bei Ihnen zu einem Preis von 1 Taler.
+	Ihr Gewinn ist daher: <br>
+	<center>
+	1 Taler x 60 Kunden = 60 Taler
+	</center>
+	</p>
+  </div>
+</div>
+{% endif %}
+
+{% if player.counter_q_profit_2 == 3 %}
+<div class="row">
+  <div class="col alert alert-secondary"> 
+	<p>
+	<b>Frage 5: 
+	{% if n_players == 2%}
+	  Sie sind Firma A und wählen einen Preis von 3,
+	  Firma B wählt einen Preis von 3. Was ist Ihr Gewinn
+	  in Talern in dieser Runde?
+	{% else %}
+	  Sie sind Firma A und wählen einen Preis von 3, 
+	  Firma B wählt einen Preis von 3, Firma C wählt
+	  einen Preis von 3. Was ist Ihr Gewinn in Talern in dieser Runde?
+	{% endif %}
+	</b>
+	</p>
+	<p>
+	<b>Antwort: </b>
+	{% if n_players == 2%}
+	  Beide Firmen im Markt haben den gleichen Preis gewählt und verkaufen 
+	  die gleiche Anzahl an Produkten (60 Kunden / 2 Firmen = 30). 
+	  Ihr Gewinn ist daher: <br>
+	  <center>
+	    3 Taler x 30 Kunden = 90 Taler
+	  </center>
+	{% else %}
+	  Alle drei Firmen im Markt haben den gleichen Preis gewählt und verkaufen 
+	  die gleiche Anzahl an Produkten (60 Kunden / 3 Firmen = 20). 
+	  Ihr Gewinn ist daher: <br>
+	  <center>
+	    3 Taler x 20 Kunden = 60 Taler
+	  </center>	
+	{% endif %}
+	</p>
+  </div>
+</div>
+{% endif %}
+
+{% if player.counter_q_profit_3 == 3 %}
+<div class="row">
+  <div class="col alert alert-secondary"> 
+	<p>
+	<b>Frage 6: Sie haben einen Gewinn von 650 Talern, was ist Ihr Gewinn in Euro?
+	</b>
+	</p>
+	<p>
+	<b>Antwort: </b>
+	100 Taler entsprechen einem Euro. Ihr Gewinn in Euro ist also:<br>
+  	<center>
+	    650  / 100 = 6,50 Euro
+	</center>	
+	</p>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
