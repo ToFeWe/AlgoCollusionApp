@@ -32,7 +32,7 @@ class Constants(BaseConstants):
     #timeout_hard = 7 * 60 # After 7 minutes auto-submitted
     timeout_soft = 10
     timeout_hard = 20
-    
+
     timeout_text = ConstantsBertrand.timeout_text
 
 
@@ -51,6 +51,7 @@ class Subsession(BaseSubsession):
                 # analysis.
                 p.participant.vars['group_treatment'] = self.session.config['group_treatment']
                 p.group.group_treatment = self.session.config['group_treatment']
+                
                 # We have a participant variable to record if the participant dropped out of 
                 # the experiment, to be able to replace him/her with a bot
                 p.participant.vars['is_dropout'] = False
@@ -79,10 +80,13 @@ class Player(BasePlayer):
 
     treatment = models.StringField()
 
-    # TODO: add it to this app
-    # TODO: Or maybe I dont need it in the instructions?
     is_dropout = models.BooleanField()
-    
+
+    def record_dropout(self):
+        """ Small helper function to record that a player dropout. """
+        self.participant.vars['is_dropout'] = True
+        self.is_dropout = True
+
     # Quiz Questions
     q_how_many_customer = models.IntegerField(
         initial=None, 

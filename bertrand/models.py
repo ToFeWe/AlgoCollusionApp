@@ -139,6 +139,8 @@ class SharedBaseSubsession(BaseSubsession):
                 for p in g.get_players():
                     p.participant.vars['group_treatment'] = self.session.config['group_treatment']                     
 
+                    # Check if the dropout variable has been added already in the intro app
+                    # else add it.
                     if 'is_dropout' not in p.participant.vars.keys():
                         p.participant.vars['is_dropout'] = False
 

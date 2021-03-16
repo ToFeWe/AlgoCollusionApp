@@ -10,7 +10,8 @@ class StartExperiment(Page):
 
     def is_displayed(self):
         # Saved it to the database if the participant is
-        # a dropout (group and player model).
+        # a dropout at the beginning of the round.
+        # Note that we save it here to player and group model.
         if self.participant.vars['is_dropout']:
             self.player.record_dropout()
         return (self.round_number == 1) & (not self.participant.vars['is_dropout'])
@@ -39,7 +40,7 @@ class Decide(Page):
     def is_displayed(self):
         if self.participant.vars['is_dropout']:
             
-            # If the player is a dropout, we take the action 
+            # If the player was already a dropout, we take the action 
             # for her/him.
             self.player.take_action_for_player()
 
@@ -65,6 +66,7 @@ class Decide(Page):
     def before_next_page(self):
         timeout_happened = self.timeout_happened
         if timeout_happened:
+            # Take action for player if she dropped out on this page
             self.player.record_dropout()
             self.player.take_action_for_player()
 
@@ -158,5 +160,7 @@ page_sequence = [
     Decide,
     RoundWaitPage,
     RoundResults,
-    EndSG
+    EndSG,
+    # TODO: Add page here already without next button to "catch" dropouts
+    # This avoid this too many referrals 
 ]

@@ -13,44 +13,82 @@ class Introduction_1_Welcome(Page):
 
         return additional_template_vars
 
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
+
 class Introduction_2_Main(Page):
     timeout_seconds = Constants.timeout_hard
     timer_text = Constants.timeout_text
+
+    def is_displayed(self):
+        return not self.participant.vars['is_dropout']
 
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
 
         return additional_template_vars
+
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
 
 class Introduction_3_Examples(Page):
     timeout_seconds = Constants.timeout_hard
     timer_text = Constants.timeout_text
 
+    def is_displayed(self):
+        return not self.participant.vars['is_dropout']
+
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
 
         return additional_template_vars
+
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
+
 
 class Introduction_4_Algos(Page):
     timeout_seconds = Constants.timeout_hard
     timer_text = Constants.timeout_text
-
+    
     def is_displayed(self):
-        return self.group.group_treatment not in ['2H0A', '3H0A']
+        if self.participant.vars['is_dropout']:
+            return False
+        else:
+            return self.group.group_treatment not in ['2H0A', '3H0A']
 
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
 
         return additional_template_vars
+
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
 
 class Introduction_5_Procedure(Page):
     timeout_seconds = Constants.timeout_hard
     timer_text = Constants.timeout_text
 
+    def is_displayed(self):
+        return not self.participant.vars['is_dropout']
+
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
 
         return additional_template_vars
+
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
 
 class Quiz(Page):
     timeout_seconds = Constants.timeout_hard
@@ -63,6 +101,10 @@ class Quiz(Page):
                     'q_profit_1',
                     'q_profit_2',
                     'q_profit_3']
+
+    def is_displayed(self):
+        # TODO: Add defaults to DB for quiz? I dont need it I guess
+        return not self.participant.vars['is_dropout']
 
     def vars_for_template(self):
         treatment =  self.group.group_treatment
@@ -91,18 +133,32 @@ class Quiz(Page):
         
         return context
 
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
+
+
 class Quiz_results(Page):
     timeout_seconds = Constants.timeout_hard
     timer_text = Constants.timeout_text
 
-    def is_displayed(self):
-        # Only show the review page if the participant had stuff wrong
-        return self.player.three_times_wrong
+    def is_displayed(self):    
+        if self.participant.vars['is_dropout']:
+            return False
+        else:
+            # Only show the review page if the participant had stuff wrong
+            return self.player.three_times_wrong
 
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
 
         return additional_template_vars
+
+    def before_next_page(self):
+        timeout_happened = self.timeout_happened
+        if timeout_happened:
+            self.player.record_dropout()
 
 page_sequence = [
     Introduction_1_Welcome,
