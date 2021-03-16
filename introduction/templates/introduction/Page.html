@@ -1,0 +1,36 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block app_styles %}
+    <style>
+        .otree-timer {
+        display: none;
+    }
+
+    </style>
+{% endblock %}
+
+{% block app_scripts %}
+{# Alarm sounds for the timer #}
+<audio id="alarm_sound" src="{% static "alarm_sound.wav" %}" preload="auto"></audio>
+
+<script>
+    // Soft sound warning for timeout  
+    setTimeout(
+        function () {
+        document.getElementById('alarm_sound').play();
+        },
+        {{Constants.timeout_soft|json}}*1000 // *1000 due to miliseconds
+    );
+
+    // Show timeout if we passed the soft audio timeout
+    $(function () {
+        $('.otree-timer__time-left').on('update.countdown', function (event) {
+            if (event.offset.totalSeconds <= {{Constants.timeout_soft|json}}) {
+                $('.otree-timer').show();
+            }
+        });
+    });
+
+</script>
+{% endblock %}

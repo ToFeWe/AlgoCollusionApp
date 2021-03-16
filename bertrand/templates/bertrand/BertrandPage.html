@@ -39,10 +39,9 @@ i removed many linebreaks to make output HTML cleaner
                         </div>
                     </div>
             </div>
-
-
         </form>
         <br/>
+
         {# need the default:False for projects with old MTurkLandingPage #}
         {% if view.is_debug|default:False %}
             <br>
@@ -69,4 +68,40 @@ i removed many linebreaks to make output HTML cleaner
     <script src="{% static 'otree/js/live.js' %}" id="otree-live" data-socket-url="{{ view.live_url }}"></script>
   {% endif %}
 {% endblock %}
+
+{% block global_styles  %}
+<style>
+    .otree-timer {
+        display: none;
+    }
+</style>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'global/theme.css' %}" />
+{% endblock %}
+
+{% block global_scripts  %}
+{# Alarm sounds for the timer #}
+<audio id="alarm_sound" src="{% static "alarm_sound.wav" %}" preload="auto"></audio>
+
+<script>
+    // Soft sound warning for timeout  
+    setTimeout(
+        function () {
+        document.getElementById('alarm_sound').play();
+        },
+        {{Constants.timeout_soft|json}}*1000 // *1000 due to miliseconds
+    );
+
+    // Show timeout
+    $(function () {
+        $('.otree-timer__time-left').on('update.countdown', function (event) {
+            if (event.offset.totalSeconds <= {{Constants.timeout_soft|json}}) {
+                $('.otree-timer').show();
+            }
+        });
+    });
+
+</script>
+{% endblock %}
+
 

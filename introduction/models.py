@@ -24,6 +24,18 @@ class Constants(BaseConstants):
     lowest_price = ConstantsBertrand.lowest_price
     m_consumer = ConstantsBertrand.m_consumer
 
+    # Timeout info
+    # Timeouts in seconds
+    # The timeouts are longer here as participants have to read instructions etc
+    # which might take longer.
+    #timeout_soft = 6 * 60 # After 6 minutes the timeout is shown and participants get a notification
+    #timeout_hard = 7 * 60 # After 7 minutes auto-submitted
+    timeout_soft = 10
+    timeout_hard = 20
+    
+    timeout_text = ConstantsBertrand.timeout_text
+
+
     error_message_form_field = ('Ihre Antwort war leider nicht korrekt.' +
                                 ' Bitte überlegen Sie noch einmal und lesen bei' +
                                 ' Bedarf erneut in die Instruktionen.')

@@ -5,6 +5,9 @@ import random
 
 
 class StartExperiment(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
+
     def is_displayed(self):
         # Saved it to the database if the participant is
         # a dropout (group and player model).
@@ -21,15 +24,15 @@ class StartExperiment(Page):
         template_vars.update(additional_template_vars)
         return template_vars
 
-    def get_timeout_seconds(self):
-        return Constants.timeout_hard
-
     def before_next_page(self):
         timeout_happened = self.timeout_happened
         if timeout_happened:
             self.player.record_dropout()
 
 class Decide(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
+
     form_model = 'player'
     form_fields = ['price']
 
@@ -58,9 +61,6 @@ class Decide(Page):
             }
         template_vars.update(additional_template_vars)
         return template_vars
-
-    def get_timeout_seconds(self):
-        return Constants.timeout_hard
 
     def before_next_page(self):
         timeout_happened = self.timeout_happened
@@ -94,6 +94,8 @@ class RoundWaitPage(WaitPage):
         self.group.calc_round_profit()
 
 class RoundResults(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
 
     def is_displayed(self):
         if self.participant.vars['is_dropout']:
@@ -113,15 +115,14 @@ class RoundResults(Page):
         template_vars.update(additional_template_vars)
         return template_vars
 
-    def get_timeout_seconds(self):
-        return Constants.timeout_hard
-
     def before_next_page(self):
         timeout_happened = self.timeout_happened
         if timeout_happened:
             self.player.record_dropout()
 
 class EndSG(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
 
     def is_displayed(self):
         if self.participant.vars['is_dropout']:
@@ -144,9 +145,6 @@ class EndSG(Page):
         }
         template_vars.update(additional_template_vars)
         return template_vars
-
-    def get_timeout_seconds(self):
-        return Constants.timeout_hard
 
     def before_next_page(self):
         timeout_happened = self.timeout_happened

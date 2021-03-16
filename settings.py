@@ -16,7 +16,7 @@ SESSION_CONFIGS = [
     dict(
         name='intro_check',
         display_name="intro_check",
-        group_treatment='2H1A',
+        group_treatment='2H0A',
         num_demo_participants=18,
         use_browser_bots=False,
         app_sequence=[

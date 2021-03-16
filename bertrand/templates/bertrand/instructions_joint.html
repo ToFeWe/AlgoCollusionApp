@@ -1,7 +1,7 @@
 {% load otree %}
 <br>
 <p>
-  <button type="button" id="instruct_btn" onclick=ShowInstruct()> Zeige Instruktionen </button><br>
+  <button class="btn btn-secondary" type="button" id="instruct_btn" onclick=ShowInstruct()> Zeige Instruktionen </button><br>
 </p>
 <p>
   <div id='instruct' class="instructions well well-lg" xmlns="http://www.w3.org/1999/html"
@@ -27,8 +27,6 @@
   </div>
 </p>
 
-<audio id="alarm_sound" src="{% static "alarm_sound.wav" %}" preload="auto"></audio>
-
 <script>
   // Show/Hide Instructions
   function ShowInstruct() {
@@ -43,21 +41,6 @@
       btn.innerHTML = "Zeige Instruktionen";
     }
   }
-
-// Timeout for the page 
-setTimeout(
-    function () {
-    document.getElementById('alarm_sound').play();
-    alert("Bitte treffen Sie jetzt Ihre Entscheidung!");
-    },
-    6000*1000 // *1000 due to miliseconds //TODO
-);
-
-function playSound() {
-	
-  const audio = new Audio();
-  audio.play();
-}
 
 </script>
 

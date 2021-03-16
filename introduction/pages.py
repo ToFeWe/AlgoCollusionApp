@@ -5,24 +5,36 @@ from .models import Constants
 import math
 
 class Introduction_1_Welcome(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
+
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
 
         return additional_template_vars
 
 class Introduction_2_Main(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
+
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
 
         return additional_template_vars
 
 class Introduction_3_Examples(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
+
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
 
         return additional_template_vars
 
 class Introduction_4_Algos(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
+
     def is_displayed(self):
         return self.group.group_treatment not in ['2H0A', '3H0A']
 
@@ -32,12 +44,18 @@ class Introduction_4_Algos(Page):
         return additional_template_vars
 
 class Introduction_5_Procedure(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
+
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
 
         return additional_template_vars
 
 class Quiz(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
+
     form_model = 'player'
     form_fields =  ['q_how_many_customer',
                     'q_after_fixed_round',
@@ -51,9 +69,9 @@ class Quiz(Page):
         
         # Make label treatment specific
         if treatment in ['1H1A', '2H0A']:
-            label_profit_1 = ('Sie sind Firma A und wählen einen Preis von 1, Firma B wählt einen Preis von 2.',
+            label_profit_1 = ('Sie sind Firma A und wählen einen Preis von 1, Firma B wählt einen Preis von 2.'
                               ' Was ist Ihr Gewinn in Talern in dieser Runde?')
-            label_profit_2 = ('Sie sind Firma A und wählen einen Preis von 3, Firma B wählt einen Preis von 3.',
+            label_profit_2 = ('Sie sind Firma A und wählen einen Preis von 3, Firma B wählt einen Preis von 3.'
                               ' Was ist Ihr Gewinn in Talern in dieser Runde?')
 
         else:
@@ -74,6 +92,9 @@ class Quiz(Page):
         return context
 
 class Quiz_results(Page):
+    timeout_seconds = Constants.timeout_hard
+    timer_text = Constants.timeout_text
+
     def is_displayed(self):
         # Only show the review page if the participant had stuff wrong
         return self.player.three_times_wrong

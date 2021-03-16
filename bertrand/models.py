@@ -20,7 +20,8 @@ class Constants(BaseConstants):
 
     # Timeouts in seconds
     timeout_soft = 30
-    timeout_hard = 1000 # TODO Change
+    timeout_hard = 60 # TODO Change
+    timeout_text = "Bitte entscheiden Sie sich. Sonst ist Schicht im Schacht!"
 
     # Define market constants
     maximum_price = 5

@@ -1,4 +1,4 @@
-{% extends "global/Page.html" %}
+{% extends "introduction/Page.html" %}
 {% load otree %}
 
 {% block title %}Antworten auf die Verständnisfragen{% endblock %}
@@ -9,11 +9,11 @@
 	<b>Beachten Sie: Sie haben mindestens eine Frage falsch beantwortet.</b><br>
 	Sie sehen unten die richtigen Antworten zu den Fragen, die Sie falsch beantwortet
 	haben. Bitte lesen Sie sich diese gute durch und schauen Sie bei Bedarf erneut
-	in die Instruktionen. Sollten Sie irgendwelche Fragen haben,
-	melden Sie sich mit Hilfe der Chatfunktion in der Webex-Konferenz
-	beim Administrator.<br><br>
+	in die Instruktionen. Die gesamten Instruktionen werden Ihnen unten eingeblendet.
+	Sollten Sie irgendwelche Fragen haben, melden Sie sich mit Hilfe der Chatfunktion
+	in der Webex-Konferenz beim Administrator.<br><br>
 	<p>
-	<b> Sobald sie die Antworten gelesen haben, klicken Sie bitte auf "Weiter".</b>
+	  <b> Sobald sie die Antworten gelesen haben, klicken Sie bitte auf "Weiter".</b>
 	</p>
   </div>
 </div>
@@ -25,15 +25,15 @@
 	<b>Frage 1: Wie viele Kunden gibt es im Markt, die das Produkt kaufen wollen?</b>
 	</p>
 	<p>
-	<b>Antwort: </b>Der Markt hat 60 identische Kunden.
+	<b>Antwort: </b>Der Markt hat <b>60 identische Kunden</b>.
 	Jeder Kunde möchte in jeder Runde eines Durchgangs eine Einheit des Produkts 
 	möglichst günstig kaufen.
 	</p>
   </div>
 </div>
 {% endif %}
-{% if player.counter_after_fixed_round == 3 %}
 
+{% if player.counter_after_fixed_round == 3 %}
 <div class="row">
   <div class="col alert alert-secondary"> 
 	<p>
@@ -42,7 +42,7 @@
 	<p>
 	<b>Antwort: </b>Nach jeder Runde entscheidet ein Zufallsmechanismus,
 	 ob eine weitere Runde gespielt wird oder der Durchgang endet.
-	 Die Wahrscheinlichkeit, dass eine weitere Periode gespielt wird, liegt bei 95 %.
+	 Die Wahrscheinlichkeit, dass eine weitere Periode gespielt wird, <b>liegt bei 95 %</b>.
 	 Der Durchgang endet also nach jeder Runde mit einer Wahrscheinlichkeit von 5 %.
 	 Der Durchgang wir so lange fortgesetzt, bis der Zufall das Ende bestimmt.
 	</p>
@@ -57,7 +57,7 @@
 	<b>Frage 3: Was ist der maximale Preis, den die Kunden bereit sind für das Produkt zu zahlen?</b>
 	</p>
 	<p>
-	<b>Antwort: </b>Jeder Kunde ist bereit maximal 4 Taler für diese Einheit des Produkts auszugeben.
+	<b>Antwort: </b>Jeder Kunde ist bereit maximal <b>4 Taler</b> für eine Einheit des Produkts auszugeben.
 	</p>
   </div>
 </div>
@@ -85,7 +85,7 @@
 	Alle Kunden kaufen das Produkt bei Ihnen zu einem Preis von 1 Taler.
 	Ihr Gewinn ist daher: <br>
 	<center>
-	1 Taler x 60 Kunden = 60 Taler
+	1 Taler x 60 Kunden = <b>60 Taler</b>
 	</center>
 	</p>
   </div>
@@ -115,14 +115,14 @@
 	  die gleiche Anzahl an Produkten (60 Kunden / 2 Firmen = 30). 
 	  Ihr Gewinn ist daher: <br>
 	  <center>
-	    3 Taler x 30 Kunden = 90 Taler
+	    3 Taler x 30 Kunden = <b>90 Taler</b>
 	  </center>
 	{% else %}
 	  Alle drei Firmen im Markt haben den gleichen Preis gewählt und verkaufen 
 	  die gleiche Anzahl an Produkten (60 Kunden / 3 Firmen = 20). 
 	  Ihr Gewinn ist daher: <br>
 	  <center>
-	    3 Taler x 20 Kunden = 60 Taler
+	    3 Taler x 20 Kunden = <b>60 Taler</b>
 	  </center>	
 	{% endif %}
 	</p>
@@ -141,10 +141,34 @@
 	<b>Antwort: </b>
 	100 Taler entsprechen einem Euro. Ihr Gewinn in Euro ist also:<br>
   	<center>
-	    650  / 100 = 6,50 Euro
+	    650  / 100 = <b>6,50 Euro</b>
 	</center>	
 	</p>
   </div>
 </div>
+
+
+
 {% endif %}
+{% next_button %}
+<div class="row">
+	<div class="col">
+		{% include "bertrand/instructions_joint.html" %}
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+  //On this page by default instructions shown
+    var instruct = document.getElementById("instruct");
+    var btn = document.getElementById("instruct_btn");
+
+	instruct.style.display = "block";
+	btn.innerHTML = "Verstecke Instruktionen";
+
+});
+
+</script>
+
 {% endblock %}
+
+
