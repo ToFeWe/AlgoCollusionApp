@@ -29,11 +29,11 @@ SESSION_CONFIGS = [
         num_demo_participants=18,
         use_browser_bots=False,
         app_sequence=[
-        #  'introduction',
+         'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
-        #  'survey',
+         'quiz',
          'payment']
     ),
     dict(
@@ -43,11 +43,11 @@ SESSION_CONFIGS = [
         num_demo_participants=18,
         use_browser_bots=False,
         app_sequence=[
-        #  'introduction',
+         'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
-        #  'survey',
+         'quiz',
          'payment']
     )
 
