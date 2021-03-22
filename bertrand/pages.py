@@ -53,7 +53,7 @@ class Decide(Page):
 
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
-        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {} Talern:".format(Constants.lowest_price,
+        label_decide = "Bitte wählen sie Ihren Preis zwischen {} und {}:".format(Constants.lowest_price,
                                                                                         Constants.maximum_price)
         template_vars = {
             "label_decide": label_decide,

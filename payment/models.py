@@ -22,18 +22,18 @@ class Subsession(BaseSubsession):
 
     def creating_session(self):
         
-        # Init vars to zero
         for p in self.get_players():
-            # For every player another super game is payed
-            p.payed_sg = random.choice([1,2,3])
-            p.participant.vars['payed_sg'] = p.payed_sg
+            # For every player another super game is paid
+            p.paid_sg = random.choice([1,2,3])
+            p.participant.vars['paid_sg'] = p.paid_sg
+
+            # init vars for admin report 
             p.participant.vars['final_money_with_show_up'] = 0
             p.participant.vars['final_money_no_show_up'] = 0
-            p.participant.vars['final_money_with_show_up_and_corona'] = 0
 
     def vars_for_admin_report(self):
         participants = self.session.get_participants()
-        total_payoff_all = sum([p.vars['final_money_with_show_up_and_corona'] for p in participants])
+        total_payoff_all = sum([p.payoff.to_real_world_currency(self.session) for p in participants])
         mean_payoff_all = total_payoff_all/self.session.num_participants
         return {
             'participants': participants,
@@ -46,9 +46,6 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    # Indicator which super game is payed
-    payed_sg = models.IntegerField()
+    # Indicator which super game is paid
+    paid_sg = models.IntegerField()
         
-    final_money_no_show_up = models.FloatField()
-    final_money_with_show_up = models.FloatField()
-    final_money_with_show_up_and_corona = models.FloatField()

@@ -1,6 +1,5 @@
-{% extends "otree/admin/Session.html" %}
-{% block content %}
-{{ block.super }}
+{% load otree %}
+
 <div class="container" style='max-width:970px'>
     <p>
     Generated: <strong>{% now "DATETIME_FORMAT" %}</strong>
@@ -33,15 +32,14 @@
         <tr>
             <th>Participant code</th>
             <th>Participant label</th>
-            <th><b>Participant IP</b></th>
+            <th>Is Dropout</th>
             <th>Progress</th>
             <th>Taler Super Game 1</th>
             <th>Taler Super Game 2</th>
             <th>Taler Super Game 3</th>
-            <th>Payed Super Game</th>
+            <th>Paid Super Game</th>
             <th>Participation fee</th>
             <th>Super Game Payoff</th>
-            <th>Total (with Show-up but no Corona)</th>
             <th><b>Total</b></th>
 
         </tr>
@@ -51,18 +49,17 @@
         <tr>
             <td style="font-family: 'Courier New'">{{ p.code }}</td>
             <td> {{ p.label|default_if_none:"" }}</td>
-            <td> <b>{{p.ip_address}} </b> </td>
+            <th> {{p.vars.is_dropout}} </th>
             <td>{{ p.current_page_ }}</td>
 
             <td>{{ p.vars.final_payoff_sg_1 }} </td>
             <td>{{ p.vars.final_payoff_sg_2 }} </td>
             <td>{{ p.vars.final_payoff_sg_3 }} </td>
 
-            <td>{{ p.vars.payed_sg }}</td>
+            <td>{{ p.vars.paid_sg }}</td>
             <td>{{ participation_fee }}</td>
             <td>{{ p.vars.final_money_no_show_up }}</td>
-            <td>{{ p.vars.final_money_with_show_up}}</td>
-            <td><b>{{ p.vars.final_money_with_show_up_and_corona}}</b></td>
+            <td><b>{{ p.vars.final_money_with_show_up}}</b></td>
         </tr>
         {% endfor %}
 
@@ -88,4 +85,3 @@
         <br/>
     </div>
 </div>
-{% endblock %}

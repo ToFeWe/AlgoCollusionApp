@@ -20,11 +20,8 @@
   	{% formfield player.q_profit_2 label=current_label%}
 	{% endwith %}
 
-  	{% formfield player.q_profit_3 %}
-
 <br>
 
-        {% next_button %}
   
   </div>
   <div class="col">
@@ -58,6 +55,8 @@
   
   </div>
 </div>
+{% next_button %}
+{% include "bertrand/instructions_joint.html" %}
 
 
 

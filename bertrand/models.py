@@ -24,10 +24,10 @@ class Constants(BaseConstants):
     timeout_text = "Bitte entscheiden Sie sich. Sonst ist Schicht im Schacht!"
 
     # Define market constants
-    maximum_price = 5
-    reservation_price = 4
-    stage_game_NE = 1
-    lowest_price = 0
+    maximum_price = c(5)
+    reservation_price = c(4)
+    stage_game_NE = c(1)
+    lowest_price = c(0)
 
     # Number of (computerized) consumers
     m_consumer = 60
@@ -164,17 +164,17 @@ class SharedBaseGroup(BaseGroup):
     # Hence, also in the "individual" choice treatments
     # e.g. the treatments with only one human and algorithms
     # those variables are used to store outcomes.
-    winning_price = models.IntegerField()
-    winner_profit = models.IntegerField()
+    winning_price = models.CurrencyField()
+    winner_profit = models.CurrencyField()
     n_winners = models.IntegerField()
 
     # Outcomes for the algorithm(s)
     # Note that in markets with two algorithms,
     # the price of those algorithms must be
     # symmetric, given its the same with the same input.
-    price_algorithm = models.IntegerField()
-    profit_algorithm = models.FloatField()
-    accumulated_profit_algorithm = models.FloatField()
+    price_algorithm = models.CurrencyField()
+    profit_algorithm = models.CurrencyField()
+    accumulated_profit_algorithm = models.CurrencyField()
 
     # Treatment storage
     group_treatment = models.StringField()
@@ -299,17 +299,17 @@ class SharedBasePlayer(BasePlayer):
     is_dropout = models.BooleanField()
 
     # Price chosen by participant
-    price = models.IntegerField(
+    price = models.CurrencyField(
         min=Constants.lowest_price, max=Constants.maximum_price,
         doc="""Price player offers to sell product for"""
     )
 
     # CurrencyField deliberately avoided
-    profit = models.IntegerField()
-    accumulated_profit = models.IntegerField()
+    profit = models.CurrencyField()
+    accumulated_profit = models.CurrencyField()
 
     # Final payoff is stored again
-    final_payoff_sg = models.FloatField()
+    final_payoff_sg = models.CurrencyField()
 
     def get_market_infos(self):
         """

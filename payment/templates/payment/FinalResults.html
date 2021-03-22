@@ -11,39 +11,28 @@ Das Experiment endet jetzt.<br><br>
 
 <table class="table">
 
-  <tr> <th> Gewinn im ersten Spiel </th> <td> {{payoff_sg_1}} Taler </td> </tr>
-  <tr> <th> Gewinn im zweiten Spiel </th> <td>  {{payoff_sg_2}} Taler </td> </tr>
-  <tr> <th> Gewinn im dritten Spiel </th> <td>  {{payoff_sg_3}} Taler </td> </tr>
+  <tr> <th> Gewinn im ersten Spiel </th> <td> {{payoff_sg_1}}  </td> </tr>
+  <tr> <th> Gewinn im zweiten Spiel </th> <td>  {{payoff_sg_2}}  </td> </tr>
+  <tr> <th> Gewinn im dritten Spiel </th> <td>  {{payoff_sg_3}}  </td> </tr>
 </table>
 <br>
-Ein Zufallsmechanismus hat entschieden, dass das {{payed_sg}}. Spiel ausgezahlt wird.
+Ein Zufallsmechanismus hat entschieden, dass das {{paid_sg}}. Spiel ausgezahlt wird.
 <br><br>
 Ein Euro entsprechen dabei {{exchange_rate|c}}. 
 Außerdem erhalten Sie zusätzlich für Ihr Erscheinen zum Experiment {{show_up|floatformat:2}} Euro.  
   
-<br><br>
-<b> Als zusätzlichen finanziellen Bonus in der aktuellen COVID19-Pandemie zahlen wir Ihnen weitere {{corona_bonus_after_end|floatformat:2}} Euro.</b>  <br><br>
 
    <br><br>
  <b> Ihre gesamte Auszahlung: </b>
  <table class="table">
 
-  <tr> <th> Gewinn im {{payed_sg}}. Spiel </th> <td> {{final_money_no_show_up|floatformat:2}} Euro </td> </tr>
+  <tr> <th> Gewinn im {{paid_sg}}. Spiel </th> <td> {{final_money_no_show_up|floatformat:2}} Euro </td> </tr>
   <tr> <th> Bonus für Ihr pünktliches Erscheinen </th> <td>  {{show_up|floatformat:2}} Euro </td> </tr>
-  <tr> <th> Coronebedingter Extrabonus </th> <td> {{corona_bonus_after_end|floatformat:2}} Euro </td> </tr>
-  <tr> <th> <p style="color:red"> Gesamtgewinn </p></th> <th><p style="color:red">  {{final_money_with_show_up_and_corona|floatformat:2}} Euro </p></th> </tr>
+  <tr> <th> <p style="color:red"> Gesamtgewinn </p></th> <th><p style="color:red">  {{final_money_with_show_up|floatformat:2}} Euro </p></th> </tr>
 
 </table>
-   <br><br>
-Die Auszahlung wird online via Paypal oder Banktransfer durchgeführt. 
-<b>Klicken Sie auf "Weiter", um zur entsprechenden Auszahlungsseite zu gelangen.</b>
-Bitte halten Sie Ihre IBAN-Nummer oder Ihre Paypal-E-Mail-Adresse bereit.
-Außerdem benötigen Sie Ihre Teilnehmer-ID. Diese finden Sie in der Erinnerungsemail
-zu diesem Experiment. <br>
-Bitte füllen Sie außerdem die Quittung, die an ihrem Platz liegt, aus.
-
-<br><br>
-    {% next_button %}
-
+<h2>
+Bitte geben Sie den Betrag jetzt auf der Auszahlungsseite ein.<br>Erinnerung: Ihre Gesamtauszahlung ist {{final_money_with_show_up|floatformat:2}} Euro 
+</h2>  
 {% endblock %}
 

@@ -99,8 +99,8 @@ class Quiz(Page):
                     'q_after_fixed_round',
                     'q_consumer_wtp',
                     'q_profit_1',
-                    'q_profit_2',
-                    'q_profit_3']
+                    'q_profit_2'
+                    ]
 
     def is_displayed(self):
         # TODO: Add defaults to DB for quiz? I dont need it I guess
@@ -117,9 +117,9 @@ class Quiz(Page):
                               ' Was ist Ihr Gewinn in Talern in dieser Runde?')
 
         else:
-            label_profit_1 = ('Sie sind Firma A und wählen einen Preis von 1, Firma B wählt einen Preis von 2,' +
+            label_profit_1 = ('Sie sind Firma A und wählen einen Preis von 1, Firma B wählt einen Preis von 2,' 
                              ' Firma C wählt einen Preis von 3. Was ist Ihr Gewinn in Talern in dieser Runde?')
-            label_profit_2 = ('Sie sind Firma A und wählen einen Preis von 3, Firma B wählt einen Preis von 3,' +
+            label_profit_2 = ('Sie sind Firma A und wählen einen Preis von 3, Firma B wählt einen Preis von 3,' 
                               ' Firma C wählt einen Preis von 3. Was ist Ihr Gewinn in Talern in dieser Runde?')
 
         additional_template_vars = self.group.get_additional_template_variables()
