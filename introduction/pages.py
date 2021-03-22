@@ -139,7 +139,7 @@ class Quiz(Page):
             self.player.record_dropout()
 
 
-class Quiz_results(Page):
+class Quiz_Results(Page):
     timeout_seconds = Constants.timeout_hard
     timer_text = Constants.timeout_text
 

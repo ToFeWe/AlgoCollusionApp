@@ -94,7 +94,7 @@ class SharedBaseSubsession(BaseSubsession):
             # If we actually have (human) groups, apply a different shuffle structure.
             if group_size == 3:
                 if n_participants not in [9, 18]:
-                    raise Exception(("In the 3H0A treatment we need matching groups of 9 people.",
+                    raise Exception(("In the 3-player treatment we need matching groups of 9 people.",
                                      "The Maximum number of subjects is 18.",
                                      "One of the conditions is not met given {} participants.".format(n_participants)))
                 else:
@@ -106,7 +106,7 @@ class SharedBaseSubsession(BaseSubsession):
                             'shuffle_structure_medium']
             elif group_size == 2:
                 if n_participants not in [6, 12, 18]:
-                    raise Exception(("In the 3H0A treatment we need matching groups of 6 people.",
+                    raise Exception(("In the 2-player treatments we need matching groups of 6 people.",
                                      "The Maximum number of subjects is 18.",
                                      "One of the conditions is not met given {} participants.".format(n_participants)))
                 else:
