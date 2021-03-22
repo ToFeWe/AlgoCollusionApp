@@ -167,5 +167,5 @@ page_sequence = [
     Introduction_4_Algos,
     Introduction_5_Procedure,
     Quiz,
-    Quiz_results
+    Quiz_Results
 ]
