@@ -161,7 +161,5 @@ page_sequence = [
     Decide,
     RoundWaitPage,
     RoundResults,
-    EndSG,
-    # TODO: Add page here already without next button to "catch" dropouts
-    # This avoid this too many referrals 
-]
+    EndSG
+    ]
