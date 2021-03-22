@@ -75,7 +75,8 @@ class RoundWaitPage(WaitPage):
     def vars_for_template(self):
         # Different body text if dropout
         if self.participant.vars['is_dropout']:
-            return dict(body_text="TODO Du bist ein dropout") #TODO
+            return dict(body_text=("Sie haben das Zeitlimit für Ihre Entscheidung deutlich überschritten "
+                                   "und wurden deswegen aus dem Experiment ausgeschlossen."))
 
     def is_displayed(self):
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']

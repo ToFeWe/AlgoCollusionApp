@@ -21,7 +21,8 @@ class Constants(BaseConstants):
     # Timeouts in seconds
     timeout_soft = 30
     timeout_hard = 60 # TODO Change
-    timeout_text = "Bitte entscheiden Sie sich. Sonst ist Schicht im Schacht!"
+    timeout_text = ("Bitte klicken Sie auf Weiter, sobald Sie eine Entscheidung getroffen haben. Sollten Sie das Zeitlimit "
+                   "überschreiten, werden Sie aus dem Experiment ausgeschlossen. Verbleibende Zeit:")
 
     # Define market constants
     maximum_price = c(5)
@@ -323,7 +324,7 @@ class SharedBasePlayer(BasePlayer):
         # First the individual choice treatments
         # The group class is here only used to store the information
         # on the algorithm and not on the ids in the group.
-        # We assume that the algorithms are here always has the ids two and/or three
+        # We assume that the algorithms here always have the ids two and/or three
         if treatment == '1H1A':
             player_id = 1
             opponent_ids = [2]

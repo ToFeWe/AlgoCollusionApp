@@ -33,7 +33,8 @@ class Constants(BaseConstants):
     timeout_soft = 20
     timeout_hard = 40
 
-    timeout_text = ConstantsBertrand.timeout_text
+    timeout_text = ("Bitte klicken Sie auf Weiter, sobald Sie die Insturktionen gelesen haben. Sollten Sie das Zeitlimit "
+                   "überschreiten, werden Sie aus dem Experiment ausgeschlossen. Verbleibende Zeit:")
 
 
     error_message_form_field = ('Ihre Antwort war leider nicht korrekt.' +
