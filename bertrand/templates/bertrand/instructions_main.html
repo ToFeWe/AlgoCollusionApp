@@ -10,8 +10,7 @@
   <p>
     Im Experiment verwenden wir eine fiktive Geldeinheit namens Taler.
     Im Anschluss an das Experiment werden die Taler in Euro umgerechnet und Ihnen ausgezahlt.
-    <b>Dabei entsprechen 110 Taler einem Euro.</b> Die Euro-Beträge werden auf die erste
-    Nachkommastelle gerundet.
+    <b>Dabei entsprechen 110 Taler einem Euro.</b>
   </p>
   <p>
     In diesem Experiment repräsentieren Sie eine Firma in einem virtuellen Produktmarkt.
@@ -38,13 +37,13 @@
   <p>
     Der Markt hat {{Constants.m_consumer}} identische Kunden.
     Jeder Kunde möchte in jeder Runde eines Durchgangs <b>eine Einheit</b> des Produkts möglichst günstig kaufen.
-    Jeder Kunde ist bereit maximal <b>{{Constants.reservation_price}}</b> für diese Einheit des Produkts
+    Jeder Kunde ist bereit maximal <b>{{Constants.reservation_price|c}} </b> für diese Einheit des Produkts
     auszugeben.
   </p>
   <p>
     Alle Firmen entscheiden in jeder Runde erneut <b>gleichzeitig</b>, für wie viele Taler Sie Ihr Produkt verkaufen
     möchten.
-    Sie können Ihr Produkt für einen Preis von {{Constants.lowest_price}}, 1 Taler, … oder {{Constants.maximum_price}}
+    Sie können Ihr Produkt für einen Preis von {{Constants.lowest_price|c}}, 1 Taler, … oder {{Constants.maximum_price|c}}
     verkaufen
     (nur ganze Taler). Ihr Gewinn ist der Preis multipliziert mit der Anzahl an verkauften Einheiten.
     Formal ausgedrückt:
@@ -54,7 +53,7 @@
   </p>
   <p>
   Die Firma mit dem <b>niedrigsten Preis in der jeweiligen Runde</b> verkauft Ihre Produkte,
-  solange der Preis nicht größer als {{Constants.reservation_price}} ist. Firmen mit einem höheren Preis verkaufen ihr Produkt nicht.
+  solange der Preis nicht größer als {{Constants.reservation_price|c}} ist. Firmen mit einem höheren Preis verkaufen ihr Produkt nicht.
   <b>Der niedrigste Preis ist der Marktpreis in der jeweiligen Runde.</b> Firmen mit einem <b>Preis, der größer als der
     Marktpreis ist,
     verkaufen Ihre Produkte in der jeweiligen Runde nicht.</b> 

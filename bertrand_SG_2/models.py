@@ -19,7 +19,7 @@ class Subsession(SharedBaseSubsession):
         """
         # The number of rounds we have drawn ex ante according to some cont prob
         return {#'round_number_draw': 17,
-                'round_number_draw': 1, # for testing TODO: Remove
+                'round_number_draw': 3, # for testing TODO: Remove
                 'super_game_count': 2,
                 'group_shuffle_by_size' : {
                     3: {'shuffle_structure_small': [[1,5,9], [4, 8, 3], [7, 2, 6]],

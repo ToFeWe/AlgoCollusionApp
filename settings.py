@@ -29,7 +29,7 @@ SESSION_CONFIGS = [
         num_demo_participants=18,
         use_browser_bots=False,
         app_sequence=[
-         'introduction',
+         #'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
@@ -43,7 +43,7 @@ SESSION_CONFIGS = [
         num_demo_participants=18,
         use_browser_bots=False,
         app_sequence=[
-         'introduction',
+         #'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
@@ -64,7 +64,7 @@ LANGUAGE_CODE = 'de'
 REAL_WORLD_CURRENCY_CODE = 'EUR'
 POINTS_CUSTOM_NAME = 'Taler'
 USE_POINTS = True
-REAL_WORLD_CURRENCY_DECIMAL_PLACES = 1
+REAL_WORLD_CURRENCY_DECIMAL_PLACES = 2
 
 ROOMS = [
     dict(

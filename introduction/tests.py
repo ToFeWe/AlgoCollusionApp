@@ -6,7 +6,7 @@ from otree.api import SubmissionMustFail
 
 
 class PlayerBot(Bot):
-
+    # TODO: rework
     def play_round(self):
         yield(pages.Introduction_1)
         

@@ -19,16 +19,16 @@ class Constants(BaseConstants):
     num_rounds = 30
 
     # Timeouts in seconds
-    timeout_soft = 30
-    timeout_hard = 60 # TODO Change
+    timeout_soft = 300
+    timeout_hard = 600 # TODO Change
     timeout_text = ("Bitte klicken Sie auf Weiter, sobald Sie eine Entscheidung getroffen haben. Sollten Sie das Zeitlimit "
                    "überschreiten, werden Sie aus dem Experiment ausgeschlossen. Verbleibende Zeit:")
 
     # Define market constants
-    maximum_price = c(5)
-    reservation_price = c(4)
-    stage_game_NE = c(1)
-    lowest_price = c(0)
+    maximum_price = 5
+    reservation_price = 4
+    stage_game_NE = 1
+    lowest_price = 0
 
     # Number of (computerized) consumers
     m_consumer = 60
@@ -88,7 +88,7 @@ class SharedBaseSubsession(BaseSubsession):
             # Initialize a shuffle structure which is used in the individual choice treatments.
             # Note: In the individual choice treatments, we do not have a group matching
             # but everyone is in his/her own group. This is still needed as we use the group
-            #  class for all market information.
+            #  class for all market information (e.g. algorithms market prices etc.).
             shuffle_structure = shuffle_structure = [[i] for i in range(1, self.session.num_participants + 1)]
 
             # If we actually have (human) groups, apply a different shuffle structure.
@@ -165,17 +165,16 @@ class SharedBaseGroup(BaseGroup):
     # Hence, also in the "individual" choice treatments
     # e.g. the treatments with only one human and algorithms
     # those variables are used to store outcomes.
-    winning_price = models.CurrencyField()
-    winner_profit = models.CurrencyField()
+    winning_price = models.IntegerField()
     n_winners = models.IntegerField()
 
     # Outcomes for the algorithm(s)
     # Note that in markets with two algorithms,
     # the price of those algorithms must be
     # symmetric, given its the same with the same input.
-    price_algorithm = models.CurrencyField()
-    profit_algorithm = models.CurrencyField()
-    accumulated_profit_algorithm = models.CurrencyField()
+    price_algorithm = models.IntegerField()
+    profit_algorithm = models.IntegerField()
+    accumulated_profit_algorithm = models.IntegerField()
 
     # Treatment storage
     group_treatment = models.StringField()
@@ -238,7 +237,6 @@ class SharedBaseGroup(BaseGroup):
         # Calculate the market outcome
         self.winning_price = min(all_prices)
         self.n_winners = len([price for price in all_prices if price == self.winning_price])
-
         for p in self.get_players():
             p.profit = self.calc_profit(p.price)
             # Accumulate profit if we played more than one round
@@ -300,17 +298,17 @@ class SharedBasePlayer(BasePlayer):
     is_dropout = models.BooleanField()
 
     # Price chosen by participant
-    price = models.CurrencyField(
+    price = models.IntegerField(
         min=Constants.lowest_price, max=Constants.maximum_price,
         doc="""Price player offers to sell product for"""
     )
 
     # CurrencyField deliberately avoided
-    profit = models.CurrencyField()
-    accumulated_profit = models.CurrencyField()
+    profit = models.IntegerField()
+    accumulated_profit = models.IntegerField()
 
     # Final payoff is stored again
-    final_payoff_sg = models.CurrencyField()
+    final_payoff_sg = models.IntegerField()
 
     def get_market_infos(self):
         """
@@ -404,7 +402,7 @@ class Subsession(SharedBaseSubsession):
         """
         # The number of rounds we have drawn ex ante according to some cont prob
         return {#'round_number_draw': 11, #TODO Change
-                'round_number_draw': 2, # for testing TODO: Remove
+                'round_number_draw': 5, # for testing TODO: Remove
                 'super_game_count': 1,
                 'group_shuffle_by_size': {
                     3: {'shuffle_structure_small': [[1, 2, 3], [4, 5, 6], [7, 8, 9]],

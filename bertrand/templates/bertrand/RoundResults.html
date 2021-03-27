@@ -21,15 +21,15 @@
 
         <tr align="center">
             <th align="center"> Preise </th>
-            <td align="center"> {{player.price}} </td>
+            <td align="center"> {{player.price|c}} </td>
 
             {% for o_p in opponents_prices %}
-                <td align="center"> {{o_p}} </td>
+                <td align="center"> {{o_p|c}} </td>
 
             {% endfor %}
         </tr>
     </table>
-    Ihr Preis in dieser Runde betrug {{ player.price }}. Der Marktpreis betrug {{ group.winning_price }}. Sie erhalten in dieser Runde einen Gewinn von {{player.profit}}. 
+    Ihr Preis in dieser Runde betrug {{ player.price |c}}. Der Marktpreis betrug {{ group.winning_price |c}}. Sie erhalten in dieser Runde einen Gewinn von {{player.profit|c}}. 
 
     <br><br>
 
