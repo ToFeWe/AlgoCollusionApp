@@ -26,6 +26,8 @@ class SharedPlayerBot(Bot):
         if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
             # Check if instructions are shown on the page
             assert "Firmen entscheiden in jeder Runde erneut" in self.html
+            assert "130 Taler" in self.html # Conversion rate in pre reg
+
             if treatment in ['1H1A', '1H2A', '2H1A']:
                 assert "Marktentscheidungen durch Algorithmen" in self.html
             else:

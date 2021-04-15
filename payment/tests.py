@@ -14,13 +14,13 @@ class PlayerBot(Bot):
         assert str(self.participant.vars['final_payoff_sg_2']) in self.html
         assert str(self.participant.vars['final_payoff_sg_3']) in self.html
 
-        # 110 points are one euro
-        final_coins_in_euro = self.participant.vars[key_payoff_sg] / 110
+        # 130 points are one euro
+        final_coins_in_euro = self.participant.vars[key_payoff_sg] / 130
         final_coins_in_euro_rounded = round(final_coins_in_euro * 100) / 100
 
         assert "Bonus für Ihr pünktliches Erscheinen" in self.html
         assert "Gesamtgewinn" in self.html
-        
+        assert "130" in self.html # Conversion rate in pre reg
         # Replace . with , given the formating of django with the german language code
         assert str(final_coins_in_euro_rounded).replace('.',',') in self.html #SG Payoff
         assert str(final_coins_in_euro_rounded + 4.0).replace('.',',') in self.html # SG payoff + show-up 
