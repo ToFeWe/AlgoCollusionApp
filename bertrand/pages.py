@@ -82,9 +82,7 @@ class RoundWaitPage(WaitPage):
         return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
 
     def after_all_players_arrive(self):
-        # TODO: I could check here if the entire group is a dropout
-        # Then I could skip this page as well I guess and would avoid
-        # this ERR_TOO_MANY_REDIRECTS. Not sure if this is actually 
+        # TODO: Fix ERR_TOO_MANY_REDIRECTS? Not sure if this is actually 
         # so important tho.
 
         # Algorithm also decides on its price if there is any

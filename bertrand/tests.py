@@ -85,54 +85,87 @@ class SharedPlayerBot(Bot):
     def check_specific_prices(self, treatment):
         err_msg_price = 'Price is wrong!'
         err_msg_profit = 'Profit is wrong'
+        err_msg_acc_profit = 'Accumulated profit is wrong'
+
         if treatment == '1H1A':
             if self.round_number == 1:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 120, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 120, err_msg_acc_profit
+
                 assert self.player.profit == 120, err_msg_profit
+                assert self.player.accumulated_profit == 120, err_msg_acc_profit
             elif self.round_number == 2:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 120, err_msg_acc_profit
+
                 assert self.player.profit == 180, err_msg_profit
+                assert self.player.accumulated_profit == 300, err_msg_acc_profit
             elif self.round_number == 3:
                 assert self.group.price_algorithm == 1, err_msg_price
                 assert self.group.profit_algorithm == 30, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 150, err_msg_acc_profit
+
                 assert self.player.profit == 30, err_msg_profit
+                assert self.player.accumulated_profit == 330, err_msg_acc_profit
             elif self.round_number == 4:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 150, err_msg_acc_profit
+
                 assert self.player.profit == 180, err_msg_profit
+                assert self.player.accumulated_profit == 510, err_msg_acc_profit
+
             elif self.round_number == 5:
                 assert self.group.price_algorithm == 1, err_msg_price
                 assert self.group.profit_algorithm == 60, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 210, err_msg_acc_profit
+
                 assert self.player.profit == 0, err_msg_profit
+                assert self.player.accumulated_profit == 510, err_msg_acc_profit
             else:
                 assert self.group.price_algorithm == 1, err_msg_price
                 assert self.group.profit_algorithm == 60, err_msg_price
-                assert self.player.profit == 0, err_msg_profit
 
+                assert self.player.profit == 0, err_msg_profit
 
         elif treatment == '2H1A':
             if self.round_number == 1:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 80, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 80, err_msg_acc_profit
+
                 assert self.player.profit == 80, err_msg_profit
+                assert self.player.accumulated_profit == 80, err_msg_acc_profit
             elif self.round_number == 2:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 80, err_msg_acc_profit
+
                 assert self.player.profit == 90, err_msg_profit
+                assert self.player.accumulated_profit == 170, err_msg_acc_profit
             elif self.round_number == 3:
                 assert self.group.price_algorithm == 1, err_msg_price
                 assert self.group.profit_algorithm == 20, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 100, err_msg_acc_profit
+
                 assert self.player.profit == 20, err_msg_profit
+                assert self.player.accumulated_profit == 190, err_msg_acc_profit
             elif self.round_number == 4:
                 assert self.group.price_algorithm == 0, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 100, err_msg_acc_profit
+
                 assert self.player.profit == 0, err_msg_profit
+                assert self.player.accumulated_profit == 190, err_msg_acc_profit
             elif self.round_number == 5:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 80, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 180, err_msg_acc_profit
+
                 assert self.player.profit == 80, err_msg_profit
+                assert self.player.accumulated_profit == 270, err_msg_acc_profit
             else:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 80, err_msg_profit
