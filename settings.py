@@ -8,7 +8,6 @@ from os import environ
 SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1/130,
     participation_fee=4.00,
-    corona_bonus_after_end=4.00,
     doc=""
 )
 

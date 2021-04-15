@@ -2,85 +2,117 @@ from otree.api import Currency as c, currency_range
 from . import pages
 from ._builtin import Bot
 from .models import Constants
-from otree.api import SubmissionMustFail
+from otree.api import SubmissionMustFail, Submission
 
 import random
 
 class SharedPlayerBot(Bot):
     # TODO: Test Time out case
-    cases = [ 'specific_prices']#'monopoly',
+    cases = ['timeout_test']#'monopoly',timeout_test, specific_prices
 
     def play_round(self):
         case = self.case
         treatment = self.session.config['group_treatment']
         n_players = 2 if treatment in ['2H0A', '1H1A'] else 3
+        
+        if self.case == 'timeout_test':
+            if not self.participant.vars['is_dropout']:
+                if self.round_number == 1:
+                    yield(pages.StartExperiment)
+                if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
+                    # A player has  a fixed probability to drop out at the beginning of round 2
+                    bool_timeout = False
+                    if self.round_number == 2:
+                        timeout_prob = 0.10
+                        if random.random()<timeout_prob:
+                            bool_timeout = True
+                    # In the rounds after round three, we check if there is a dropout in the group
+                    # The participant should see a pop-up notifying him if this is the case
+                    if self.round_number >= 3:
+                        if self.group.dropout_in_group: #TODO: Weird behaviour here, I guess because of waitpages
+                            assert "Ein anderer Teilnehmer in Ihrem Markt hat das Experiment vorzeitig verlassen" in self.html
+                        else:
+                            assert "Ein anderer Teilnehmer in Ihrem Markt hat das Experiment vorzeitig verlassen" not in self.html
 
-        if self.round_number == 1:
-            self.test_stranger_matching()
-            yield(pages.StartExperiment)
-            # Check in the first round if the price bounds are correct
-            yield SubmissionMustFail(pages.Decide, {'price': -1}, error_fields=['price'])
-            yield SubmissionMustFail(pages.Decide, {'price': 6}, error_fields=['price']) 
-            yield SubmissionMustFail(pages.Decide, {'price': 3.2}, error_fields=['price']) 
+                    yield Submission(pages.Decide, {'price': Constants.reservation_price}, timeout_happened=bool_timeout)
 
-        if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
-            # Check if instructions are shown on the page
-            assert "Firmen entscheiden in jeder Runde erneut" in self.html
-            assert "130 Taler" in self.html # Conversion rate in pre reg
+                    # This is relevant for the round two when he dropped out
+                    if not self.participant.vars['is_dropout']:
+                        yield Submission(pages.RoundResults)
 
-            if treatment in ['1H1A', '1H2A', '2H1A']:
-                assert "Marktentscheidungen durch Algorithmen" in self.html
+                if self.round_number == self.subsession.this_app_constants()['round_number_draw']:
+                    if not self.participant.vars['is_dropout']:
+                      yield(pages.EndSG)
             else:
-                assert "Marktentscheidungen durch Algorithmen" not in self.html
+                assert self.group.dropout_in_group, 'There is a dropout which is not properly recorded in the Database.'
+        else:
 
-            if case == 'monopoly':
-                yield(pages.Decide, {'price': Constants.reservation_price})
-                # Conditional on full cooperation algorithms plays monopoly price too
-                assert self.player.profit == int(4 * 60 / n_players)
-            elif case == 'specific_prices':
-                # Play a specific price cycle and check if the outcome matches
-                # our expectation.
-                price = 4
-                if self.round_number == 2:
-                    price = 3
-                elif self.round_number == 3:
-                    price = 1
-                elif self.round_number == 4:
-                    price = 3
-                elif self.round_number == 5:
-                    price = 4
-                yield(pages.Decide, {'price': price})
-                self.check_specific_prices(treatment=treatment)
-            if n_players == 3:
-                assert 'Firma C' in self.html
-            else:
-                assert 'Firma C' not in self.html
+            if self.round_number == 1:
+                self.test_stranger_matching()
+                yield(pages.StartExperiment)
+                # Check in the first round if the price bounds are correct
+                yield SubmissionMustFail(pages.Decide, {'price': -1}, error_fields=['price'])
+                yield SubmissionMustFail(pages.Decide, {'price': 6}, error_fields=['price']) 
+                yield SubmissionMustFail(pages.Decide, {'price': 3.2}, error_fields=['price']) 
 
-            # If the player won the market, she must have have made a profit
-            if self.player.price == self.group.winning_price:
-                assert str(int(self.group.winning_price/self.group.n_winners * Constants.m_consumer)) in self.html
-            assert str(int(self.player.price)) in self.html
-            assert str(int(self.group.winning_price)) in self.html
+            if self.round_number <= self.subsession.this_app_constants()['round_number_draw']:
+                # Check if instructions are shown on the page
+                assert "Firmen entscheiden in jeder Runde erneut" in self.html
+                assert "130 Taler" in self.html # Conversion rate in pre reg
 
-            yield(pages.RoundResults)
-            
-            if self.round_number == self.subsession.this_app_constants()['round_number_draw']:
-                # Check if the total profit is shown correctly
-                accumulated_payoff_in_app = sum([p_in_r.profit for p_in_r in self.player.in_all_rounds()])
-                assert str(int(accumulated_payoff_in_app)) in self.html, "Not there"
-                
-                # And if it has been saved correctly
-                sg_counter = self.subsession.this_app_constants()['super_game_count']
-                key_name = "final_payoff_sg_" + str(sg_counter)        
-                assert accumulated_payoff_in_app == self.participant.vars[key_name]
-
-                assert "insgesamt einen Gewinn von <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
-                if sg_counter == 1 or sg_counter == 2:
-                    assert "Sie spielen jetzt vom gleichen Spiel einen neuen Durchgang" in self.html
+                if treatment in ['1H1A', '1H2A', '2H1A']:
+                    assert "Marktentscheidungen durch Algorithmen" in self.html
                 else:
-                    assert "Dies war der letzte Durchgang" in self.html
-                assert "dies die letzte Runde des {}. Durchgangs".format(self.subsession.this_app_constants()['super_game_count']) in self.html
-                yield(pages.EndSG)
+                    assert "Marktentscheidungen durch Algorithmen" not in self.html
+
+                if case == 'monopoly':
+                    yield(pages.Decide, {'price': Constants.reservation_price})
+                    # Conditional on full cooperation algorithms plays monopoly price too
+                    assert self.player.profit == int(4 * 60 / n_players)
+                elif case == 'specific_prices':
+                    # Play a specific price cycle and check if the outcome matches
+                    # our expectation.
+                    price = 4
+                    if self.round_number == 2:
+                        price = 3
+                    elif self.round_number == 3:
+                        price = 1
+                    elif self.round_number == 4:
+                        price = 3
+                    elif self.round_number == 5:
+                        price = 4
+                    yield(pages.Decide, {'price': price})
+                    self.check_specific_prices(treatment=treatment)
+                if n_players == 3:
+                    assert 'Firma C' in self.html
+                else:
+                    assert 'Firma C' not in self.html
+
+                # If the player won the market, she must have have made a profit
+                if self.player.price == self.group.winning_price:
+                    assert str(int(self.group.winning_price/self.group.n_winners * Constants.m_consumer)) in self.html
+                assert str(int(self.player.price)) in self.html
+                assert str(int(self.group.winning_price)) in self.html
+
+                yield(pages.RoundResults)
+                
+                if self.round_number == self.subsession.this_app_constants()['round_number_draw']:
+                    # Check if the total profit is shown correctly
+                    accumulated_payoff_in_app = sum([p_in_r.profit for p_in_r in self.player.in_all_rounds()])
+                    assert str(int(accumulated_payoff_in_app)) in self.html, "Not there"
+                    
+                    # And if it has been saved correctly
+                    sg_counter = self.subsession.this_app_constants()['super_game_count']
+                    key_name = "final_payoff_sg_" + str(sg_counter)        
+                    assert accumulated_payoff_in_app == self.participant.vars[key_name]
+
+                    assert "insgesamt einen Gewinn von <b>{} Taler".format(int(accumulated_payoff_in_app)) in self.html
+                    if sg_counter == 1 or sg_counter == 2:
+                        assert "Sie spielen jetzt vom gleichen Spiel einen neuen Durchgang" in self.html
+                    else:
+                        assert "Dies war der letzte Durchgang" in self.html
+                    assert "dies die letzte Runde des {}. Durchgangs".format(self.subsession.this_app_constants()['super_game_count']) in self.html
+                    yield(pages.EndSG)
 
     def check_specific_prices(self, treatment):
         err_msg_price = 'Price is wrong!'

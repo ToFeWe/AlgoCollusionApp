@@ -39,7 +39,7 @@ class Decide(Page):
 
     def is_displayed(self):
         if self.participant.vars['is_dropout']:
-            
+
             # If the player was already a dropout, we take the action 
             # for her/him.
             self.player.take_action_for_player()
