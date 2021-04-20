@@ -11,9 +11,9 @@ Das Experiment endet jetzt.<br><br>
 
 <table class="table">
 
-  <tr> <th> Gewinn im ersten Spiel </th> <td> {{payoff_sg_1}} </td> </tr>
-  <tr> <th> Gewinn im zweiten Spiel </th> <td>  {{payoff_sg_2}}  </td> </tr>
-  <tr> <th> Gewinn im dritten Spiel </th> <td>  {{payoff_sg_3}}  </td> </tr>
+  <tr> <th> Gewinn im ersten Spiel </th> <td> {{payoff_sg_1}} Taler</td> </tr>
+  <tr> <th> Gewinn im zweiten Spiel </th> <td>  {{payoff_sg_2}}  Taler</td> </tr>
+  <tr> <th> Gewinn im dritten Spiel </th> <td>  {{payoff_sg_3}}  Taler</td> </tr>
 </table>
 <br>
 Ein Zufallsmechanismus hat entschieden, dass das {{paid_sg}}. Spiel ausgezahlt wird.
@@ -31,8 +31,7 @@ Außerdem erhalten Sie zusätzlich für Ihr Erscheinen zum Experiment {{show_up|
   <tr> <th> <p style="color:red"> Gesamtgewinn </p></th> <th><p style="color:red">  {{final_money_with_show_up|floatformat:2}} Euro </p></th> </tr>
 
 </table>
-<h2>
-Bitte geben Sie den Betrag jetzt auf der Auszahlungsseite ein.<br>Erinnerung: Ihre Gesamtauszahlung ist {{final_money_with_show_up|floatformat:2}} Euro 
-</h2>  
+<h1>Das Experiment endet jetzt.  Ihr Auszahlung beträgt {{payoff_plus_participation_fee}}. Bitte klicken Sie hier um Ihre Auszahlung zu erhalten: </h1>
+<a href="{{paymentURL}}" class="btn btn-primary btn-block btn-lg" role="button">Zur Auszahlungsseite</a>
 {% endblock %}
 

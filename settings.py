@@ -26,6 +26,8 @@ SESSION_CONFIGS = [
         display_name="SELF_treatment_1H1A_players_18",
         group_treatment='1H1A',
         num_demo_participants=18,
+        expId=1234,
+        expShortName='test',
         use_browser_bots=False,
         app_sequence=[
          #'introduction',
@@ -40,6 +42,8 @@ SESSION_CONFIGS = [
         display_name="SELF_treatment_2H0A_players_18",
         group_treatment='2H0A',
         num_demo_participants=18,
+        expId=1234,
+        expShortName='test',
         use_browser_bots=False,
         app_sequence=[
          #'introduction',

@@ -1,7 +1,23 @@
 from otree.api import Currency as c, currency_range
 from ._builtin import Page, WaitPage
 from .models import Constants
-import math
+
+
+class OrseeID(Page):
+    form_model = 'player'
+    form_fields = ['orsee_id']
+
+    def is_displayed(self):
+        # Page is only required if we did not use
+        # pass the orsee id via the participant label and if the
+        # participant is not a dropout.
+        if (self.participant.label is None) & (not self.participant.vars['is_dropout']):
+            return True
+        else:
+            self.player.orsee_id = self.participant.label
+
+    def before_next_page(self):
+        self.participant.label = self.player.orsee_id
 
 class FinalResults(Page):
     def is_displayed(self):
@@ -26,15 +42,14 @@ class FinalResults(Page):
             'payoff_sg_1': self.participant.vars['final_payoff_sg_1'],
             'payoff_sg_2': self.participant.vars['final_payoff_sg_2'],
             'payoff_sg_3': self.participant.vars['final_payoff_sg_3'],
-            'paid_sg': self.player.paid_sg
+            'paid_sg': self.player.paid_sg,
+            'payoff_plus_participation_fee': self.participant.payoff_plus_participation_fee(),
+            'paymentURL': self.player.create_paymentURL()
         }
-
 
 class DropOut(Page):
     def is_displayed(self):
         return self.participant.vars['is_dropout']
 
-page_sequence = [
-    FinalResults,
-    DropOut
-    ]
+
+page_sequence = [OrseeID, FinalResults, DropOut]
