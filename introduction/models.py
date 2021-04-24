@@ -96,7 +96,7 @@ class Player(BasePlayer):
 
     q_after_fixed_round = models.StringField(
         initial=None, 
-        choices = ['95%', '5%', '50%'],
+        choices = ['95%', '20%', '50%'],
         label='Was ist die Wahrscheinlichkeit, dass nach Abschluss einer Periode eine weitere gespielt wird?'
     )
 
@@ -129,6 +129,13 @@ class Player(BasePlayer):
     three_times_wrong = models.BooleanField(initial=False)
 
     def check_three_times_wrong(self):
+        """
+        
+        Small helper function to check if any of the control questions
+        has been answered three times wrong. If so the value of the 
+        field *three_times_wrong* will be set to true and an explanation
+        will be shown to the participant.
+        """
         all_values = [self.counter_how_many_customer,
                       self.counter_after_fixed_round,
                       self.counter_consumer_wtp,
@@ -137,8 +144,10 @@ class Player(BasePlayer):
                       ]
 
         self.three_times_wrong = any(v >= 3 for v in all_values)
-
-    # Error evaluation of form fields
+    
+    
+    ### Error evaluation of form fields ###
+    
     def q_how_many_customer_error_message(self, value):
         if value != Constants.m_consumer:
             # Count +1 if the player answered the question wrong

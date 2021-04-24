@@ -7,8 +7,7 @@ from otree.api import SubmissionMustFail, Submission
 import random
 
 class SharedPlayerBot(Bot):
-    # TODO: Test Time out case
-    cases = ['timeout_test']#'monopoly',timeout_test, specific_prices
+    cases = ['monopoly','timeout_test', 'specific_prices']#
 
     def play_round(self):
         case = self.case

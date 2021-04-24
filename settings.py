@@ -30,7 +30,7 @@ SESSION_CONFIGS = [
         expShortName='test',
         use_browser_bots=False,
         app_sequence=[
-         #'introduction',
+         'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
@@ -46,7 +46,7 @@ SESSION_CONFIGS = [
         expShortName='test',
         use_browser_bots=False,
         app_sequence=[
-         #'introduction',
+         'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
