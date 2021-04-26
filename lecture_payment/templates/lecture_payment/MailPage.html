@@ -1,0 +1,20 @@
+{% extends "global/Page.html" %}
+
+{% load otree %}
+
+{% block title %}
+Ihre HHU-Mailadresse
+{% endblock %}
+{% block content %}
+<p>
+  Das Experiment endet jetzt. <b>Bitte geben Sie unten Ihre HHU-Mailadresse ein.</b>
+  Wir werden im Anschluss an dieses Experiment zwei Teilnehmer:innen zufällig auswählen,
+  die eine Bezahlung gemäß Ihrer Entscheidungen erhalten.
+  Falls Sie zufällig ausgewählt werden, werden wir Sie unter dieser E-Mail Adresse kontaktieren,
+  um mit Ihnen die Auszahlung durchzuführen.
+</p>
+<p>
+  {% formfields %}
+</p>
+{% next_button %}
+{% endblock %}

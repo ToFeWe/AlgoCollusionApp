@@ -1,0 +1,42 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+Viele Dank für Ihre Teilnahme
+{% endblock %}
+
+{% block content %}
+Das Experiment endet jetzt.<br><br> 
+
+
+<table class="table">
+
+  <tr> <th> Gewinn im ersten Spiel </th> <td> {{payoff_sg_1}} Taler</td> </tr>
+  <tr> <th> Gewinn im zweiten Spiel </th> <td>  {{payoff_sg_2}}  Taler</td> </tr>
+  <tr> <th> Gewinn im dritten Spiel </th> <td>  {{payoff_sg_3}}  Taler</td> </tr>
+</table>
+<br>
+Ein Zufallsmechanismus hat entschieden, dass das {{paid_sg}}. Spiel ausgezahlt wird.
+<br><br>
+Ein Euro entsprechen dabei {{exchange_rate|c}}. 
+Außerdem erhalten Sie zusätzlich für Ihr Erscheinen zum Experiment {{show_up|floatformat:2}} Euro.  
+  
+
+   <br><br>
+ <b> Ihre gesamte Auszahlung: </b>
+ <table class="table">
+
+  <tr> <th> Gewinn im {{paid_sg}}. Spiel </th> <td> {{final_money_no_show_up|floatformat:2}} Euro </td> </tr>
+  <tr> <th> Bonus für Ihr pünktliches Erscheinen </th> <td>  {{show_up|floatformat:2}} Euro </td> </tr>
+  <tr> <th> <p style="color:red"> Gesamtgewinn </p></th> <th><p style="color:red">  {{final_money_with_show_up|floatformat:2}} Euro </p></th> </tr>
+
+</table>
+<p>
+  <b>Falls Sie zufällig für die Auszahlung ausgewählt werden, schreiben wir Ihnen eine E-Mail an {{player.mail}}.
+  Vielen Dank für Ihre Teilnahme </b>
+</p>
+
+
+
+{% endblock %}
+

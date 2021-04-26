@@ -1,0 +1,83 @@
+<h3> URLs for the payment platform</h3>
+<div id="urlTable"></div>
+
+
+    <h3>Participants</h3>
+
+
+    <table class="table table-striped">
+        <tr>
+            <th>Participant code</th>
+            <th>Participant label</th>
+            <th>Is Dropout</th>
+            <th>Progress</th>
+            <th>Taler Super Game 1</th>
+            <th>Taler Super Game 2</th>
+            <th>Taler Super Game 3</th>
+            <th>Paid Super Game</th>
+            <th>Participation fee</th>
+            <th>Super Game Payoff</th>
+            <th><b>Total</b></th>
+
+        </tr>
+
+        {% for p in participants %}
+        
+        <tr>
+            <td style="font-family: 'Courier New'">{{ p.code }}</td>
+            <td> {{ p.label|default_if_none:"" }}</td>
+            <th> {{p.vars.is_dropout}} </th>
+            <td>{{ p.current_page_ }}</td>
+
+            <td>{{ p.vars.final_payoff_sg_1 }} </td>
+            <td>{{ p.vars.final_payoff_sg_2 }} </td>
+            <td>{{ p.vars.final_payoff_sg_3 }} </td>
+
+            <td>{{ p.vars.paid_sg }}</td>
+            <td>{{ participation_fee }}</td>
+            <td>{{ p.vars.final_money_no_show_up }}</td>
+            <td><b>{{ p.vars.final_money_with_show_up}}</b></td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+    <h3>Summary</h3>
+    <table class="table">
+        <tr>
+            <th>Total payments</th>
+            <td>{{total_payoff_all}} </td>
+        </tr>
+        <tr>
+            <th>Mean payment</th>
+            <td>{{mean_payoff_all}}</td>
+        </tr>
+    </table>
+
+
+    <h3>Notes/Signature</h3>
+    <div class="card bg-light">
+        <br/>
+        <br/>
+        <br/>
+    </div>
+
+<script type="text/javascript">
+    var create_url_table = (function create_url_table(selector,baseNode=document) {
+        const urls_with_id = {{urls_with_id|safe}};
+        const tableRow = document.createElement('tr');
+        const tableCol = document.createElement('td');
+        const tableNode = document.createElement('table');
+        
+        tableRow.appendChild(tableCol);
+        
+        urls_with_id.forEach(uri => {
+            let row = tableRow.cloneNode(true);
+            row.firstChild.innerText = window.location.origin + uri;
+            tableNode.appendChild(row);
+        });
+        baseNode?.querySelector(selector)?.appendChild(tableNode);
+
+        return create_url_table;
+    })('#urlTable');
+</script>
