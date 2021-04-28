@@ -10,7 +10,6 @@ class General(Page):
                    'q_abitur', 'q_math', 'q_budget', 'q_spending']
 
     def is_displayed(self):
-        #TODO: Should I add timeouts here too and record dropouts?
         if self.participant.vars['is_dropout']:
             return False
         else:

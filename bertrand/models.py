@@ -19,8 +19,8 @@ class Constants(BaseConstants):
     num_rounds = 30
 
     # Timeouts in seconds
-    timeout_soft = 300
-    timeout_hard = 600 # TODO Change
+    timeout_soft = 5 * 60
+    timeout_hard = 7 * 60
     timeout_text = ("Bitte klicken Sie auf Weiter, sobald Sie eine Entscheidung getroffen haben. Sollten Sie das Zeitlimit "
                    "überschreiten, werden Sie aus dem Experiment ausgeschlossen. Verbleibende Zeit:")
 
@@ -401,8 +401,8 @@ class Subsession(SharedBaseSubsession):
         
         """
         # The number of rounds we have drawn ex ante according to some cont prob
-        return {#'round_number_draw': 11, #TODO Change
-                'round_number_draw': 5, # for testing TODO: Remove
+        return {'round_number_draw': 11, #TODO Change
+                # 'round_number_draw': 5, # for testing TODO: Remove
                 'super_game_count': 1,
                 'group_shuffle_by_size': {
                     3: {'shuffle_structure_small': [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
