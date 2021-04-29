@@ -95,7 +95,7 @@ i removed many linebreaks to make output HTML cleaner
     // Show timeout
     $(function () {
         $('.otree-timer__time-left').on('update.countdown', function (event) {
-            if (event.offset.totalSeconds <= {{Constants.timeout_soft|json}}) {
+            if (event.offset.totalSeconds <= {{Constants.timeout_seconds_left|json}}) {
                 $('.otree-timer').show();
             }
         });

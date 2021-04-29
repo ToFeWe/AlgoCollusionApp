@@ -19,8 +19,10 @@ class Constants(BaseConstants):
     num_rounds = 30
 
     # Timeouts in seconds
-    timeout_soft = 5 * 60
-    timeout_hard = 7 * 60
+    timeout_soft = 5 * 60 # After 5 minutes the timer is shown
+    timeout_hard = 7 * 60 # After 7 minutes the participant is a dropout
+    timeout_seconds_left = timeout_hard - timeout_soft
+
     timeout_text = ("Bitte klicken Sie auf Weiter, sobald Sie eine Entscheidung getroffen haben. Sollten Sie das Zeitlimit "
                    "überschreiten, werden Sie aus dem Experiment ausgeschlossen. Verbleibende Zeit:")
 
