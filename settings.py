@@ -66,6 +66,19 @@ SESSION_CONFIGS = [
          'bertrand_SG_3', 
          'lecture_payment']
     ),
+    dict(
+        name='BOT_LECTURE_treatment_1H1A_players_18',
+        display_name="LECTURE_treatment_1H1A_players_18",
+        group_treatment='1H1A',
+        num_demo_participants=18,
+        use_browser_bots=True,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'lecture_payment']
+    ),
 
 
 
