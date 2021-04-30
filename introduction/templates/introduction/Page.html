@@ -11,14 +11,13 @@
 {% endblock %}
 
 {% block app_scripts %}
-{# Alarm sounds for the timer #}
-<audio id="alarm_sound" src="{% static "alarm_sound.wav" %}" preload="auto"></audio>
 
 <script>
     // Soft sound warning for timeout  
     setTimeout(
         function () {
-        document.getElementById('alarm_sound').play();
+            var audio = new Audio("{% static "alarm_sound.wav" %}");
+            audio.play();
         },
         {{Constants.timeout_soft|json}}*1000 // *1000 due to miliseconds
     );
