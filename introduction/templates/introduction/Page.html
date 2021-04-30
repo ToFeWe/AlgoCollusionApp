@@ -16,7 +16,7 @@
     // Soft sound warning for timeout  
     setTimeout(
         function () {
-            var audio = new Audio("{% static "alarm_sound.wav" %}");
+            var audio = new Audio("/static/alarm_sound.wav");
             audio.play();
         },
         {{Constants.timeout_soft|json}}*1000 // *1000 due to miliseconds
