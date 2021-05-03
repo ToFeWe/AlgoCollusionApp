@@ -7,8 +7,8 @@ from otree.api import SubmissionMustFail, Submission
 import random
 
 class SharedPlayerBot(Bot):
-    cases = ['monopoly','timeout_test', 'specific_prices']#
-
+    cases = ['monopoly', 'specific_prices']#'timeout_test
+ 
     def play_round(self):
         case = self.case
         treatment = self.session.config['group_treatment']
