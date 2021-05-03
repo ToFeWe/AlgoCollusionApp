@@ -68,7 +68,7 @@ SESSION_CONFIGS = [
     ),
     dict(
         name='BOT_LECTURE_treatment_1H1A_players_18',
-        display_name="LECTURE_treatment_1H1A_players_18",
+        display_name="BOT_LECTURE_treatment_1H1A_players_18",
         group_treatment='1H1A',
         num_demo_participants=18,
         use_browser_bots=True,

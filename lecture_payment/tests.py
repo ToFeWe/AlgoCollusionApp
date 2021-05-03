@@ -10,7 +10,7 @@ class PlayerBot(Bot):
             yield Submission(pages.DropOut, check_html=False)
         else:
             if self.participant.label is None:
-                yield pages.OrseeID, dict(orsee_id="test-id")
+                yield pages.MailPage, dict(mail="test@test.de")
             expect(str(self.participant.payoff_plus_participation_fee()), "in", self.html)
 
             paid_sg_string = str(self.player.paid_sg)
