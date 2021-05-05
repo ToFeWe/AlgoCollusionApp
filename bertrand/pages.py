@@ -1,7 +1,6 @@
 from ._builtin import Page, WaitPage
 from otree.api import Currency as c, currency_range
 from .models import Constants
-import random
 
 
 class StartExperiment(Page):
@@ -11,11 +10,12 @@ class StartExperiment(Page):
     def is_displayed(self):
         # Saved it to the database if the participant is
         # a dropout at the beginning of the round.
-        # Note that we save it here to player and group model.
+        # Note that it is saved to the player and group model.
         if self.participant.vars['is_dropout']:
             self.player.record_dropout()
-        return (self.round_number == 1) & (not self.participant.vars['is_dropout'])
-    
+        return (self.round_number == 1) & (
+            not self.participant.vars['is_dropout'])
+
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
         template_vars = {
@@ -30,6 +30,7 @@ class StartExperiment(Page):
         if timeout_happened:
             self.player.record_dropout()
 
+
 class Decide(Page):
     timeout_seconds = Constants.timeout_hard
     timer_text = Constants.timeout_text
@@ -40,7 +41,7 @@ class Decide(Page):
     def is_displayed(self):
         if self.participant.vars['is_dropout']:
 
-            # If the player was already a dropout, we take the action 
+            # If the player was already a dropout, we take the action
             # for her/him.
             self.player.take_action_for_player()
 
@@ -49,7 +50,8 @@ class Decide(Page):
         else:
             # Only displayed if we still play, e.g. the number of rounds is equal or
             # below the random raw of round numbers from before
-            return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
+            return self.round_number <= self.subsession.this_app_constants()[
+                'round_number_draw']
 
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
@@ -57,9 +59,10 @@ class Decide(Page):
                                                                                         Constants.maximum_price)
         template_vars = {
             "label_decide": label_decide,
-            'exchange_rate': int(1 / self.session.config['real_world_currency_per_point']), # To avoid comma
+            # To avoid comma
+            'exchange_rate': int(1 / self.session.config['real_world_currency_per_point']),
             'super_game_count': self.subsession.this_app_constants()['super_game_count']
-            }
+        }
         template_vars.update(additional_template_vars)
         return template_vars
 
@@ -79,10 +82,11 @@ class RoundWaitPage(WaitPage):
                                    "und wurden deswegen aus dem Experiment ausgeschlossen."))
 
     def is_displayed(self):
-        return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
+        return self.round_number <= self.subsession.this_app_constants()[
+            'round_number_draw']
 
     def after_all_players_arrive(self):
-        # TODO: Fix ERR_TOO_MANY_REDIRECTS? Not sure if this is actually 
+        # TODO: Fix ERR_TOO_MANY_REDIRECTS? Not sure if this is actually
         # so important tho.
 
         # Algorithm also decides on its price if there is any
@@ -93,7 +97,8 @@ class RoundWaitPage(WaitPage):
 
         # Set the profits for the round
         self.group.calc_round_profit()
-        
+
+
 class RoundResults(Page):
     timeout_seconds = Constants.timeout_hard
     timer_text = Constants.timeout_text
@@ -102,7 +107,8 @@ class RoundResults(Page):
         if self.participant.vars['is_dropout']:
             return False
         else:
-            return self.round_number <= self.subsession.this_app_constants()['round_number_draw']
+            return self.round_number <= self.subsession.this_app_constants()[
+                'round_number_draw']
 
     def vars_for_template(self):
         additional_template_vars = self.group.get_additional_template_variables()
@@ -121,6 +127,7 @@ class RoundResults(Page):
         if timeout_happened:
             self.player.record_dropout()
 
+
 class EndSG(Page):
     timeout_seconds = Constants.timeout_hard
     timer_text = Constants.timeout_text
@@ -129,7 +136,8 @@ class EndSG(Page):
         if self.participant.vars['is_dropout']:
             return False
         else:
-            return self.round_number == self.subsession.this_app_constants()['round_number_draw']
+            return self.round_number == self.subsession.this_app_constants()[
+                'round_number_draw']
 
     def vars_for_template(self):
         # Set the final payoff for player for the given Super Game
@@ -139,7 +147,7 @@ class EndSG(Page):
         # Template variables
         additional_template_vars = self.group.get_additional_template_variables()
         template_vars = {
-            'final_payoff_euro' : float(self.participant.payoff_plus_participation_fee()),
+            'final_payoff_euro': float(self.participant.payoff_plus_participation_fee()),
             'payoff_coins': self.participant.payoff,
             'super_game_count': self.subsession.this_app_constants()['super_game_count'],
             'accumulated_profit': self.player.accumulated_profit
@@ -151,7 +159,6 @@ class EndSG(Page):
         timeout_happened = self.timeout_happened
         if timeout_happened:
             self.player.record_dropout()
-        
 
 
 page_sequence = [
@@ -160,4 +167,4 @@ page_sequence = [
     RoundWaitPage,
     RoundResults,
     EndSG
-    ]
+]

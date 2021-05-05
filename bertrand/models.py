@@ -12,19 +12,20 @@ An Experiment on Algorithmic Collusion.
 
 
 class Constants(BaseConstants):
-    players_per_group = None
+    players_per_group = None  # Grouping done in Subsession class
     name_in_url = 'algcoll'
 
     # num_rounds is only an upper bound but not actually used
     num_rounds = 30
 
     # Timeouts in seconds
-    timeout_soft = 5 * 60 # After 5 minutes the timer is shown
-    timeout_hard = 7 * 60 # After 7 minutes the participant is a dropout
+    timeout_soft = 5 * 60  # After 5 minutes the timer is shown
+    timeout_hard = 7 * 60  # After 7 minutes the participant is a dropout
+    # Time left before the timer is shown
     timeout_seconds_left = timeout_hard - timeout_soft
 
     timeout_text = ("Bitte klicken Sie auf Weiter, sobald Sie eine Entscheidung getroffen haben. Sollten Sie das Zeitlimit "
-                   "überschreiten, werden Sie aus dem Experiment ausgeschlossen. Verbleibende Zeit:")
+                    "überschreiten, werden Sie aus dem Experiment ausgeschlossen. Verbleibende Zeit:")
 
     # Define market constants
     maximum_price = 5
@@ -43,7 +44,6 @@ class Constants(BaseConstants):
                     2: 'B',
                     3: 'C'}
 
-
     # Load the Q learning agents for the experiment.
     with open("./bertrand/static/q_learning_agents/otree_super_star_2_agents.pickle", "rb") as f:
         two_firm_agent = pickle.load(f)
@@ -61,8 +61,10 @@ class Constants(BaseConstants):
     }
 
     # The state of convergence has been saved in string format.
-    two_firm_agent['state_of_convergence'] = eval(two_firm_agent['state_of_convergence'])
-    three_firm_agent['state_of_convergence'] = eval(three_firm_agent['state_of_convergence'])
+    two_firm_agent['state_of_convergence'] = eval(
+        two_firm_agent['state_of_convergence'])
+    three_firm_agent['state_of_convergence'] = eval(
+        three_firm_agent['state_of_convergence'])
 
 
 class SharedBaseSubsession(BaseSubsession):
@@ -90,10 +92,13 @@ class SharedBaseSubsession(BaseSubsession):
             # Initialize a shuffle structure which is used in the individual choice treatments.
             # Note: In the individual choice treatments, we do not have a group matching
             # but everyone is in his/her own group. This is still needed as we use the group
-            #  class for all market information (e.g. algorithms market prices etc.).
-            shuffle_structure = shuffle_structure = [[i] for i in range(1, self.session.num_participants + 1)]
+            # class for all market information (e.g. algorithms market prices
+            # etc.).
+            shuffle_structure = shuffle_structure = [
+                [i] for i in range(1, self.session.num_participants + 1)]
 
-            # If we actually have (human) groups, apply a different shuffle structure.
+            # If we actually have (human) groups, apply a different shuffle
+            # structure.
             if group_size == 3:
                 if n_participants not in [9, 18]:
                     raise Exception(("In the 3-player treatment we need matching groups of 9 people.",
@@ -121,14 +126,13 @@ class SharedBaseSubsession(BaseSubsession):
                     elif n_participants == 18:
                         shuffle_structure = self.this_app_constants()['group_shuffle_by_size'][group_size][
                             'shuffle_structure_big']
-            
-            # Apply grouping structure                
+
+            # Apply grouping structure
             self.set_group_matrix(shuffle_structure)
         else:
             # For all other rounds in the app, we apply the group structure which we have used for
-            # the first round.
-            # Hence, the group structure is kept constant within the app.
-            # Note however that we change it from super game to super game as we change the 
+            # the first round. Hence, the group structure is kept constant within the app.
+            # Note however that we change it from super game to super game as we change the
             # shuffle_structure_*** variable in this_app_constants()
             self.group_like_round(1)
 
@@ -140,19 +144,24 @@ class SharedBaseSubsession(BaseSubsession):
             # Also store it for each participant
             if self.round_number == 1:
                 for p in g.get_players():
-                    p.participant.vars['group_treatment'] = self.session.config['group_treatment']                     
+                    p.participant.vars['group_treatment'] = self.session.config['group_treatment']
 
                     # Check if the dropout variable has been added already in the intro app
                     # else add it.
                     if 'is_dropout' not in p.participant.vars.keys():
                         p.participant.vars['is_dropout'] = False
 
-                    # Init payoff variable for dict to zero at the start of the game
+                    # Initialize payoff variable for dict to zero at the start
+                    # of the game
                     sg_counter = self.this_app_constants()['super_game_count']
                     key_name = "final_payoff_sg_" + str(sg_counter)
                     p.participant.vars[key_name] = 0
 
     def vars_for_admin_report(self):
+        """
+
+        Variables for the admin report page.
+        """
         all_groups = self.get_groups()
         return {
             'all_groups': all_groups
@@ -165,7 +174,7 @@ class SharedBaseGroup(BaseGroup):
 
     # We use the group as a market level
     # Hence, also in the "individual" choice treatments
-    # e.g. the treatments with only one human and algorithms
+    # (e.g. the treatments with only one human and algorithms)
     # those variables are used to store outcomes.
     winning_price = models.IntegerField()
     n_winners = models.IntegerField()
@@ -181,13 +190,13 @@ class SharedBaseGroup(BaseGroup):
     # Treatment storage
     group_treatment = models.StringField()
 
-    # Record on the group level if there was d dropout
+    # Record on the group level if there was a dropout
     # in the group
     dropout_in_group = models.BooleanField()
 
     def set_algo_price(self):
         """
-        
+
         A function to get the price of the algorithmic player
         in the given round given the prices that haven been played
         in the last round.
@@ -200,17 +209,24 @@ class SharedBaseGroup(BaseGroup):
         past_prices_tuple = Constants.three_firm_agent['state_of_convergence']
         if treatment == '1H1A':
             past_prices_tuple = Constants.two_firm_agent['state_of_convergence']
-        
-        # Current state is the set of past prices
+
+        # The current state is the set of past prices
         if self.round_number > 1:
             past_algo_price = [self.in_previous_rounds()[-1].price_algorithm]
-            all_past_human_prices = [p.in_previous_rounds()[-1].price for p in self.get_players()]
+            all_past_human_prices = [
+                p.in_previous_rounds()[-1].price for p in self.get_players()]
 
-            # Price of the Algorithm is always assumed to be first, given how it learned
+            # The algorithm always assumes that its price comes in the first position of
+            # the state given how it learned.
             if treatment == '1H2A':
-                past_prices_tuple = tuple(past_algo_price + past_algo_price + all_past_human_prices)
+                # Algorithm prices are always symmetric.
+                past_prices_tuple = tuple(
+                    past_algo_price +
+                    past_algo_price +
+                    all_past_human_prices)
             else:
-                past_prices_tuple = tuple(past_algo_price + all_past_human_prices)
+                past_prices_tuple = tuple(
+                    past_algo_price + all_past_human_prices)
 
         # Differ which algorithm to use by treatment (3 or 2 firm market)
         if treatment in ['1H2A', '2H1A']:
@@ -234,21 +250,28 @@ class SharedBaseGroup(BaseGroup):
             if treatment == '1H2A':
                 all_prices = algo_price + algo_price + all_human_prices
             else:
+                # Else it must be the 1H1A treatment
                 all_prices = algo_price + all_human_prices
 
         # Calculate the market outcome
         self.winning_price = min(all_prices)
-        self.n_winners = len([price for price in all_prices if price == self.winning_price])
+        self.n_winners = len(
+            [price for price in all_prices if price == self.winning_price]
+            )
         for p in self.get_players():
             p.profit = self.calc_profit(p.price)
-            # Accumulate profit if we played more than one round
+            # Add profit to the accumulate profit if we already
+            # played more than one round.
             if self.round_number == 1:
                 p.accumulated_profit = p.profit
             else:
-                p.accumulated_profit = p.in_round(self.round_number - 1).accumulated_profit + p.profit
+                # Note we do not use oTrees payoff field here, as one super game is paid at random
+                # at the end of the experiment.
+                p.accumulated_profit = p.in_round(
+                    self.round_number - 1).accumulated_profit + p.profit
 
         # Calculate the algorithms profits in case there is one in the market.
-        # Makes our live easier when paying passive subjects in the end 
+        # This makes our lives easier when paying passive subjects in the end.
         if treatment not in ['3H0A', '2H0A']:
             self.profit_algorithm = self.calc_profit(self.price_algorithm)
 
@@ -268,20 +291,23 @@ class SharedBaseGroup(BaseGroup):
         if price > Constants.reservation_price:
             profit = 0
         elif price == self.winning_price:
-            profit = math.ceil((1 / self.n_winners) * price * Constants.m_consumer)
+            profit = math.ceil(
+                (1 / self.n_winners) * price * Constants.m_consumer
+            )
         else:
             profit = 0
         return profit
 
     def get_additional_template_variables(self):
         """
+
         Simple helper method that returns information for the template, which are mainly
         used in the instructions.
-
         """
         n_players = 2 if self.group_treatment in ['2H0A', '1H1A'] else 3
         group_treatment = self.group_treatment
-        algo_treatment = True if group_treatment not in ['2H0A', '3H0A'] else False
+        algo_treatment = True if group_treatment not in [
+            '2H0A', '3H0A'] else False
         return {
             'algo_treatment': algo_treatment,
             'group_treatment': group_treatment,
@@ -295,7 +321,7 @@ class SharedBaseGroup(BaseGroup):
 class SharedBasePlayer(BasePlayer):
     class Meta:
         abstract = True
-    
+
     # Dropout indicator
     is_dropout = models.BooleanField()
 
@@ -316,15 +342,17 @@ class SharedBasePlayer(BasePlayer):
         """
 
         A function that returns the relevant market information
-        for the participants in a given round as a tuple.
+        for the participants in a given round as a tuple
+
         (player_id, opponent_ids, opponent_prices)
         """
         treatment = self.group.group_treatment
 
-        # First the individual choice treatments
-        # The group class is here only used to store the information
-        # on the algorithm and not on the ids in the group.
-        # We assume that the algorithms here always have the ids two and/or three
+        # In the individual choice treatments the group class is
+        # only used to store the information on the algorithm and
+        # not on the ids in the group. We assume that the algorithms
+        # here always have the ids two and/or three, when the information
+        # is displayed to the participants.
         if treatment == '1H1A':
             player_id = 1
             opponent_ids = [2]
@@ -332,7 +360,9 @@ class SharedBasePlayer(BasePlayer):
         elif treatment == '1H2A':
             player_id = 1
             opponent_ids = [2, 3]
-            opponent_prices = [self.group.price_algorithm, self.group.price_algorithm]
+            opponent_prices = [
+                self.group.price_algorithm,
+                self.group.price_algorithm]
         else:
             # If we are not in an individual choice treatment
             # the group will come into play.
@@ -341,7 +371,8 @@ class SharedBasePlayer(BasePlayer):
             opponent_ids_no_algo = [o.id_in_group for o in opponents]
             opponent_prices_no_algo = [o.price for o in opponents]
 
-            # In the fully human markets, the opponents will be only non algorithms.
+            # In the fully human markets, the opponents will be only non
+            # algorithms.
             if treatment in ['2H0A', '3H0A']:
                 opponent_ids = opponent_ids_no_algo
                 opponent_prices = opponent_prices_no_algo
@@ -349,7 +380,8 @@ class SharedBasePlayer(BasePlayer):
                 # In 2H1A, the opponents are non algorithms and algorithms.
                 # Algorithm is always the last group member.
                 opponent_ids = opponent_ids_no_algo + [3]
-                opponent_prices = opponent_prices_no_algo + [self.group.price_algorithm]
+                opponent_prices = opponent_prices_no_algo + \
+                    [self.group.price_algorithm]
 
         # Map the integer to letters from A to C
         player_letter = Constants.firma_id_map[player_id]
@@ -357,21 +389,32 @@ class SharedBasePlayer(BasePlayer):
         return (player_letter, opponent_letters, opponent_prices)
 
     def set_final_payoff(self):
-        # We take the accumulated payoff from the last round we played. 
-        # This is stored as a fake-constant in the subsession, since it is a random draw
-        # for each SuperGame and the different supergame apps inherit from this app
-        last_played_round = self.subsession.this_app_constants()['round_number_draw']
+        """
+
+        A function to save the final payoff of the participant
+        for the respective super game to the participant dictionary.
+        Important: Only use this method once the profit for the last round
+        has been calculated using *set_profits_round* from the group method.
+        """
+        # We take the accumulated payoff from the last round we played.
+        # This round number is stored as a fake-constant in the subsession, since
+        # it is a random draw  for each SuperGame and the different supergame apps
+        # inherit from this app.
+        last_played_round = self.subsession.this_app_constants()[
+            'round_number_draw']
 
         # Take the accumulated profit from the last round
-        # IMPORTANT: Only use this method once the profit for the round has been calculated
-        # using *set_profits_round* from the group method
         total_coins = self.in_round(last_played_round).accumulated_profit
-        # Save the final accumulated payoff for the last subgame in the participant dict.
+        # Save the final accumulated payoff for the last subgame in the
+        # participant dict.
         self.sg_payoff_to_dict(sg_counter=self.subsession.this_app_constants()['super_game_count'],
                                final_payoff=total_coins)
 
     def sg_payoff_to_dict(self, sg_counter, final_payoff):
-        """ A helper function to save payoff for each subgame (*final_payoff* for subgame *sg_counter*) to the participant dict.
+        """
+
+        A helper function to save payoff for each subgame (*final_payoff* for subgame *sg_counter*)
+        to the participant dict.
         """
         key_name = "final_payoff_sg_" + str(sg_counter)
         self.participant.vars[key_name] = final_payoff
@@ -379,15 +422,14 @@ class SharedBasePlayer(BasePlayer):
     def take_action_for_player(self):
         """
         In case a participant drops out of the experiment
-        we need to a default choice for the player, such 
-        that the experiment, with the group matching can
-        progress. This default choice will be the price
+        we need to a default choice for the player, such
+        that the experiment, with the given group matching
+        can progress. This default choice will be the price
         just below the monopoly price with a random error
         of +/- 1.
 
         """
-        # TODO: Think about this
-        self.price = Constants.reservation_price - 1 + random.randint(-1,1) 
+        self.price = Constants.reservation_price - 1 + random.randint(-1, 1)
 
     def record_dropout(self):
         """ Small helper function to record that a player dropout. """
@@ -395,15 +437,18 @@ class SharedBasePlayer(BasePlayer):
         self.is_dropout = True
         self.group.dropout_in_group = True
 
+
 class Subsession(SharedBaseSubsession):
-    pass
 
     def this_app_constants(self):
-        """ App specific constants
-        
         """
-        # The number of rounds we have drawn ex ante according to some cont prob
-        return {'round_number_draw': 25, #TODO Change
+
+        App specific constants for the first super game of
+        the experiment.
+        """
+        # The number of rounds we have drawn ex ante according to the
+        # continuation probability of 95 %.
+        return {'round_number_draw': 25,  # TODO Change
                 # 'round_number_draw': 5, # for testing TODO: Remove
                 'super_game_count': 1,
                 'group_shuffle_by_size': {
