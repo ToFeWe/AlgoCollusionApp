@@ -448,8 +448,7 @@ class Subsession(SharedBaseSubsession):
         """
         # The number of rounds we have drawn ex ante according to the
         # continuation probability of 95 %.
-        return {'round_number_draw': 25,  # TODO Change
-                # 'round_number_draw': 5, # for testing TODO: Remove
+        return {'round_number_draw': 25,
                 'super_game_count': 1,
                 'group_shuffle_by_size': {
                     3: {'shuffle_structure_small': [[1, 2, 3], [4, 5, 6], [7, 8, 9]],

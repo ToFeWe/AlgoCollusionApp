@@ -13,21 +13,12 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 SESSION_CONFIGS = [
     dict(
-        name='intro_check',
-        display_name="intro_check",
-        group_treatment='2H0A',
-        num_demo_participants=18,
-        use_browser_bots=False,
-        app_sequence=[
-         'introduction']
-    ),
-    dict(
         name='SELF_treatment_1H1A_players_18',
         display_name="SELF_treatment_1H1A_players_18",
         group_treatment='1H1A',
         num_demo_participants=18,
-        expId=1234,
-        expShortName='test',
+        expId=1234, #TODO: Change and test once it exists
+        expShortName='test',#TODO: Change and test once it exists
         use_browser_bots=False,
         app_sequence=[
          'introduction',
@@ -43,8 +34,8 @@ SESSION_CONFIGS = [
         group_treatment='2H0A',
         num_demo_participants=18,
         expId=1234,
-        expShortName='test',
-        use_browser_bots=False,
+        expShortName='test',#TODO: Change and test once it exists
+        use_browser_bots=False,#TODO: Change and test once it exists
         app_sequence=[
          'introduction',
          'bertrand',
@@ -54,33 +45,37 @@ SESSION_CONFIGS = [
          'payment']
     ),
     dict(
-        name='LECTURE_treatment_1H1A_players_18',
-        display_name="LECTURE_treatment_1H1A_players_18",
-        group_treatment='1H1A',
+        name='BOT_treatment_2H0A_players_18',
+        display_name="BOT_treatment_2H0A_players_18",
+        group_treatment='2H0A',
         num_demo_participants=18,
-        use_browser_bots=False,
-        app_sequence=[
-         'introduction',
-         'bertrand',
-         'bertrand_SG_2', 
-         'bertrand_SG_3', 
-         'lecture_payment']
-    ),
-    dict(
-        name='BOT_LECTURE_treatment_1H1A_players_18',
-        display_name="BOT_LECTURE_treatment_1H1A_players_18",
-        group_treatment='1H1A',
-        num_demo_participants=18,
+        expId=1234,
+        expShortName='test',
         use_browser_bots=True,
         app_sequence=[
          'introduction',
          'bertrand',
          'bertrand_SG_2', 
          'bertrand_SG_3', 
-         'lecture_payment']
+         'quiz',
+         'payment']
     ),
-
-
+    dict(
+        name='BOT_treatment_1H1A_players_18',
+        display_name="BOT_treatment_1H1A_players_18",
+        group_treatment='1H1A',
+        num_demo_participants=18,
+        expId=1234,
+        expShortName='test',
+        use_browser_bots=True,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'quiz',
+         'payment']
+    )
 
 
 ]

@@ -205,58 +205,82 @@ class SharedPlayerBot(Bot):
             if self.round_number == 1:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 80, err_msg_profit
+                
                 assert self.player.profit == 80, err_msg_profit
+                assert self.player.accumulated_profit == 80, err_msg_acc_profit
             elif self.round_number == 2:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
+
                 assert self.player.profit == 180, err_msg_profit
+                assert self.player.accumulated_profit == 260, err_msg_acc_profit
             elif self.round_number == 3:
                 assert self.group.price_algorithm == 1, err_msg_price
                 assert self.group.profit_algorithm == 20, err_msg_profit
+
                 assert self.player.profit == 20, err_msg_profit
+                assert self.player.accumulated_profit == 280, err_msg_acc_profit
+
             elif self.round_number == 4:
                 assert self.group.price_algorithm == 0, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
+
                 assert self.player.profit == 0, err_msg_profit
+                assert self.player.accumulated_profit == 280, err_msg_acc_profit
             elif self.round_number == 5:
                 assert self.group.price_algorithm == 2, err_msg_price
                 assert self.group.profit_algorithm == 60, err_msg_profit
+
                 assert self.player.profit == 0, err_msg_profit
+                assert self.player.accumulated_profit == 280, err_msg_acc_profit
             elif self.round_number == 6:
                 assert self.group.price_algorithm == 0, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
+
                 assert self.player.profit == 0, err_msg_profit
+                assert self.player.accumulated_profit == 280, err_msg_acc_profit
             else:
                 assert self.group.price_algorithm == 1, err_msg_price
                 assert self.group.profit_algorithm == 30, err_msg_profit
+
                 assert self.player.profit == 0, err_msg_profit
-                #TODO: Add accumulated profit assertion
+                assert self.player.accumulated_profit == 280, err_msg_acc_profit
         elif treatment == '2H0A':
             assert self.group.price_algorithm == None, 'No Algo in this treatment.'
             assert self.group.profit_algorithm == None, 'No Algo in this treatment.'
             if self.round_number == 1:
                 assert self.player.profit == 120, err_msg_profit
+                assert self.player.accumulated_profit == 120, err_msg_acc_profit
             elif self.round_number == 2:
                 assert self.player.profit == 90, err_msg_profit
+                assert self.player.accumulated_profit == 210, err_msg_acc_profit
             elif self.round_number == 3:
                 assert self.player.profit == 30, err_msg_profit
+                assert self.player.accumulated_profit == 240, err_msg_acc_profit
             elif self.round_number == 4:
                 assert self.player.profit == 90, err_msg_profit
+                assert self.player.accumulated_profit == 330, err_msg_acc_profit
             else:
                 assert self.player.profit == 120, err_msg_profit
+                assert self.player.accumulated_profit == 350, err_msg_acc_profit
         elif treatment == '3H0A':
             assert self.group.price_algorithm == None, 'No Algo in this treatment.'
             assert self.group.profit_algorithm == None, 'No Algo in this treatment.'
             if self.round_number == 1:
                 assert self.player.profit == 80, err_msg_profit
+                assert self.player.accumulated_profit == 80, err_msg_acc_profit
             elif self.round_number == 2:
                 assert self.player.profit == 60, err_msg_profit
+                assert self.player.accumulated_profit == 140, err_msg_acc_profit
             elif self.round_number == 3:
                 assert self.player.profit == 20, err_msg_profit
+                assert self.player.accumulated_profit == 160, err_msg_acc_profit
             elif self.round_number == 4:
                 assert self.player.profit == 60, err_msg_profit
+                assert self.player.accumulated_profit == 240, err_msg_acc_profit
             else:
                 assert self.player.profit == 80, err_msg_profit
+                assert self.player.accumulated_profit == 320, err_msg_acc_profit
 
     def test_stranger_matching(self):
         """

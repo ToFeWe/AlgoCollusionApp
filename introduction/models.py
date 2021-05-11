@@ -30,8 +30,6 @@ class Constants(BaseConstants):
     timeout_soft = 6 * 60 # After 6 minutes the timeout is shown and participants get a notification
     timeout_hard = 8 * 60 # After 8 minutes auto-submitted
     timeout_seconds_left = timeout_hard - timeout_soft
-    #timeout_soft = 20
-    #timeout_hard = 40 #TODO change
 
     timeout_text = ("Bitte klicken Sie auf Weiter, sobald Sie die Insturktionen gelesen haben. Sollten Sie das Zeitlimit "
                    "überschreiten, werden Sie aus dem Experiment ausgeschlossen. Verbleibende Zeit:")
