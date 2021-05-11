@@ -7,7 +7,7 @@ from otree.api import SubmissionMustFail, Submission
 import random
 
 class SharedPlayerBot(Bot):
-    cases = ['monopoly', 'specific_prices']#'timeout_test
+    cases = ['specific_prices', 'monopoly']#'timeout_test 'monopoly', 
  
     def play_round(self):
         case = self.case
@@ -262,7 +262,7 @@ class SharedPlayerBot(Bot):
                 assert self.player.accumulated_profit == 330, err_msg_acc_profit
             else:
                 assert self.player.profit == 120, err_msg_profit
-                assert self.player.accumulated_profit == 350, err_msg_acc_profit
+
         elif treatment == '3H0A':
             assert self.group.price_algorithm == None, 'No Algo in this treatment.'
             assert self.group.profit_algorithm == None, 'No Algo in this treatment.'
@@ -280,7 +280,6 @@ class SharedPlayerBot(Bot):
                 assert self.player.accumulated_profit == 240, err_msg_acc_profit
             else:
                 assert self.player.profit == 80, err_msg_profit
-                assert self.player.accumulated_profit == 320, err_msg_acc_profit
 
     def test_stranger_matching(self):
         """
