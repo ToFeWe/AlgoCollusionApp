@@ -13,10 +13,10 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 SESSION_CONFIGS = [
     dict(
-        name='SELF_treatment_1H1A_players_18',
-        display_name="SELF_treatment_1H1A_players_18",
+        name='SELF_treatment_1H1A_players_12',
+        display_name="SELF_treatment_1H1A_players_12",
         group_treatment='1H1A',
-        num_demo_participants=18,
+        num_demo_participants=12,
         expId=1620910586, 
         expShortName='Allgcoll',
         use_browser_bots=False,
@@ -29,10 +29,10 @@ SESSION_CONFIGS = [
          'payment']
     ),
     dict(
-        name='SELF_treatment_2H0A_players_18',
-        display_name="SELF_treatment_2H0A_players_18",
+        name='SELF_treatment_2H0A_players_12',
+        display_name="SELF_treatment_2H0A_players_12",
         group_treatment='2H0A',
-        num_demo_participants=18,
+        num_demo_participants=12,
         expId=1620910586, 
         expShortName='Allgcoll',
         use_browser_bots=False,
@@ -45,10 +45,10 @@ SESSION_CONFIGS = [
          'payment']
     ),
     dict(
-        name='BOT_treatment_2H0A_players_18',
-        display_name="BOT_treatment_2H0A_players_18",
+        name='BOT_treatment_2H0A_players_12',
+        display_name="BOT_treatment_2H0A_players_12",
         group_treatment='2H0A',
-        num_demo_participants=18,
+        num_demo_participants=12,
         expId=1620910586, 
         expShortName='Allgcoll',
         use_browser_bots=True,
@@ -61,10 +61,10 @@ SESSION_CONFIGS = [
          'payment']
     ),
     dict(
-        name='BOT_treatment_1H1A_players_18',
-        display_name="BOT_treatment_1H1A_players_18",
+        name='BOT_treatment_1H1A_players_12',
+        display_name="BOT_treatment_1H1A_players_12",
         group_treatment='1H1A',
-        num_demo_participants=18,
+        num_demo_participants=12,
         expId=1620910586, 
         expShortName='Allgcoll',
         use_browser_bots=True,
@@ -77,10 +77,10 @@ SESSION_CONFIGS = [
          'payment']
     ),
     dict(
-        name='BOT_treatment_2H1A_players_18',
-        display_name="BOT_treatment_2H1A_players_18",
+        name='BOT_treatment_2H1A_players_12',
+        display_name="BOT_treatment_2H1A_players_12",
         group_treatment='2H1A',
-        num_demo_participants=18,
+        num_demo_participants=12,
         expId=1620910586, 
         expShortName='Allgcoll',
         use_browser_bots=True,
@@ -93,10 +93,10 @@ SESSION_CONFIGS = [
          'payment']
     ),
     dict(
-        name='BOT_treatment_1H2A_players_18',
-        display_name="BOT_treatment_1H2A_players_18",
+        name='BOT_treatment_1H2A_players_12',
+        display_name="BOT_treatment_1H2A_players_12",
         group_treatment='1H2A',
-        num_demo_participants=18,
+        num_demo_participants=12,
         expId=1620910586, 
         expShortName='Allgcoll',
         use_browser_bots=True,
