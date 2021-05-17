@@ -103,7 +103,6 @@ class Quiz(Page):
                     ]
 
     def is_displayed(self):
-        # TODO: Add defaults to DB for quiz? I dont need it I guess
         return not self.participant.vars['is_dropout']
 
     def vars_for_template(self):

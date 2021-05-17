@@ -17,8 +17,8 @@ SESSION_CONFIGS = [
         display_name="SELF_treatment_1H1A_players_18",
         group_treatment='1H1A',
         num_demo_participants=18,
-        expId=1234, #TODO: Change and test once it exists
-        expShortName='test',#TODO: Change and test once it exists
+        expId=1620910586, 
+        expShortName='Allgcoll',
         use_browser_bots=False,
         app_sequence=[
          'introduction',
@@ -33,9 +33,9 @@ SESSION_CONFIGS = [
         display_name="SELF_treatment_2H0A_players_18",
         group_treatment='2H0A',
         num_demo_participants=18,
-        expId=1234,
-        expShortName='test',#TODO: Change and test once it exists
-        use_browser_bots=False,#TODO: Change and test once it exists
+        expId=1620910586, 
+        expShortName='Allgcoll',
+        use_browser_bots=False,
         app_sequence=[
          'introduction',
          'bertrand',
@@ -49,8 +49,8 @@ SESSION_CONFIGS = [
         display_name="BOT_treatment_2H0A_players_18",
         group_treatment='2H0A',
         num_demo_participants=18,
-        expId=1234,
-        expShortName='test',
+        expId=1620910586, 
+        expShortName='Allgcoll',
         use_browser_bots=True,
         app_sequence=[
          'introduction',
@@ -65,8 +65,8 @@ SESSION_CONFIGS = [
         display_name="BOT_treatment_1H1A_players_18",
         group_treatment='1H1A',
         num_demo_participants=18,
-        expId=1234,
-        expShortName='test',
+        expId=1620910586, 
+        expShortName='Allgcoll',
         use_browser_bots=True,
         app_sequence=[
          'introduction',
@@ -81,8 +81,8 @@ SESSION_CONFIGS = [
         display_name="BOT_treatment_2H1A_players_18",
         group_treatment='2H1A',
         num_demo_participants=18,
-        expId=1234,
-        expShortName='test',
+        expId=1620910586, 
+        expShortName='Allgcoll',
         use_browser_bots=True,
         app_sequence=[
          'introduction',
@@ -97,8 +97,8 @@ SESSION_CONFIGS = [
         display_name="BOT_treatment_1H2A_players_18",
         group_treatment='1H2A',
         num_demo_participants=18,
-        expId=1234,
-        expShortName='test',
+        expId=1620910586, 
+        expShortName='Allgcoll',
         use_browser_bots=True,
         app_sequence=[
          'introduction',

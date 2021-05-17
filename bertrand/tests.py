@@ -206,18 +206,21 @@ class SharedPlayerBot(Bot):
             if self.round_number == 1:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 80, err_msg_profit
-                
+                assert self.group.accumulated_profit_algorithm == 80, err_msg_acc_profit
+
                 assert self.player.profit == 80, err_msg_profit
                 assert self.player.accumulated_profit == 80, err_msg_acc_profit
             elif self.round_number == 2:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 80, err_msg_acc_profit
 
                 assert self.player.profit == 180, err_msg_profit
                 assert self.player.accumulated_profit == 260, err_msg_acc_profit
             elif self.round_number == 3:
                 assert self.group.price_algorithm == 1, err_msg_price
                 assert self.group.profit_algorithm == 20, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 100, err_msg_acc_profit
 
                 assert self.player.profit == 20, err_msg_profit
                 assert self.player.accumulated_profit == 280, err_msg_acc_profit
@@ -225,12 +228,14 @@ class SharedPlayerBot(Bot):
             elif self.round_number == 4:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 100, err_msg_acc_profit
 
                 assert self.player.profit == 180, err_msg_profit
                 assert self.player.accumulated_profit == 460, err_msg_acc_profit
             elif self.round_number == 5:
                 assert self.group.price_algorithm == 1, err_msg_price
                 assert self.group.profit_algorithm == 30, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 130, err_msg_acc_profit
 
                 assert self.player.profit == 0, err_msg_profit
                 assert self.player.accumulated_profit == 460, err_msg_acc_profit
