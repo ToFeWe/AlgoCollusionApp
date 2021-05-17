@@ -75,6 +75,38 @@ SESSION_CONFIGS = [
          'bertrand_SG_3', 
          'quiz',
          'payment']
+    ),
+    dict(
+        name='BOT_treatment_2H1A_players_18',
+        display_name="BOT_treatment_2H1A_players_18",
+        group_treatment='2H1A',
+        num_demo_participants=18,
+        expId=1234,
+        expShortName='test',
+        use_browser_bots=True,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'quiz',
+         'payment']
+    ),
+    dict(
+        name='BOT_treatment_1H2A_players_18',
+        display_name="BOT_treatment_1H2A_players_18",
+        group_treatment='1H2A',
+        num_demo_participants=18,
+        expId=1234,
+        expShortName='test',
+        use_browser_bots=True,
+        app_sequence=[
+         'introduction',
+         'bertrand',
+         'bertrand_SG_2', 
+         'bertrand_SG_3', 
+         'quiz',
+         'payment']
     )
 
 

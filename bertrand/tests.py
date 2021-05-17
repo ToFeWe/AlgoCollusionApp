@@ -7,7 +7,7 @@ from otree.api import SubmissionMustFail, Submission
 import random
 
 class SharedPlayerBot(Bot):
-    cases = ['specific_prices', 'monopoly']#'timeout_test 'monopoly', 
+    cases = ['specific_prices']#'timeout_test 'monopoly',
  
     def play_round(self):
         case = self.case
@@ -184,24 +184,25 @@ class SharedPlayerBot(Bot):
                 assert self.player.profit == 20, err_msg_profit
                 assert self.player.accumulated_profit == 190, err_msg_acc_profit
             elif self.round_number == 4:
-                assert self.group.price_algorithm == 0, err_msg_price
+                assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
                 assert self.group.accumulated_profit_algorithm == 100, err_msg_acc_profit
 
-                assert self.player.profit == 0, err_msg_profit
-                assert self.player.accumulated_profit == 190, err_msg_acc_profit
+                assert self.player.profit == 90, err_msg_profit
+                assert self.player.accumulated_profit == 280, err_msg_acc_profit
             elif self.round_number == 5:
-                assert self.group.price_algorithm == 4, err_msg_price
-                assert self.group.profit_algorithm == 80, err_msg_profit
-                assert self.group.accumulated_profit_algorithm == 180, err_msg_acc_profit
+                assert self.group.price_algorithm == 1, err_msg_price
+                assert self.group.profit_algorithm == 60, err_msg_profit
+                assert self.group.accumulated_profit_algorithm == 160, err_msg_acc_profit
 
-                assert self.player.profit == 80, err_msg_profit
-                assert self.player.accumulated_profit == 270, err_msg_acc_profit
+                assert self.player.profit == 0, err_msg_profit
+                assert self.player.accumulated_profit == 280, err_msg_acc_profit
             else:
-                assert self.group.price_algorithm == 4, err_msg_price
-                assert self.group.profit_algorithm == 80, err_msg_profit
-                assert self.player.profit == 80, err_msg_profit
+                assert self.group.price_algorithm == 1, err_msg_price
+                assert self.group.profit_algorithm == 60, err_msg_profit
+                assert self.player.profit == 0, err_msg_profit
         elif treatment == '1H2A':
+            # TODO add algo accumulated
             if self.round_number == 1:
                 assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 80, err_msg_profit
@@ -222,29 +223,23 @@ class SharedPlayerBot(Bot):
                 assert self.player.accumulated_profit == 280, err_msg_acc_profit
 
             elif self.round_number == 4:
-                assert self.group.price_algorithm == 0, err_msg_price
+                assert self.group.price_algorithm == 4, err_msg_price
                 assert self.group.profit_algorithm == 0, err_msg_profit
 
-                assert self.player.profit == 0, err_msg_profit
-                assert self.player.accumulated_profit == 280, err_msg_acc_profit
+                assert self.player.profit == 180, err_msg_profit
+                assert self.player.accumulated_profit == 460, err_msg_acc_profit
             elif self.round_number == 5:
-                assert self.group.price_algorithm == 2, err_msg_price
-                assert self.group.profit_algorithm == 60, err_msg_profit
+                assert self.group.price_algorithm == 1, err_msg_price
+                assert self.group.profit_algorithm == 30, err_msg_profit
 
                 assert self.player.profit == 0, err_msg_profit
-                assert self.player.accumulated_profit == 280, err_msg_acc_profit
-            elif self.round_number == 6:
-                assert self.group.price_algorithm == 0, err_msg_price
-                assert self.group.profit_algorithm == 0, err_msg_profit
-
-                assert self.player.profit == 0, err_msg_profit
-                assert self.player.accumulated_profit == 280, err_msg_acc_profit
+                assert self.player.accumulated_profit == 460, err_msg_acc_profit
             else:
                 assert self.group.price_algorithm == 1, err_msg_price
                 assert self.group.profit_algorithm == 30, err_msg_profit
 
                 assert self.player.profit == 0, err_msg_profit
-                assert self.player.accumulated_profit == 280, err_msg_acc_profit
+                assert self.player.accumulated_profit == 460, err_msg_acc_profit
         elif treatment == '2H0A':
             assert self.group.price_algorithm == None, 'No Algo in this treatment.'
             assert self.group.profit_algorithm == None, 'No Algo in this treatment.'
