@@ -277,7 +277,7 @@ class SharedPlayerBot(Bot):
                 assert self.player.accumulated_profit == 160, err_msg_acc_profit
             elif self.round_number == 4:
                 assert self.player.profit == 60, err_msg_profit
-                assert self.player.accumulated_profit == 240, err_msg_acc_profit
+                assert self.player.accumulated_profit == 220, err_msg_acc_profit
             else:
                 assert self.player.profit == 80, err_msg_profit
 
