@@ -75,6 +75,8 @@ class Decide(Page):
 
 
 class RoundWaitPage(WaitPage):
+    template_name = 'bertrand/MyWaitPage.html'
+
     def vars_for_template(self):
         # Different body text if dropout
         if self.participant.vars['is_dropout']:

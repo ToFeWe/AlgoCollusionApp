@@ -20,7 +20,7 @@ class Constants(BaseConstants):
 
     # Timeouts in seconds
     timeout_soft = 5 * 60  # After 5 minutes the timer is shown
-    timeout_hard = 7 * 60  # After 7 minutes the participant is a dropout
+    timeout_hard = 8 * 60  # After 8 minutes the participant is a dropout
     # Time left before the timer is shown
     timeout_seconds_left = timeout_hard - timeout_soft
 
